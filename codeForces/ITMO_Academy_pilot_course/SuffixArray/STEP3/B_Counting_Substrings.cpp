@@ -1,10 +1,9 @@
-//https://codeforces.com/edu/course/2/lesson/2/2/practice/contest/269103/problem/A
 #include<bits/stdc++.h>
 
 #define endl '\n'
 #define IO ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);
-#define YES cout<<"YES\n";
-#define NO cout<<"NO\n";
+#define YES cout<<"Yes\n";
+#define NO cout<<"No\n";
 
 #define pb push_back
 
@@ -18,6 +17,9 @@ const int MX = 300005;
 using namespace std;
 
 typedef long long ll;
+
+vector<int> res;
+string s;
 
 vector<int> sort_cyclic_shifts(string const& s) {
     int n = s.size();
@@ -73,15 +75,85 @@ vector<int> suffix_array_construction(string s) {
     return sorted_shifts;
 }
 
-int main(){
-    string s;
-    cin>>s;
-    vector<int> res = suffix_array_construction(s);
+int lb(string q){
+    int l=0, r=res.size()-1;
+    int ans = res.size(),m;
+
+    while(l<=r){
+        m=l+(r-l)/2;
+        //cout << "m es ahora " << m << endl;
+        //cout << "Nuestra aux es " << s.substr(res[m],q.size()) << endl;
+
+        if( s.substr(res[m],q.size()) >= q ){
+            //cout << "Se cumple la condicion" << endl;
+            ans = m;
+            r = m-1;
+        }
+        else{
+            //cout << "No se cumple la condicion" << endl;
+            l = m+1;
+        }
+        //cout << endl;
+    }
+
+    if(s.substr(res[ans],q.size()) == q){
+       return ans; 
+    }
+    else{
+        return res.size();
+    }
+}
+
+int up(string q){
+    int l=0,r=res.size()-1,m;
+    int ans = res.size();
+
+    while(l<=r){
+        m=l+(r-l)/2;
+
+        if( s.substr(res[m],q.size()) > q){
+            ans = m;
+            r = m-1;
+        }
+        else{
+            l = m+1;
+        }
+    }
+
+    return ans;
+}
+
+void sol(){
+    string q;
+    cin>>q;
     
-    cout << s.size() << " ";
+    int pos = lb(q);
+    int pos2 = up(q);
+
+    int ans = pos2-pos;
+
+    if(ans<0)
+        cout << 0 << endl;
+    else
+        cout << ans << endl;
+    
+}
+
+int main(){
+    //IO
+
+    cin>>s;
+    int t;cin>>t;
+    res = suffix_array_construction(s);
+
+    while(t--)
+        sol();
+    
+    /*
     forn(i,s.size()){
-        cout << res[i] << " ";
+        cout << s.substr(res[i],s.size()-res[i]) << endl;
     }
     cout << endl;
+    */
     
 }

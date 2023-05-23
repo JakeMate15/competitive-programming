@@ -1,10 +1,10 @@
-//https://codeforces.com/edu/course/2/lesson/2/2/practice/contest/269103/problem/A
+//https://codeforces.com/edu/course/2/lesson/2/3/practice/contest/269118/problem/A
 #include<bits/stdc++.h>
 
 #define endl '\n'
 #define IO ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);
-#define YES cout<<"YES\n";
-#define NO cout<<"NO\n";
+#define YES cout<<"Yes\n";
+#define NO cout<<"No\n";
 
 #define pb push_back
 
@@ -18,6 +18,9 @@ const int MX = 300005;
 using namespace std;
 
 typedef long long ll;
+
+vector<int> res;
+string s;
 
 vector<int> sort_cyclic_shifts(string const& s) {
     int n = s.size();
@@ -73,15 +76,42 @@ vector<int> suffix_array_construction(string s) {
     return sorted_shifts;
 }
 
+void sol(){
+    string q;
+    cin>>q;
+    string aux;
+
+    int l=0,r=res.size()-1;
+    while(l<=r){
+        int m=(l+r)/2;
+        aux = s.substr(res[m],q.size());
+        if(aux==q){
+            YES
+            return;
+        }
+        if(aux>q)   
+            r=m-1;
+        else    
+            l=m+1;
+    }
+
+    NO
+}
+
 int main(){
-    string s;
+    IO
+
     cin>>s;
-    vector<int> res = suffix_array_construction(s);
+    int t;cin>>t;
+    res = suffix_array_construction(s);
+    while(t--)
+        sol();
     
-    cout << s.size() << " ";
+    /*
     forn(i,s.size()){
-        cout << res[i] << " ";
+        cout << s.substr(res[i],s.size()-res[i]) << endl;
     }
     cout << endl;
+    */
     
 }
