@@ -18,37 +18,23 @@ const int MOD = 1e9+7;
 int fac[N+5] = {1};
 
 void calcF(){
-    fore(i,1,N) fac[i] = (fac[i-1]*i)%MOD;
+    fore(i,1,N) fac[i] = (fac[i-1]*i);
 }
 
-ll extendedEuclidean(ll a, ll b, ll &x, ll &y) {
-    if (a == 0) {
-        x = 0;
-        y = 1;
-        return b;
-    }
-
-    ll x1, y1;
-    ll gcd = extendedEuclidean(b % a, a, x1, y1);
-
-    x = y1 - (b / a) * x1;
-    y = x1;
-
-    return gcd;
+pair<ll,ll> extendedEuclid (ll a, ll b){ //a * x + b * y = gcd(a,b)
+    ll x,y;
+    if (b==0) return {1,0};
+    auto p=extendedEuclid(b,a%b);
+    x=p.second;
+    y=p.first-(a/b)*x;
+    if(a*x+b*y==-gcd(a,b)) x=-x, y=-y;
+    return {x,y};
 }
 
-ll modularInverse(ll a, ll m) {
-    ll x, y;
-    ll gcd = extendedEuclidean(a, m, x, y);
-
-    if (gcd != 1)   return -1;
-    else            return (x % m + m) % m;
-}
-
-int invMod(int a, int b){
-    int inversoModularB = modularInverse(b, MOD);
-    if (inversoModularB == -1)  return -1;
-    else                        return  (a * inversoModularB) % MOD;
+ll inv(ll a, ll mod) { //inverse of a modulo mod
+    assert(gcd(a,mod)==1);
+    pair<ll,ll> sol = extendedEuclid(a,mod);
+    return ((sol.first%mod)+mod)%mod;
 }
 
 
@@ -66,22 +52,27 @@ int main(){IO
 
     calcF();
 
-    debug(invMod(fac[n-rep.size()+1],fac[n]));
+    int q = 1;
+    for(auto x: rep){
+        (q*=fac[x.second]);
+    }
+    debug( ((q * inv(fac[n],MOD))+MOD)%MOD );
     while(k--){
         int A,B;
         cin>>A>>B;A--;
 
         int keyR = a[A];
         if(keyR!=B){
-            if(rep.count(B))    rep[B]++;
-            else                rep[B]=1;
-
-            if(rep[keyR]>1)     rep[keyR]--;  
-            else                rep.erase(keyR);     
+            if(!rep.count(B))   rep[B]=0;
+            if(rep[keyR]==0)    (q/=1);
+            else                (q/=rep[keyR]);
+            rep[keyR]--;
+            rep[B]++;
+            (q*=rep[B]);
             a[A] = B;
         }
-        rep.erase(0);
-        debug(invMod(fac[n-rep.size()+1],fac[n]));
+
+        debug( ((q * inv(fac[n],MOD))+MOD)%MOD );
 
     }
 }

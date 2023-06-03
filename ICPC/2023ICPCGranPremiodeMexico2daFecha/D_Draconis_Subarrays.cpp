@@ -53,13 +53,18 @@ int main(){IO
     int n,m;
     cin>>n>>m;
 
-    int a[n+1]={0},b[m+1]={0};
-    fore(i,1,n)   cin>>a[i];
-    fore(i,1,m)   cin>>b[i];
+	if(n==1){
+		cout << m << "\n";
+		return 0;
+	}
 
-    vector<int> patron(n-1),busqueda(m-1);
-    fore(i,0,n-1) patron[i] = abs(a[i+1]-a[i+2]);
-    fore(i,0,m-1) busqueda[i] = abs(b[i+1]-b[i+2]);
+    int a[n]={0},b[m]={0};
+    forn(i,n)   cin>>a[i];
+    forn(i,m)   cin>>b[i];
+
+    vector<int> patron,busqueda;
+    forr(i,1,n) patron.push_back(a[i]-a[i-1]);
+    forr(i,1,m) busqueda.push_back(b[i]-b[i-1]);
 
     kmp k(patron);
     vector<int> bK = k.search(busqueda);
