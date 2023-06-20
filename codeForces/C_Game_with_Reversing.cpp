@@ -12,11 +12,34 @@ typedef vector<int> vi;
 #define YES         cout << "YES\n"
 #define NO          cout << "NO\n"
 #define debug(a)    cout << a << "\n"
+#define sz(a)       (int)a.size()
+
 
 void sol(){
-    int n,k;cin>>n>>k;
-    
-    debug( ceil(( 1.0*(n-1) )/k) +1);
+    string s1,s2;cin>>s1>>s2;
+
+    if(s1==s2){
+        debug(0);
+        return;
+    }
+    string aux = s2;
+    reverse(all(aux));
+    if( aux == s1 ){
+        debug(2);
+        return;
+    }
+
+    int op1,op2;
+    forn(i,sz(s1)){
+        if( s1[i]!=s2[i] )  op1++;
+    }
+
+    forn(i,sz(s1)){
+        if( s1[i]!=aux[i] )  op2++;
+    }
+
+    debug( min( 2*op2, 4 ) );
+
 }
 
 int main(){IO

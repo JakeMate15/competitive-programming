@@ -14,9 +14,30 @@ typedef vector<int> vi;
 #define debug(a)    cout << a << "\n"
 
 void sol(){
-    int n,k;cin>>n>>k;
+    int n;cin>>n;
+    int a[n];
+    int pos = 0, neg = 0;
     
-    debug( ceil(( 1.0*(n-1) )/k) +1);
+    forn(i,n){
+        cin>>a[i]; 
+        if(a[i] == 1)   pos++;
+        else            neg++;
+    }
+
+    int res = 0;
+    if(neg%2==1){
+        res++;
+        pos++;
+        neg--;
+    }
+
+    while(neg>pos){
+        pos+=2;
+        neg-=2;
+        res+=2;
+    }
+
+    debug(res);
 }
 
 int main(){IO
