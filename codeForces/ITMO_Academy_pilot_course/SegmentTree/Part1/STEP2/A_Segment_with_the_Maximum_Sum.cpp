@@ -61,8 +61,13 @@ struct SegmentTree{
 	}
 
 	//range query, [l, r]
-	T query(){
-		return max(ST[1].seg,0LL);
+	nodo query(int l, int r){
+		nodo resl = creaNodo(0,0,0,0), resr = creaNodo(0,0,0,0);
+		for(l += N, r += N; l <= r; l >>= 1, r >>= 1){
+			if(l & 1)       resl = merge(resl,ST[l++]);
+			if(!(r & 1))    resr = merge(ST[r--],resr);
+		}
+		return merge(resl,resr);
 	}
 };
 
@@ -72,11 +77,11 @@ int main(){IO
     for(int &x: a)  cin>>x;
 
     SegmentTree<int> st(n,a);
-    debug(st.query());
+    debug(st.query(0,n-1).seg);
     while(q--){
         int i,v;cin>>i>>v;
         st.update(i,v);
-        debug(st.query());
+        debug(st.query(0,n-1).seg);
     }
 
 }
