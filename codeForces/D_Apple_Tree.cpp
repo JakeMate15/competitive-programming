@@ -14,50 +14,41 @@ typedef vector<int> vi;
 #define NO          cout << "NO\n"
 #define debug(a)    cout << a << "\n"
 
-vector< vector<lli> > arbol;
-vector<lli> hojas;
-
-void dfs(lli nodo, lli padre) {
-    lli contador_hojas = 0;
-
-    // Recorrer los nodos adyacentes
-    for (auto adyacente : arbol[nodo]) {
-        if (adyacente != padre) {
-            dfs(adyacente, nodo);
-            contador_hojas += hojas[adyacente];
-        }
-    }
-
-    if (contador_hojas == 0) {
-        contador_hojas = 1;  // El nodo actual es una hoja
-    }
-
-    hojas[nodo] = contador_hojas;
-}
-
 void sol(){
-    lli n; cin >> n;
-    arbol.clear();
-    arbol.resize(n + 1);
-    hojas.clear();
-    hojas.resize(n + 1);
+    int n; cin >> n;
+    vector< vector<int> > arbol(n+1);
+    vector<lli> hojas(n+1);
 
     forn(i, n - 1){
-        lli u, v; cin >> u >> v;
+        int u, v; cin >> u >> v;
         arbol[u].push_back(v);
         arbol[v].push_back(u);
     }
 
-    dfs(1,0);
+    auto dfs = [&](int nodo, int padre, auto &&dfs) -> void{
+        lli contador_hojas = 0;
 
-    lli q;cin>>q;
+        for (auto adyacente : arbol[nodo]) {
+            if (adyacente != padre) {
+                dfs(adyacente, nodo, dfs);
+                contador_hojas += hojas[adyacente];
+            }
+        }
+
+        if (contador_hojas == 0) {
+            contador_hojas = 1;
+        }
+
+        hojas[nodo] = contador_hojas;
+    };
+
+    dfs(1,0,dfs);
+
+    int q;cin>>q;
     while(q--){
-        lli x,y;cin>>x>>y;
+        int x,y;cin>>x>>y;
         debug( hojas[x]*hojas[y] );
     }
-
-    
-    
 }
 
 int main(){
