@@ -31,11 +31,10 @@ void sol(){
     for(int &x: querys)
         cin >> x;
 
-    int l=-1,r=q,mid;
+    int l=0,r=q-1,mid;
 
-    while(r>l+1){
-        mid = l+(r-l)/2;
-        debug(m);
+    while( l<=r){
+        mid = (r+l)/2;
 
         vi a(n+1,0);
         fore(i,0,mid)
@@ -47,17 +46,19 @@ void sol(){
 
         bool ok = false;
         for(auto x: seg){
-            if( (x.first-x.second+1)/2 < (pref[x.second] - pref[x.first-1]) ){
+            //cout << x.first << "," << x.second << " " << (x.second-x.first+1)/2  << " " << (pref[x.second] - pref[x.first-1]) << "\n";
+            if( (x.second-x.first+1)/2 < (pref[x.second] - pref[x.first-1]) ){
                 ok=true;
                 break;
             }
         }
 
-        if(ok)  r = m;
-        else    l = m;
+        if(ok)  r = mid-1;
+        else    l = mid+1;
+
     }
 
-    debug(m);
+    debug( ((l==q)?-1:l+1) );
 }
 
 int main(){IO
