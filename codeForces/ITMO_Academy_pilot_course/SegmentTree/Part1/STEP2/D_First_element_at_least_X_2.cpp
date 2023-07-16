@@ -17,34 +17,43 @@ template<typename T>
 struct SegmentTree{
 	int N;
 	vector<T> ST;
-
+ 
 	//build from an array in O(n)
 	SegmentTree(int N, vector<T> & arr): N(N){
 		ST.resize(N << 1);
 		for(int i = 0; i < N; ++i)
 			ST[N + i] = arr[i];
 		for(int i = N - 1; i > 0; --i)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
+			ST[i] = max(ST[i << 1] , ST[i << 1 | 1]);
 	}
-
+ 
 	//single element update in i
-	void update(int i){
-		ST[i += N] ^= 1; //update the element accordingly
+	void update(int i, T value){
+		ST[i += N] = value; //update the element accordingly
 		while(i >>= 1)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
+			ST[i] = max(ST[i << 1] , ST[i << 1 | 1]);
 	}
 
-	int Kth_One(int k) {
+
+    int atLeastX(int k) {
         int i = 0, s = N >> 1;
         for(int p = 2; p < 2 * N; p <<= 1, s >>= 1) {
-            //cout << "P: " << p << " s:" << s << "\n"; 
-            if(k < ST[p])	continue;
-            //cout << "P: " << p << " s:" << s << "\n"; 
-            k -= ST[p++];	i += s;
+            if(ST[p] < k)	p++, i += s;
         }
+        if(ST[N + i] < k)	i = -1;
         return i;
     }
-
+ 
+    int atLeastX(int x, int l, int p, int s) {
+        if(ST[p] < x or s <= l)	return -1;
+        if((p << 1) >= 2 * N)
+            return (ST[p] >= x) - 1;
+        int i = atLeastX(x, l, p << 1, s >> 1);
+        if(i != -1)	return i;
+        i = atLeastX(x, l - (s >> 1), p << 1 | 1, s >> 1);
+        if(i == -1)	return -1;
+        return (s >> 1) + i;
+    }
 
     void imp(){
         for(auto x: ST) cout << x << " ";
@@ -52,7 +61,6 @@ struct SegmentTree{
         debug("");
     }
 };
-
 
 int main(){IO
     int n,q;cin>>n>>q;
@@ -64,14 +72,16 @@ int main(){IO
     SegmentTree<int> st(nT,a);
     
     while(q--){
-        int op,k;
-        cin>>op>>k;
+        int op,k,valor,l;
+        cin>>op;
         
         if(op==1){
-            st.update(k);
+            cin>>k>>valor;
+            st.update(k,valor);
         }
         else{
-            debug(st.Kth_One(k));
+            cin>>k>>l;
+            debug(st.atLeastX(k,l,1,nT));
         }
 
     }

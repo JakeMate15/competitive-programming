@@ -1,3 +1,4 @@
+//https://codeforces.com/contest/1846/problem/C
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -15,16 +16,29 @@ typedef vector<int> vi;
 #define sz(a)       (int)a.size()
 
 void sol(){
-    int p, np, t;
-    cin >> p >> np >> t;
+    int n,m,h;
+    cin>>n>>m>>h;
 
-    vector<pair<vector<int>, int>> a[p];
-    forn(i,p){
-        forn(j,np){
-            cin >> a[i][j];
+    vector<pair<int,int>> a(n);
+    forn(i,n){
+        vi b(m);
+        forn(j,m)   cin>>b[j];
+        sort(all(b));
+        int cur = 0;
+        for(int x: b){
+            cur+=x;
+            if(cur<=h){
+                a[i].first++;
+                a[i].second+=cur;
+            }
         }
-        sort(a[i],a[i]+np);
     }
+
+    forn(i,n)   a[i].second = (-a[i].second);
+    int res = 1;
+    forn(i,n)   if(a[i]>a[0])   res++;
+
+    debug(res);
 }
 
 int main(){IO

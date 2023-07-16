@@ -17,7 +17,7 @@ template<typename T>
 struct SegmentTree{
 	int N;
 	vector<T> ST;
-
+ 
 	//build from an array in O(n)
 	SegmentTree(int N, vector<T> & arr): N(N){
 		ST.resize(N << 1);
@@ -26,28 +26,30 @@ struct SegmentTree{
 		for(int i = N - 1; i > 0; --i)
 			ST[i] = max(ST[i << 1] , ST[i << 1 | 1]);
 	}
-
+ 
 	//single element update in i
-	void update(int i, int v){
-		ST[i += N] = v; //update the element accordingly
+	void update(int i, T value){
+		ST[i += N] = value; //update the element accordingly
 		while(i >>= 1)
 			ST[i] = max(ST[i << 1] , ST[i << 1 | 1]);
 	}
 
-	int atLeastX(int k) {
+
+    int atLeastX(int k) {
         int i = 0, s = N >> 1;
         for(int p = 2; p < 2 * N; p <<= 1, s >>= 1) {
-            if(k < ST[p]){
-                continue;
-            }	
-            k -= ST[p++];	i += s;
+            if(ST[p] < k)	p++, i += s;
         }
-
+        if(ST[N + i] < k)	i = -1;
         return i;
     }
 
+    void imp(){
+        for(auto x: ST) cout << x << " ";
+        //for(int i=0; i<N; i++) cout << ST[N+i] << " ";
+        debug("");
+    }
 };
-
 
 int main(){IO
     int n,q;cin>>n>>q;
@@ -57,19 +59,24 @@ int main(){IO
     for(int i=0; i<n; i++)  cin>>a[i];
 
     SegmentTree<int> st(nT,a);
+    //st.imp();
     
     while(q--){
-        st.imp();
-        int op,k;
-        cin>>op>>k;
+        //st.imp();
+        int op,k,valor;
+        cin>>op;
         
         if(op==1){
-            int v;cin>>v;
-            st.update(k,v);
+            cin>>k>>valor;
+            //debug("Update");
+            st.update(k,valor);
+            //st.imp();
         }
         else{
-            //(st.atLeastX(k));
+            cin>>k;
+            //cout << "Al menos: " << k << endl;
             debug(st.atLeastX(k));
+            //debug("");
         }
 
     }
