@@ -17,7 +17,19 @@ typedef vector<int> vi;
 typedef pair<int,int> pii;
 
 void sol(){
-		 
+	int n;
+	cin>>n;
+
+	vi a(n);
+	for(auto &x: a)	cin>>x;
+
+	int res = 0;
+	forn(i,n){
+		forr(j,i+1,n){
+			if(a[i]>=a[j])	res++;
+		}
+	}
+	debug(res);		 
 }
 
 int main(){IO
