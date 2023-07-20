@@ -17,37 +17,25 @@ typedef vector<int> vi;
 typedef pair<int,int> pii;
 
 void sol(){
-	int n0,n1,n2;
-	cin>>n0>>n1>>n2;
+    int n;cin>>n;
+    vi a(n);
+    for(auto &x: a) cin>>x;
 
-	if(n2>=1){
-		if(n0>=1){
-			n1--;
-			forn(i,n0+1)		cout << 0;
-		}
-		forn(i,n2+1)			cout << 1;
-		forn(i,n1/2)			cout << "01";
-		if(n1&1)				cout << 0;
-	}
-	else{
-		if(n0>=1){
-			//n1--;
-			forn(i,n0+1)		cout << 0;
-			forn(i,n1/2)		cout << "10";
-			if( n1&1 )			cout << 1;
-		}
-		else{
-			if(n1&1){
-				forn(i,n1/2+1)	cout << "10";
-			}
-			else{
-				forn(i,n1/2)	cout << "10";
-				cout << 1;
-			}
-		}
-		
-	}
-	debug("");
+    sort(all(a));
+    int curr = 1;
+    forr(i,1,n){
+        if(a[i]==a[i-1]){
+            curr++;
+            if(curr>=3){
+                debug(a[i]);
+                return;
+            }
+        }
+        else{
+            curr = 1;
+        }
+    }
+    debug(-1);
 }
 
 int main(){IO
