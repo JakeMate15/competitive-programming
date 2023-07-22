@@ -16,6 +16,8 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> pii;
 
+const int mod = 1e9+7;
+
 void sol(){
 
 }

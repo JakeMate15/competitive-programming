@@ -16,8 +16,8 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> pii;
 
-ll ok(vector<ll> a, ll m){
-    ll sum = 0;
+__int128 ok(vector<ll> a, ll m){
+    __int128 sum = 0;
 
     for(auto x: a){
         sum+= ((x+m)*(x+m));
@@ -39,7 +39,7 @@ void sol(){
     while(l<=r){
         m = (l+r)/2;
         //cout << l << " " << r << " " << m << " " << endl;
-        ll sum = ok(a,m);
+        __int128 sum = ok(a,m);
         //cout << sum << " " << c << endl;
         if( sum == c){
             debug(m/2);
@@ -52,8 +52,6 @@ void sol(){
             l = m+1;
         }
     }
-
-    debug("\n\n");
 }
 
 int main(){IO

@@ -1,115 +1,186 @@
-//https://codeforces.com/gym/104375/problem/E
-#include <bits/stdc++.h>
-#define ll long long 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-using  namespace std;
-const int N=8e5+5;
-const int MAX=2e5+3;
-int T[MAX];
-int S[MAX];
-int F[MAX];
-int FT[MAX];
-int pare[MAX];
-int rk[MAX];
-vector<int>t[MAX];
-int timer;
-void dfs(int node,int par){
-    //rk[node]=rk[par]+1;
-    S[node]=timer;
-    FT[timer]=node;
-    timer++;
-    for(auto ch:t[node]){
-        if(ch==par) continue;
-        pare[ch]=node;
-        dfs(ch,node);
-    }
-    F[node]=timer;
-    FT[timer]=node;
-    timer++;   
-}
-pair<ll,ll> nums[N];
-pair<ll,ll> st[N], arr[N];
-ll lazy[N];
-void push_up(int i){
-    int ch1=2*i+1;
-    int ch2=2*i+2;
-    st[i]=min(st[ch1],st[ch2]);
-}
+#include<bits/stdc++.h>
+using namespace std;
  
-void build(int l, int r, int i){
-    lazy[i]=0;
-    if(l==r){st[i]=nums[l];return;}
-    int m=(l+r)>>1;
-    build(l,m,2*i+1);
-    build(m+1,r,2*i+2);
-    push_up(i);
-}
-void push_down(int l, int r,int i){
-    if(!lazy[i])return;
-    int ch1=2*i+1;
-    int ch2=2*i+2;
-    ll &lzy=lazy[i];
-    st[ch1].first+=lzy;
-    st[ch2].first+=lzy;
-    lazy[ch1]+=lzy;
-    lazy[ch2]+=lzy;
-    lzy=0;
-}
-void update(int l, int r, int a, int b,ll x, int i){
-    if(a>r||b<l)return;
-    if(a<=l&&r<=b){
-        st[i].first+=x;
-        lazy[i]+=x;
-        return;
-    }
-    push_down(l,r,i);
-    int m=(l+r)>>1;
-    update(l,m,a,b,x,2*i+1);update(m+1,r,a,b,x,2*i+2);
-    push_up(i);
-}
-pair<ll,ll> query(int l, int r, int a, int b, int i){
-    if(a>r||b<l)return {5e17,3e5+1};
-    push_down(l,r,i);
-    if(a<=l&&r<=b) return st[i];
-    int m=(l+r)>>1;
-    return min(query(l,m,a,b,2*i+1),query(m+1,r,a,b,2*i+2));
-}
-int main(){IO
+typedef long long ll;
+typedef vector<int> vi;
+typedef pair<ll,int> pvi;
+#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define forn(i,n)   for(ll (i)=0; i<n; i++)
+#define forr(i,a,n) for(ll i=(a); i<n; i++)
+#define fore(i,a,n) for(ll i=(a); i<=n; i++)
+#define all(v)      v.begin(),v.end()
+#define borra(s)    s.erase(unique(all(s)),s.end())
+#define debug(a)    cout << a << "\n"
 
+const int N = 1e5+10;
+vector<int> arbol[N];
+int meta[N+1];
+vector<ll> metaE(1,0);
+int eulerT[N+1];
+int eIn[N+1];
+int eFin[N+1];
+int alcanzado[N+1];
+int tamS[N];
+int eulerCont = 1;
+
+template<typename T>
+struct SegmentTreeLazy{
+	int N,h;
+	vector<T> d;
+	vector<pvi> ST;
+    
+	pvi merge(pvi a, pvi b){
+	    if(a.first < b.first)   return a;
+		else                    return b;
+	}
+
+	//Build from an array in O(n)
+	SegmentTreeLazy(int n, vector<T> &a): N(n){
+		ST.resize(N << 1);
+		d.resize(N);
+		h = 64 - __builtin_clzll(n);
+
+		for(int i = 0; i < N; ++i)
+			ST[N + i] = {a[i],i};
+		for(int i = N - 1; i > 0; --i)
+			ST[i] = merge(ST[i << 1] , ST[i << 1 | 1]);
+	}
+ 
+	void apply(int p, T value) {
+		ST[p].first += value;
+		if(p<N)	d[p]+= value;
+	}
+ 
+	// modify value of parents of p
+	void build(int p){
+		while(p>1){
+			p >>= 1;
+            pvi auxM = merge(ST[p << 1], ST[p << 1 | 1]);
+			ST[p] = {auxM.first+d[p] , auxM.second}; 
+		}
+	}
+ 
+	// propagate from root to p
+	void push(int p){
+		for (int s = h; s > 0; --s) {
+			int i = p >> s;
+			if (d[i] != 0) {
+				apply(i << 1, d[i]);
+				apply(i << 1 | 1, d[i]);
+				d[i] = 0;
+			}
+		}
+	}
+ 
+	// add v to interval [l, r)
+	void increment(int l, int r, T value) {	
+		l += N, r += N;
+		int l0 = l, r0 = r;
+		for (; l < r; l >>= 1, r >>= 1) {
+			if(l & 1) apply(l++, value);
+			if(r & 1) apply(--r, value);
+		}
+		build(l0);
+		build(r0 - 1);
+	}
+ 
+	// min on interval [l, r)
+	pvi range_min(int l, int r) { 	
+		l += N, r += N;
+		push(l);
+		push(r - 1);
+		pvi res = {LLONG_MAX,0};
+		for (; l < r; l >>= 1, r >>= 1) {
+			if(l & 1)	res = merge(res, ST[l++]);
+			if(r & 1)	res = merge(res, ST[--r]);
+		}
+		return res;
+	}
+    
+};
+
+
+void dfs(int u, int p) {
+    tamS[u] = 1;
+    eIn[u] = eulerCont;
+    eulerT[eulerCont] = u;
+    metaE.push_back(meta[u]);
+    eulerCont++;
+
+    for (int i = 0; i < arbol[u].size(); i++) {
+        int v = arbol[u][i];
+        if (v != p) {
+            dfs(v, u);
+            tamS[u] += tamS[v];
+        }
+    }
+
+    eFin[u] = eulerCont - 1;
+}
+
+
+int main(){IO
     int n,q;cin>>n>>q;
-    int res[n+1];
-    ll ai[n+1];
-    for(int i=1;i<=n;i++){
-        cin>>ai[i];
+    memset(alcanzado,-1,sizeof(alcanzado));
+
+    forn(i,n)   cin>>meta[i+1];
+
+    forn(i,n-1){
+        int u,v;cin>>u>>v;
+        arbol[u].push_back(v);
+        arbol[v].push_back(u);
     }
-    for(int i=1;i<=n;i++) res[i]=-1;
-    for(int i=0;i<n-1;i++){
-        int a,b;cin>>a>>b;
-        t[a].push_back(b);
-        t[b].push_back(a);
+    dfs(1,0);
+
+    SegmentTreeLazy<ll> st((int)metaE.size(),metaE);
+    int aux = 1;
+    
+    while(q--){
+        //cout << "q: " <<aux<<"\n";
+        int nodo,dinero;
+        cin>>nodo>>dinero;
+
+        int l,r;
+        if(dinero%tamS[nodo]==0){
+            l = eIn[nodo];
+            r = eFin[nodo]+1;
+            st.increment(l,r,-(dinero/tamS[nodo]));
+        }
+        else{
+            l = eIn[nodo];
+            r = eFin[nodo]+1;
+            int sumaAux = -(dinero/tamS[nodo]);
+            st.increment(l,r,sumaAux);
+            st.increment(l,l+1,-dinero%tamS[nodo]);
+        }
+
+        pvi minimo = st.range_min(l,r);
+        ll valor = minimo.first;
+        int idx = minimo.second;
+        
+        
+        while(valor<=0){
+            //cout << "q: " << aux << " v: " << valor << " i: " << idx << "\n";
+            alcanzado[eulerT[idx]] = aux;
+            //st.set(idx,INT_MAX);
+            st.increment(idx,idx+1,5e17+valor);
+            minimo = st.range_min(l,r);
+            valor = minimo.first;
+            idx = minimo.second;
+        }
+
+        //cout << "acabado con " << aux << " v" << valor << endl;
+        //cout << st.get(1,n+1).second << "\t" << st.get(1,n+1).first << endl;
+        //cout << st.getPosInLevel(st.get(1,n+1).first,st.get(1,n+1).second) << endl;
+        //for(auto x: st.tree)    cout << x.value << " ";
+        //debug("");
+        aux++;
     }
-    int timer=0;
-    dfs(1,-1);
-    for(int i=0;i<n*2;i++){
-        nums[i]={ai[FT[i]],i};
+
+
+    fore(i,1,n){
+        debug(alcanzado[i]);
     }
-    build(0,2*n-1,0);
-    for(int i=0;i<q;i++){
-        ll a,b;cin>>a>>b;
-        int s1=S[a],f1=F[a];
-        ll sz=(f1-s1+1)/2;
-        update(0,2*n-1,s1,f1,-(b/sz),0);
-        update(0,2*n-1,s1,s1,-(b%sz),0);
-        update(0,2*n-1,f1,f1,-(b%sz),0);
-        while(query(0,2*n-1,s1,f1,0).first<=0){
-            pair<ll,ll>q1=query(0,2*n-1,s1,f1,0);
-            if(res[FT[q1.second]]==-1)res[FT[q1.second]]=i+1;
-            update(0,2*n-1,q1.second,q1.second,q1.first+5e17,0);
-            q1=query(0,2*n-1,s1,f1,0);
-            update(0,2*n-1,q1.second,q1.second,q1.first+5e17,0);
-        }    
-    }
-    for(int i=1;i<=n;i++){
-        cout<<res[i]<<endl;
-    }
+
+    return 0;
 }

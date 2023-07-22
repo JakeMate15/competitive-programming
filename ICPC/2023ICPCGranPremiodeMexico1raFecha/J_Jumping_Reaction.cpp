@@ -1,46 +1,87 @@
 #include<bits/stdc++.h>
+#define fore(i,a,b) for(int i = a; i < b; i++)
+#define forn(i,a,b) for(int i = a; i <= b; i++)
+#define ENDL '\n';
+
 using namespace std;
+typedef long long lli;
 
-typedef long long ll;
-typedef vector<int> vi;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(ll (i)=0; i<n; i++)
-#define forr(i,a,n) for(ll i=(a); i<n; i++)
-#define fore(i,a,n) for(ll i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+const lli mod = 1e9 + 7;
 
-const int MAXN = 1e6 + 10;
-const ll MOD = 1e9 + 7;
-const ll HALF = (MOD + 1)/2;
-ll a[MAXN], s[MAXN], sq[MAXN];
-
-void sol() {
-    int n, q;
-    cin >> n >> q;
-    for(int i = 1; i <= n; i++) {
-        ll x;
-        cin >> x;
-        s[i] = (s[i - 1] + x) % MOD;
-        sq[i] = (sq[i - 1] + x * x) % MOD;
-    }
-    while(q--){
-        int l, r;
-        cin >> l >> r;
-        ll sum = (s[r] - s[l - 1]) % MOD;
-        ll sumsq = (sq[r] - sq[l - 1]) % MOD;
-        ll ans = (sum * sum - sumsq) % MOD;
-        ans = (ans * HALF) % MOD;
-        debug((ans + MOD) % MOD);
-    }
+lli sum(lli a, lli b){
+    return ((a%mod) + (b%mod))%mod;
 }
 
+lli mul(lli a, lli b){
+    return ((a % mod) * (b % mod)) % mod;
+}
 
-int main(){IO
-    int t=1;
-    //cin>>t;
-    while(t--)  sol();
+lli sub(lli a, lli b){
+    return ((a - b)+mod)%mod;
+}
+
+lli modpow(lli x, lli n){
+    if(n == 1) return x%mod;
+    if(n == 0) return 1%mod;
+    lli u = modpow(x, n/2);
+    u = mul(u, u);
+    if(n%2 == 1) u = mul(u, x);
+    return u;
+}
+lli inv(lli a){
+    return modpow(a, mod-2);
+}
+
+lli division(lli a, lli b){
+    return mul(a, inv(b));
+}
+
+int main(){
+    cout.tie(0);
+    cin.tie(0);
+    ios_base::sync_with_stdio(0);
+    int n, q; cin >> n >> q;
+    vector <int> nums(n+1);
+    vector <lli> sums(n+1);
+    vector <lli> squares(n+1);
+    sums[0] = 0;
+    squares[0] = 0;
+    
+    forn(i, 1, n){
+        cin >> nums[i];
+        sums[i] = sum(sums[i-1], nums[i]);
+        squares[i] = sum(squares[i-1], modpow(nums[i], 2));
+    }
+    
+    fore(i, 0, q){
+        int l, r;
+        cin >> l >> r;
+
+        if(l == r){
+            cout << 0 << ENDL;
+            continue;
+        }
+        
+        if(r - l == 1){
+            lli ans = mul(nums[l], nums[r]);
+            cout << ans << ENDL;
+            continue;
+        }
+
+        if(l == 1 and r == n){
+            lli res = division(sub(modpow(sums[r], 2), squares[r]), 2);
+            cout << res << ENDL;
+            continue;
+        }
+
+        lli sm = sum(sub(sums[r], sums[l]), nums[l]);
+        sm = modpow(sm, 2);
+        
+        lli sq = sum(sub(squares[r], squares[l]), (squares[l] - squares[l-1]));
+        
+        lli res = division(sub(sm, sq), 2);
+        
+        cout << res << ENDL;
+    }
+    return 0;
 }
