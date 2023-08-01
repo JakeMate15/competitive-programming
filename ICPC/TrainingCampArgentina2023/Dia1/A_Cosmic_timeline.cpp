@@ -53,19 +53,19 @@ void sol(){
         vector<ll> d(n), v(n), t(n);
 	
         map<ll, int> aux;
-	for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
                 cin >> d[i] >> v[i] >> t[i];
                 t[i] = d[i] - t[i];
                 aux[d[i]] = aux[t[i]] = 0;
         }
 	
         int cnt = 0;
-	for (auto &x : aux)
+        for (auto &x : aux)
                 x.second = cnt++;
 
         vector<ll> s(n * 2);
         SegmentTree st(s.size(),s);
-	for (int i = 0; i < n; i++) {
+        for (int i = 0; i < n; i++) {
                 s[i] = v[i] + st.query(aux[t[i]], aux[d[i]]);
                 st.update(aux[d[i]], s[i]);
         }
