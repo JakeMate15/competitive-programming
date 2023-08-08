@@ -37,7 +37,6 @@ void sol(){
 
         sort(all(arr));
 
-
         int actual = 0;
         int i;
         vi res;
@@ -53,6 +52,7 @@ void sol(){
         int pos = i;
         vi res2;
         bool banderaa = false;
+
         for (i++; i < n; i++) {
                 actual = (i - pos) * arr[i].first;
                 res2.push_back(arr[i].second);
@@ -65,6 +65,7 @@ void sol(){
                 imp(bandera,res,res2);
         }
         else {
+                //debug("hola");
                 swap(a,b);
                 actual = 0;
                 i = 0;
@@ -98,7 +99,7 @@ void sol(){
         }
 }
 
-int main(){IO
+int main(){
     int t=1;
     //cin>>t;
     while(t--)  sol();
