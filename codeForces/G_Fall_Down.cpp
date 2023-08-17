@@ -1,59 +1,57 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)		v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+#define forn(i,n)       for(int i=0; i<n; i++)
+#define forr(i,a,n)     for(int i=a; i<n; i++)
+#define fore(i,a,n)     for(int i=a; i<=n; i++)
+#define fornd(i,n)      for(int i=n; i>=0; i--)
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define deb(a)          cout << a << "\n"
+#define debl(a)         cout << a << " "
+#define pb              push_back
 
 typedef long long ll;
 typedef vector<int> vi;
-typedef pair<int,int> pii;
+const int mod = 1e9+7;
+const int mx = 1e9;
 
 void sol(){
-    int n,m;
+	int n,m;
     cin>>n>>m;
-    char a[n][m];
-    
+
+    vector<string> a(n);
     forn(i,n){
-        forn(j,m){
-            cin>>a[i][j];
+        cin>>a[i];
+    }
+
+    forn(i,m){
+        for(int j=n-1; j>=0; j--){
+            //debl(j);deb(i);
+            if(a[j][i] == '*'){
+                int k = j;
+                while(k+1<n && a[k+1][i]!='o' && a[k+1][i] != '*'){
+                    a[k][i] = '.';
+                    a[k+1][i] = '*';
+                    k++;
+                }
+            }
         }
     }
 
-    
-    forn(i,m){
-        for(int j=n-1; j>0; j--){
-            //cout << j << " " << i << endl;
-            //cout << a[j][i] << " " << a[j-1][i] << endl;
-            if(a[j][i] == 'o' || a[j-1][i] == 'o') continue;
-            char aux = a[j][i];
-            a[j][i] = a[j-1][i];
-            a[j-1][i] = aux;
-        }
-        //debug("");
-    }
-    
-    forn(i,n){
-        forn(j,m){
-            cout << a[i][j];
-        }
-        debug("");
-    }
-    
-    
-    debug("");
+    for(auto x: a)  deb(x);
+    deb("");
 }
 
 int main(){
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	int t=1;
 	cin>>t;
-	while(t--)  
+	while(t--){
 		sol();
+	}
+
+	return 0;
 }

@@ -19,38 +19,22 @@ typedef pair<int,int> pii;
 const int mod = 1e9+7;
 
 void sol(){
-    int n;
-    cin>>n;
+    int n,m,k,h;
+    cin>>n>>m>>k>>h;
 
-    int pref[n+1];
-    pref[0] = 0;
-    fore(i,1,n){
-        cin>>pref[i];
-        pref[i]+=pref[i-1];
+    vi a(n);
+    for(auto &x: a){
+        cin>>x;
+        x = abs(x-h);
     }
 
-    /*
-    fore(i,1,n) cout << pref[i] << " ";
-    cout << endl;
-    */
-
-    int l=1,r=n,m,aux;
-    while(l<=r){
-        m = (l+r)/2;
-        //cout << "m es: " << m << "\n";
-
-        cout << "? " << (m) << " ";
-        fore(i,1,m)   cout << i << " "; 
-        cout << "\n";
-
-        cin>>aux;
-
-        if(aux>pref[m]) r = m-1;
-        else            l = m+1;
-
+    int aux,res=0;
+    for(auto x: a){
+        if(x%k==0){
+            if(x/k<=m-1 && x/k>0)   res++;
+        }
     }
-
-    cout << "! " << r+1 << "\n";
+    debug(res);
 }
 
 int main(){IO

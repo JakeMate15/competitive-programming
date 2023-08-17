@@ -7,8 +7,8 @@ using namespace std;
 #define fornd(i,n)      for(int i=n; i>=0; i--)
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
-#define deb(a)          cout << a << "\n"
-#define debl(a)         cout << a << " "
+#define debln(a)      	cout << a << "\n"
+#define deb(a)        	cout << a << " "
 #define pb              push_back
 
 typedef long long ll;
@@ -17,34 +17,17 @@ const int mod = 1e9+7;
 const int mx = 1e9;
 
 void sol(){
-	int n;
-	cin>>n;
+    string s;
+    cin>>s;
+    sort(all(s));
+    vector<string> res;
 
-	map<string,ll> cnt;
+    do{
+        res.pb(s);
+    }while(next_permutation(all(s)));
 
-	ll res = 0;
-	forn(i,n){
-		string s;
-		cin>>s;
-
-		for(char c='a'; c<='k'; c++){
-			string aux = s;
-			if(c!=s[0]){
-				aux[0] = c;
-				res+=cnt[aux];
-				aux[0] = s[0];
-			}
-
-			if(c!=s[1]){
-				aux[1] = c;
-				res+=cnt[aux];
-				aux[1] = s[1];
-			}
-		}
-		cnt[s]++;
-	}
-
-	deb(res);
+    debln(sz(res));
+    for(auto x: res)    debln(x);
 }
 
 int main(){
@@ -52,7 +35,7 @@ int main(){
 	cin.tie(NULL);
 
 	int t=1;
-	cin>>t;
+	//cin>>t;
 	while(t--){
 		sol();
 	}

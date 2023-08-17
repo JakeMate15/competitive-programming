@@ -22,39 +22,42 @@ void sol(){
     int n;
     cin>>n;
 
-    int pref[n+1];
-    pref[0] = 0;
-    fore(i,1,n){
-        cin>>pref[i];
-        pref[i]+=pref[i-1];
+    vector<pii> a[40];
+
+    int x;
+    forn(i,n){
+        cin>>x;
+
+        forn(j,x){
+            int lec;
+            cin>>lec;
+
+            a[lec].emplace_back(x,i+1);
+        }
     }
 
-    /*
-    fore(i,1,n) cout << pref[i] << " ";
-    cout << endl;
-    */
+    int m;
+    cin>>m;
 
-    int l=1,r=n,m,aux;
-    while(l<=r){
-        m = (l+r)/2;
-        //cout << "m es: " << m << "\n";
+    sort(all(a[m]));
 
-        cout << "? " << (m) << " ";
-        fore(i,1,m)   cout << i << " "; 
-        cout << "\n";
+    set<int> res;
+    int ant,act;
 
-        cin>>aux;
+    if(sz(a[m]))    ant = a[m][0].first;
 
-        if(aux>pref[m]) r = m-1;
-        else            l = m+1;
-
+    forn(i,sz(a[m])){
+        if(a[m][i].first == ant)  res.insert(a[m][i].second);
     }
 
-    cout << "! " << r+1 << "\n";
+    debug(sz(res));
+    for(auto x: res){
+        cout << x << " ";
+    }
 }
 
 int main(){IO
 	int t=1;
-	cin>>t;
+	//cin>>t;
 	while(t--)  sol();
 }

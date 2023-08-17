@@ -17,34 +17,30 @@ const int mod = 1e9+7;
 const int mx = 1e9;
 
 void sol(){
-	int n;
-	cin>>n;
+	int n,k;
+    cin>>n>>k;
 
-	map<string,ll> cnt;
+    int n1 =  n - (k - 1);
+    if(n1 > 0 && n1 % 2 == 1){
+        deb("YES");
+        forn(i,k-1) debl(1);
+        deb(n-(k-1));
 
-	ll res = 0;
-	forn(i,n){
-		string s;
-		cin>>s;
+        return;
+    }
 
-		for(char c='a'; c<='k'; c++){
-			string aux = s;
-			if(c!=s[0]){
-				aux[0] = c;
-				res+=cnt[aux];
-				aux[0] = s[0];
-			}
+    int n2 = n - 2 * (k - 1);
+    if(n2 > 0 && n2 % 2 == 0){
+        deb("YES");
+        forn(i,k-1) 
+            debl(2);
+        deb(n-(2*(k-1)));
 
-			if(c!=s[1]){
-				aux[1] = c;
-				res+=cnt[aux];
-				aux[1] = s[1];
-			}
-		}
-		cnt[s]++;
-	}
+        return;
+    }
 
-	deb(res);
+    deb("NO");
+
 }
 
 int main(){
@@ -54,7 +50,7 @@ int main(){
 	int t=1;
 	cin>>t;
 	while(t--){
-		sol();
+    sol();
 	}
 
 	return 0;

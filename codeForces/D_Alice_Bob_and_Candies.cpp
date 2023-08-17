@@ -1,63 +1,78 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)		v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+#define forn(i,n)       for(int i=0; i<n; i++)
+#define forr(i,a,n)     for(int i=a; i<n; i++)
+#define fore(i,a,n)     for(int i=a; i<=n; i++)
+#define fornd(i,n)      for(int i=n; i>=0; i--)
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define deb(a)          cout << a << "\n"
+#define debl(a)         cout << a << " "
+#define pb              push_back
 
 typedef long long ll;
 typedef vector<int> vi;
-typedef pair<int,int> pii;
+const int mod = 1e9+7;
+const int mx = 1e9;
 
 void sol(){
-	int n,x;
+	int n;
 	cin>>n;
 
-	deque<int> a;
+	deque<int> dq;
 	forn(i,n){
-		cin>>x;
-		a.push_back(x);
-    }
-    
-	int ant=0,alice = 0,bob = 0, res=0, act = 0;
-	while(sz(a)>=1){
-        res++;
-		act = 0;
-        
-		while( sz(a) && act<=ant){
- 			alice+=a.front();
-            act+=a.front();
-			a.pop_front();
+		int x;cin>>x;
+		dq.push_back(x);
+	}
+
+	int tot=0,a=0,b=0;
+	int ant=0,curr=0;
+
+	while(sz(dq)){
+		if(!sz(dq))	break;
+		tot++;
+
+		
+		while(curr<=ant && sz(dq)){
+			a+=dq.front();
+			curr+=dq.front();
+			dq.pop_front();
+			
+		}
+		//cout << tot << " " << a << " " << b << "\n";
+
+		ant = curr;
+		curr = 0;
+		if(!sz(dq))	break;
+		tot++;
+
+		while(curr<=ant && sz(dq)){
+			b+=dq.back();
+			curr+=dq.back();
+			dq.pop_back();
+			
 		}
 
-		ant = act;
-
-		if(sz(a)<1)  break;
-        res++;
-        act = 0;
-
-		while(sz(a) && act<=ant){
-			bob+=a.back();
-            act+=a.back();
-			a.pop_back();
-		}
-        ant = act;
+		ant = curr;
+		curr = 0;
 
 	}
 
-    cout << res << " " << alice << " " << bob << "\n";
+	debl(tot);debl(a);deb(b);
+
+	//cout << "\n\n";
 }
 
-int main(){IO
+int main(){
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	int t=1;
 	cin>>t;
-	while(t--)  
+	while(t--){
 		sol();
+	}
+
+	return 0;
 }

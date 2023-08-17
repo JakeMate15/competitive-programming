@@ -1,33 +1,44 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)		v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+#define forn(i,n)       for(int i=0; i<n; i++)
+#define forr(i,a,n)     for(int i=a; i<n; i++)
+#define fore(i,a,n)     for(int i=a; i<=n; i++)
+#define fornd(i,n)      for(int i=n; i>=0; i--)
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define deb(a)          cout << a << "\n"
+#define debl(a)         cout << a << " "
+#define pb              push_back
 
 typedef long long ll;
 typedef vector<int> vi;
-typedef pair<int,int> pii;
+const int mod = 1e9+7;
+const int mx = 1e9;
 
 void sol(){
-    int n;cin>>n;
+	int n;
+    cin>>n;
 
-    if(n <= 1399)       debug("Division 4");
-    else if(n<=1599)    debug("Division 3");
-    else if(n<=1899)    debug("Division 2");
-    else                debug("Division 1");
+    string s = "Division ";
+
+    if(n<=1399) s+="4";
+    else if(n<=1599)    s+="3";
+    else if(n<=1899)    s+="2";
+    else    s+="1";
+
+    deb(s);
 }
 
-int main(){IO
+int main(){
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+
 	int t=1;
 	cin>>t;
-	while(t--)  
+	while(t--){
 		sol();
+	}
+
+	return 0;
 }

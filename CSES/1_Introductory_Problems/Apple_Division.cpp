@@ -7,8 +7,8 @@ using namespace std;
 #define fornd(i,n)      for(int i=n; i>=0; i--)
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
-#define deb(a)          cout << a << "\n"
-#define debl(a)         cout << a << " "
+#define debln(a)      	cout << a << "\n"
+#define deb(a)        	cout << a << " "
 #define pb              push_back
 
 typedef long long ll;
@@ -17,34 +17,23 @@ const int mod = 1e9+7;
 const int mx = 1e9;
 
 void sol(){
-	int n;
-	cin>>n;
-
-	map<string,ll> cnt;
-
-	ll res = 0;
-	forn(i,n){
-		string s;
-		cin>>s;
-
-		for(char c='a'; c<='k'; c++){
-			string aux = s;
-			if(c!=s[0]){
-				aux[0] = c;
-				res+=cnt[aux];
-				aux[0] = s[0];
-			}
-
-			if(c!=s[1]){
-				aux[1] = c;
-				res+=cnt[aux];
-				aux[1] = s[1];
-			}
-		}
-		cnt[s]++;
+    ll n, total=0, ans=INT_MAX;
+	cin >> n;
+	ll arr[n];
+	for(ll i = 0; i < n; i++) {
+		cin >> arr[i];
+		total += arr[i];
 	}
+	for(ll i = 0; i < 1<<n; i++) {
+		ll s = 0;
+		for(ll j = 0; j < n; j++) {
+			if(i & 1<<j) s += arr[j];
+		}
+		ll curr = abs((total-s)-s);
+		ans = min(ans, curr);
+	}
+	cout << ans;
 
-	deb(res);
 }
 
 int main(){
@@ -52,7 +41,7 @@ int main(){
 	cin.tie(NULL);
 
 	int t=1;
-	cin>>t;
+	//cin>>t;
 	while(t--){
 		sol();
 	}

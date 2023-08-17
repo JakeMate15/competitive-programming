@@ -17,34 +17,11 @@ const int mod = 1e9+7;
 const int mx = 1e9;
 
 void sol(){
-	int n;
-	cin>>n;
+	int n,k;
+    cin>>n>>k;
 
-	map<string,ll> cnt;
-
-	ll res = 0;
-	forn(i,n){
-		string s;
-		cin>>s;
-
-		for(char c='a'; c<='k'; c++){
-			string aux = s;
-			if(c!=s[0]){
-				aux[0] = c;
-				res+=cnt[aux];
-				aux[0] = s[0];
-			}
-
-			if(c!=s[1]){
-				aux[1] = c;
-				res+=cnt[aux];
-				aux[1] = s[1];
-			}
-		}
-		cnt[s]++;
-	}
-
-	deb(res);
+    int aux = (k - 1) / (n - 1);
+    deb(k+aux);
 }
 
 int main(){

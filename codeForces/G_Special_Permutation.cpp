@@ -5,6 +5,7 @@ using namespace std;
 #define forr(i,a,n)     for(int i=a; i<n; i++)
 #define fore(i,a,n)     for(int i=a; i<=n; i++)
 #define fornd(i,n)      for(int i=n; i>=0; i--)
+#define fored(i,n,a)    for(int i=n; i>=a; i--)
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
 #define deb(a)          cout << a << "\n"
@@ -17,40 +18,27 @@ const int mod = 1e9+7;
 const int mx = 1e9;
 
 void sol(){
-	int n;
+    int n;
     cin>>n;
 
-    vector<ll> a(n),pref(n),suf(n);
-    forn(i,n){
-        cin>>a[i];
-        if(i)   pref[i] = a[i]+pref[i-1];
-        else    pref[i] = a[i];
+    if(n<=3){
+        deb(-1);
+        return;
     }
 
-    suf[n-1] = a[n-1];
-    for(int i=n-2; i>=0; i--){
-        suf[i] = suf[i+1] + a[i];
+    if(n==4){
+        deb("2 4 1 3");
+        return;
     }
 
-    map<ll,pair<int,int>> aux;
-    forn(i,n){
-        if(!aux.count(pref[i]))     aux[pref[i]] = {-1,-1};
-        if(!aux.count(suf[n-i-1]))  aux[suf[n-i-1]] = {-1,-1};
-
-        aux[ pref[i] ].first = i;
-        aux[ suf[n-i-1] ].second = n-i-1;
+    if(n&1) for(int i=n-1; i>=2; i-=2)   debl(i);
+    else    for(int i=n; i>=2; i-=2)     debl(i);
+    debl(5);
+    for(int i=1; i<=n; i+=2){
+        if(i!=5)    
+            debl(i);
     }
-
-    int res = 0;
-    for(auto x: aux){
-        int a = x.second.first;
-        int b = x.second.second;
-        
-        if(a>=0 && b>=0 && a<b) res = max(res, a+1 + n-b );
-    }
-
-    deb(res);
-
+    deb("");
 }
 
 int main(){
