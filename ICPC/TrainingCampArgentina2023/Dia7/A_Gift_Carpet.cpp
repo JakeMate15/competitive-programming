@@ -14,11 +14,31 @@ typedef vector<int> vi;
 #define debug(a)    cout << a << "\n"
 
 void sol(){
+    int n,m;
+    cin>>n>>m;
+    string s = "vika";
+    int aux = 0;
 
+    vector<string> a(n);
+    for(auto &x: a){
+        cin>>x;
+    }
+
+        forn(i,m){
+                forn(j,n){
+                        if(a[j][i] == s[aux]){
+                                aux++;
+                                break;
+                        }
+                }
+        }
+
+        //debug(aux);
+    cout << (aux==4?"YES":"NO") << endl;
 }
 
 int main(){IO
     int t=1;
-    //cin>>t;
+    cin>>t;
     while(t--)  sol();
 }
