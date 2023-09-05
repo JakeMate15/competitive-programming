@@ -1,29 +1,32 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)	    v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+#define forn(i,n)       for(int i=0; i<n; i++)
+#define forr(i,a,n)     for(int i=a; i<n; i++)
+#define fore(i,a,n)     for(int i=a; i<=n; i++)
+#define fornd(i,n)      for(int i=n; i>=0; i--)
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define debln(a)        cout << a << "\n"
+#define deb(a)          cout << a << " "
+#define pb              push_back
 
 typedef long long ll;
 typedef vector<int> vi;
-typedef pair<int,int> pii;
-
-const int mod = 1e9+7;
+typedef pair<int,int> ii;
 
 void sol(){
 
 }
 
-int main(){IO
-	int t=1;
-	cin>>t;
-	while(t--)  sol();
+int main(){
+    ios::sync_with_stdio(false);cin.tie(0);
+
+    int t=1;
+    //cin>>t;
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }
