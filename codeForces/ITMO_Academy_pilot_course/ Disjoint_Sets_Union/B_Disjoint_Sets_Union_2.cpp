@@ -15,49 +15,56 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
 
-struct UnionFind {
-  int n;
-  vector<int> dad, size, mn,mx;
- 
-  UnionFind(int N) : n(N), dad(N), size(N, 1), mx(N),mn(N) {
-    while (N--){
-        dad[N] = N;
-        mx[N] = mn[N] = N+1;
+struct DSU{
+    int n;
+    vi padre,tam,mx,mn;
+
+    DSU(int N): n(N+1), padre(N+1), tam(N+1,1),mx(N+1),mn(N+1){
+        N++;
+        while(N--){
+          padre[N] = mx[N] = mn[N] = N;
+        }
+        
     }
-  }
-  // 4
-  // O(lg*(N))
-  int root(int u) {
-    if (dad[u] == u) return u;
-    return dad[u] = root(dad[u]);
-  }
-  // 8
-  // O(1)
-  void join(int u, int v) {
-    int Ru = root(u), Rv = root(v);
-    if (Ru == Rv) return;
-    if (size[Ru] > size[Rv]) swap(Ru, Rv);
-    --n, dad[Ru] = Rv;
-    size[Rv] += size[Ru];
-    mn[Rv] = min(mn[Rv],mn[Ru]);
-    mx[Rv] = max(mx[Rv],mx[Ru]);
-  }
-  // 4
-  // O(lg*(N))
-  bool areConnected(int u, int v) {
-    return root(u) == root(v);
-  }
-  // 4
-  int getSize(int u) { return mx[root(u)]; }
- 
-  int numberOfSets() { return n; }
+
+    int find(int a){
+        return a==padre[a]?a:padre[a]=find(padre[a]);
+    }
+
+    void join(int a, int b){
+        a = find(a), b = find(b);
+        if(a!=b){
+          if(tam[a]>tam[b]) swap(a,b);
+          n--;padre[a] = b;
+          tam[b]+=tam[a];
+          mn[b] = min(mn[b],mn[a]);
+          mx[b] = max(mx[b],mx[a]);
+        }
+    }
+
+    void get(int u){
+      int x = find(u);
+      deb(mn[x]);deb(mx[x]);debln(tam[x]);
+    }
+
+    bool same(int a, int b){
+        return find(a)==find(b);
+    }
+
+    int getTamU(int u){
+        return tam[find(u)];
+    }
+
+    int numSets(){
+        return n;
+    }
 };
 
 void sol(){
     int n,q;
     cin>>n>>q;
 
-    UnionFind ds(n);
+    DSU ds(n);
 
     while(q--){
         string op;
@@ -66,12 +73,11 @@ void sol(){
 
         if(op == "union"){
             cin>>u>>v;
-            u--;v--;
             ds.join(u,v);
         }
         else{
             cin>>u;
-            debln( (ds.getSize(u)) );
+            ds.get(u);
         }
 
     }

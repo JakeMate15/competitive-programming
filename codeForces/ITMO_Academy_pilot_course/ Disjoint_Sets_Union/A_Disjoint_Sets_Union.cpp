@@ -19,7 +19,7 @@ struct DSU{
     int n;
     vi padre,tam;
 
-    DSU(int N): n(N+1), padre(N+1), tam(N,1){
+    DSU(int N): n(N+1), padre(N+1), tam(N+1,1){
         N++;
         while(N--)  padre[N] = N;
     }
@@ -30,16 +30,19 @@ struct DSU{
     }
 
     int find(int a){
-        if(a == padre[a])   return a;
-        return padre[a] = find(padre[a]);
+        return a==padre[a]?a:padre[a]=find(padre[a]);
     }
 
     void join(int a, int b){
-        int A = find(a), B = find(b);
-        if(A==B)    return;
-        if(tam[A]>tam[B])   swap(A,B);
-        n--,padre[A] = padre[B];
-        tam[A]+=tam[B];
+        a = find(a);
+        b = find(b);
+
+        if(a!=b){
+            if(tam[a]>tam[b])   swap(a,b);
+            n--;
+            padre[a] = b;
+            tam[b]+=tam[a];
+        }
     }
 
     bool same(int a, int b){
