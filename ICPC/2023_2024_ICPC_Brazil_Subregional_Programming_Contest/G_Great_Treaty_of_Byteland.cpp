@@ -1,5 +1,3 @@
-//TLE case 22
-
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -29,9 +27,9 @@ bool eq(ld a, ld b){return abs(a-b) <= eps;}  //a == b
 bool neq(ld a, ld b){return abs(a-b) > eps;}  //a != b
 
 struct point{
-	ld x, y,j;
+	int x, y,j;
 	point(): x(0), y(0){}
-	point(ld x, ld y): x(x), y(y){}
+	point(int x, int y): x(x), y(y){}
 
 	point operator+(const point & p) const{return point(x + p.x, y + p.y);}
 	point operator-(const point & p) const{return point(x - p.x, y - p.y);}
@@ -64,28 +62,25 @@ struct point{
 istream &operator>>(istream &is, point & p){return is >> p.x >> p.y;}
 ostream &operator<<(ostream &os, const point & p){return os << "(" << p.x << ", " << p.y << ")";}
 
-map<int,int> convexHull(vector<point> P){
+vector<point> convexHull(vector<point> P){
 	sort(P.begin(), P.end());
 	vector<point> L, U;
-    map<int,int> res;
 	for(int i = 0; i < P.size(); i++){
 		while(L.size() >= 2 && le((L[L.size() - 2] - P[i]).cross(L[L.size() - 1] - P[i]), 0)){
-            res[L.back().j]--;
 			L.pop_back();
 		}
 		L.push_back(P[i]);
-        res[P[i].j]++;
 	}
 	for(int i = P.size() - 1; i >= 0; i--){
 		while(U.size() >= 2 && le((U[U.size() - 2] - P[i]).cross(U[U.size() - 1] - P[i]), 0)){
-			res[U.back().j]--;
-            U.pop_back();
+			U.pop_back();
 		}
 		U.push_back(P[i]);
-        res[P[i].j]++;
 	}
-
-	return res;
+	L.pop_back();
+	U.pop_back();
+	L.insert(L.end(), U.begin(), U.end());
+	return L;
 }
 
 bool cmp(point a, point b){
@@ -102,24 +97,18 @@ void sol(){
         puntos[i].j = i+1;
     }
 
-    map<int,int> ch = convexHull(puntos);
-
-    /*
-    int ant = -1;
+    vector<point> ch = convexHull(puntos);
+    sort(all(ch),cmp);
+    ch.erase(unique(all(ch)),ch.end());
     for(auto x: ch){
-        if(x==ant)  continue;
-        deb(x);
-        ant = x;
-    }
-    */
-
-    for(auto &[a,b]:ch){
-        if(b>0) deb(a);
+        deb(x.j);
     }
 
 }
 
 int main(){
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 
 	int t=1;
 	//cin>>t;
