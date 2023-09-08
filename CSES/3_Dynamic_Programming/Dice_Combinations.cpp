@@ -1,6 +1,3 @@
-//Nota mental, no complicar las cosas por usar una sola formula
-//:(
-
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -18,32 +15,44 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
 
-ll gcd(ll a, ll b) {return a == 0? b: gcd(b%a,a);}
-ll lcm(ll a, ll b) {return a * (b / gcd(a,b));}
-ll gaus(ll n){return (n*(n+1))/2;}
+const int mod = 1e9+7;
+const int mx = 1e6+5;
+int dp[mx];
+
+int sol(int n){
+    if(n<0)     return 0;
+    if(n<=1)    return 1;
+
+    int &mem = dp[n];
+    if(mem != 0)   return mem;
+
+    fore(i,1,6){
+        (mem+=sol(n-i))%=mod;
+    }
+
+    return mem;
+}
 
 void sol(){
-    ll n,x,y;
-    cin>>n>>x>>y;
+    int n;
+    cin>>n;
 
-    ll mcd = lcm(x,y);
-    ll juntos = n/mcd;
-    x = n/x;
-    y = n/y;
-    x-=juntos;
-    y-=juntos;
-
-    ll res = gaus(n)-gaus(n-x);
-    res-=((y*(y+1))/2);
-    //res+=((n-(n-x+1)+1)/2*((n-x+1)+n));
-    debln(res);
+    //debln(sol(n));
+    dp[0] = dp[1] = 1;
+    fore(i,2,n){
+        fore(j,1,6){
+            if(i-j<0)   break;
+            (dp[i]+=dp[i-j])%=mod;
+        }
+    }
+    debln(dp[n]);
 }
 
 int main(){
     ios::sync_with_stdio(false);cin.tie(0);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
     while(t--){
         sol();
     }

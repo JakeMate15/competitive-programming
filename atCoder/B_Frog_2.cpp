@@ -1,6 +1,3 @@
-//Nota mental, no complicar las cosas por usar una sola formula
-//:(
-
 #include<bits/stdc++.h>
 using namespace std;
 
@@ -18,32 +15,32 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
 
-ll gcd(ll a, ll b) {return a == 0? b: gcd(b%a,a);}
-ll lcm(ll a, ll b) {return a * (b / gcd(a,b));}
-ll gaus(ll n){return (n*(n+1))/2;}
-
 void sol(){
-    ll n,x,y;
-    cin>>n>>x>>y;
+    int n,k;
+    cin>>n>>k;
 
-    ll mcd = lcm(x,y);
-    ll juntos = n/mcd;
-    x = n/x;
-    y = n/y;
-    x-=juntos;
-    y-=juntos;
+    vi a(n),dp(n,INT_MAX);
+    forn(i,n){
+        cin>>a[i];
+    }
 
-    ll res = gaus(n)-gaus(n-x);
-    res-=((y*(y+1))/2);
-    //res+=((n-(n-x+1)+1)/2*((n-x+1)+n));
-    debln(res);
+    dp[0] = 0;
+    forn(i,n){
+        fore(j,1,k){
+            if(i-j>=0){
+                dp[i] = min(  abs(a[i]-a[i-j])+dp[i-j] , dp[i] );
+            }
+        }
+    }
+
+    debln(dp[n-1]);
 }
 
 int main(){
     ios::sync_with_stdio(false);cin.tie(0);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
     while(t--){
         sol();
     }

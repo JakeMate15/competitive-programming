@@ -15,26 +15,26 @@ typedef vector<int> vi;
 
 const int N = 1e6;
 const int MOD = 1e9+7;
-int fac[N+5] = {1};
+vector<int> f(N);
 
 void calcF(){
     fore(i,1,N) fac[i] = (fac[i-1]*i);
 }
 
-pair<ll,ll> extendedEuclid (ll a, ll b){ //a * x + b * y = gcd(a,b)
-    ll x,y;
-    if (b==0) return {1,0};
-    auto p=extendedEuclid(b,a%b);
-    x=p.second;
-    y=p.first-(a/b)*x;
-    if(a*x+b*y==-gcd(a,b)) x=-x, y=-y;
-    return {x,y};
-}
+int factmod(int n, int p) {
+    vector<int> f(p);
+    f[0] = 1;
+    for (int i = 1; i < p; i++)
+        f[i] = f[i-1] * i % p;
 
-ll inv(ll a, ll mod) { //inverse of a modulo mod
-    assert(gcd(a,mod)==1);
-    pair<ll,ll> sol = extendedEuclid(a,mod);
-    return ((sol.first%mod)+mod)%mod;
+    int res = 1;
+    while (n > 1) {
+        if ((n/p) % 2)
+            res = p - res;
+        res = res * f[n%p] % p;
+        n /= p;
+    }
+    return res;
 }
 
 
