@@ -3,4 +3,4 @@
 *.vscode
 *.txt
 *.bin
-.cph
+/.cph
