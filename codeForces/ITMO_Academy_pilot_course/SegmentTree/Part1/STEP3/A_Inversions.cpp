@@ -1,114 +1,81 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)	    v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+#define forn(i,n)       for(int i=0; i<n; i++)
+#define forr(i,a,n)     for(int i=a; i<n; i++)
+#define fore(i,a,n)     for(int i=a; i<=n; i++)
+#define fornd(i,n)      for(int i=n; i>=0; i--)
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define debln(a)        cout << a << "\n"
+#define deb(a)          cout << a << " "
+#define pb              push_back
 
 typedef long long ll;
 typedef vector<int> vi;
-typedef pair<int,int> pii;
+typedef pair<int,int> ii;
 
+const int mx = 2e5+5;
 template<typename T>
-struct SegmentTree{
+struct FenwickTree{
 	int N;
-	vector<T> ST;
- 
-	//Creacion a partir de un arreglo O(n)
-	SegmentTree(int N, vector<T> & arr): N(N){
-		ST.resize(N << 1);
-		for(int i = 0; i < N; ++i)
-			ST[N + i] = arr[i];     //Dato normal
-			ST[N + i] = creaNodo(); //Dato compuesto
-		for(int i = N - 1; i > 0; --i)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];        //Dato normal
-			ST[i] = merge(ST[i << 1] , ST[i << 1 | 1]); //Dato compuesto
+	vector<T> bit;
+
+	//build from array in O(n), indexed in 0
+	FenwickTree(int N): N(N){
+		bit.resize(N);
 	}
- 
-	//Actualizacion de un elemento en la posicion i
-	void update(int i, T value){
-		ST[i += N] = value;     //Dato normal
-		ST[i += N] = creaNodo();//Dato compuesto
-		while(i >>= 1)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];        //Dato normal  
-			ST[i] = merge(ST[i << 1] , ST[i << 1 | 1]); //Dato compuesto
+
+	//single element increment
+	void update(int pos, T value){
+		while(pos < N){
+			bit[pos] += value;
+			pos |= pos + 1;
+		}
 	}
- 
-	//query en [l, r]
+
+	//range query, [0, r]
+	T query(int r){
+		T res = 0;
+		while(r >= 0){
+			res += bit[r];
+			r = (r & (r + 1)) - 1;
+		}
+		return res;
+	}
+
+	//range query, [l, r]
 	T query(int l, int r){
-		T res = 0;  //Dato normal
-		nodo resl = creaNodo(), resr = creaNodo();//Dato compuesto
-		for(l += N, r += N; l <= r; l >>= 1, r >>= 1){
-			if(l & 1)       res += ST[l++]; //Dato normal
-			if(!(r & 1))    res += ST[r--]; //Dato normal
-
-			if(l & 1)       resl = merge(resl,ST[l++]); //Dato compuesto
-			if(!(r & 1))    resr = merge(ST[r--],resr); //Dato compuesto
-		}
-		return res;                 //Dato normal
-		return merge(resl,resr);    //Dato compuesto
-	}
-
-	//Para estas querys es necesario que el st tenga el tam de la siguiente potencia de 2
-	//ll nT = 1;
-	// while(nT<n) nT<<=1;
-	//vector<int> a(nT,0);	
-
-	//Encontrar k-esimo 1 en un st de 1's
-	int Kth_One(int k) {
-		int i = 0, s = N >> 1;
-		for(int p = 2; p < 2 * N; p <<= 1, s >>= 1) {
-			if(k < ST[p])	continue;
-			k -= ST[p++];	i += s;
-		}
-		return i;
-	}
-
-	//i del primer elemento >= k en todo el arr
-	int atLeastX(int k){
-		int i = 0, s = N >> 1;
-		for(int p = 2; p < 2 * N; p <<= 1, s >>= 1) {
-			if(ST[p] < k)	p++, i += s;
-		}
-		if(ST[N + i] < k)	i = -1;
-		return i;
-	}
-
-	//i del primer elemento >= k en [l,fin]
-	//Uso atLeastX(k,l,1,nT)
-	int atLeastX(int x, int l, int p, int s) {
-		if(ST[p] < x or s <= l)	return -1;
-		if((p << 1) >= 2 * N)
-			return (ST[p] >= x) - 1;
-		int i = atLeastX(x, l, p << 1, s >> 1);
-		if(i != -1)	return i;
-		i = atLeastX(x, l - (s >> 1), p << 1 | 1, s >> 1);
-		if(i == -1)	return -1;
-		return (s >> 1) + i;
+		return query(r) - query(l - 1);
 	}
 };
 
 void sol(){
-    int n;
-    cin>>n;
+	int n;
+	cin>>n;
 
-    forn(i,n){
-        int x;
-        cin>>x;
+	vi a(n);
+	for(auto &x: a){
+		cin>>x;
+	}
 
+	FenwickTree<int> bit(mx);
 
-    }
+	forn(i,n){
+		deb(i-bit.query(a[i]));
+		bit.update(a[i],1);
+	}
+
 }
 
-int main(){IO
+int main(){
+	ios::sync_with_stdio(false);cin.tie(0);
+
 	int t=1;
 	//cin>>t;
-	while(t--)  sol();
+	while(t--){
+		sol();
+	}
+
+	return 0;
 }

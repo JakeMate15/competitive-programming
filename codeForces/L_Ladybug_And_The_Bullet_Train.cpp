@@ -11,7 +11,7 @@ typedef long long int lli;
 #define debug(a)    cout << a << "\n"
 
 const int maxV = 2*1e6+1;
-vector<vector<int>> arbol;
+vector<int> arbol[maxV];
 int cantNodos[maxV];
 int distDesde1[maxV];
 
@@ -32,9 +32,6 @@ void dfs(int nodo, int padre, int objetivo, int &padreObjetivo, int &abueloObjet
 void sol(){
     int n,destino;  
     cin>>n>>destino;
-    arbol.resize(n+1);
-    memset(cantNodos,0,sizeof(cantNodos));
-    memset(distDesde1,0,sizeof(distDesde1));
 
     forn(i,n-1){
         int u,v;cin>>u>>v;
@@ -62,6 +59,7 @@ int main(){IO
     int t=1;//cin>>t;
     while(t--)
         sol();
+    return 0;
 }
 
 

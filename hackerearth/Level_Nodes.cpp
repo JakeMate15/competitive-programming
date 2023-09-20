@@ -15,49 +15,50 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
 
+const int mx = 1e5+10;
+vi g[mx];
+int vis[mx], col[mx];
+map<int,int> colores;
+
 void sol(){
-    int n;
+    int n,x;
     cin>>n;
 
-    vector<ii> segmentos(n);
-    forn(i,n){
-        int l,r,a,b;
-        cin>>l>>r>>a>>b;
-        segmentos[i] = {l,b};
+    forn(i,n-1){
+        int u,v;
+        cin>>u>>v;
+
+        g[u].pb(v);
+        g[v].pb(u);
     }
 
-    sort(all(segmentos));
-
-    vector<ii> a;
-    for(auto &[l,r]: segmentos){
-        if(sz(a) && l<=a.back().second){
-            a.back().second = max(r,a.back().second);
+    cin>>x;
+    queue<int> q;
+    vis[1] = col[1] = 1;
+    q.push(1);
+    int color = 1;
+    while(!q.empty()){
+        int s = q.front();q.pop();
+        for(auto u: g[s]){
+            if(vis[u])  continue;
+            vis[u] = true;
+            col[u] = col[s]+1;
+            q.push(u);
         }
-        else{
-            a.emplace_back(l,r);
-        }
+        
     }
 
-    int q; 
-    cin>>q;
-    while(q--){
-        int x;
-        cin>>x;
-
-        int pos = lower_bound(all(a),make_pair(x+1,0)) - a.begin() - 1;
-        if(pos>=0){
-            x = max(x,a[pos].second);
-        }
-        deb(x);
+    fore(i,1,n){
+        colores[col[i]]++;
     }
-    debln("");
+    debln(colores[x]);
 }
 
 int main(){
     ios::sync_with_stdio(false);cin.tie(0);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
     while(t--){
         sol();
     }
