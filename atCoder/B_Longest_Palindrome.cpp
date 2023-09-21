@@ -16,38 +16,32 @@ typedef vector<int> vi;
 typedef pair<int,int> ii;
 
 void sol(){
-    int n;
-    cin >> n;
-    
-    int b[n][n];
-    forn(i,n){
-        forn(j,n){
-            char x;
-            cin >> x;
-            b[i][j] = x - '0';
-        }
-    }
-    
-    forn(i,n){
-        vector<int> a{i};
-        forn(j,n) {
-            if (b[j][i]) {
-                a.pb(j);
+    string s;
+    cin>>s;
+
+    int n = sz(s);
+    int res = 1;
+    fore(i,2,n){
+        forn(j,n-i+1){
+            string s1 = s.substr(j,i);
+            string s2 = s1;
+            reverse(all(s1));
+
+            if(s1 == s2){
+                res = max(res,i);
+                break;
             }
         }
-        deb(sz(a));
-        for (auto x : a) {
-            deb(x+1);
-        }
-        debln("");
     }
+
+    debln(res);
 }
 
 int main(){
     ios::sync_with_stdio(false);cin.tie(0);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
     while(t--){
         sol();
     }

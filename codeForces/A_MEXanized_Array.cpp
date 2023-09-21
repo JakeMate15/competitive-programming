@@ -16,31 +16,25 @@ typedef vector<int> vi;
 typedef pair<int,int> ii;
 
 void sol(){
-    int n;
-    cin >> n;
-    
-    int b[n][n];
-    forn(i,n){
-        forn(j,n){
-            char x;
-            cin >> x;
-            b[i][j] = x - '0';
-        }
+    int n,k,x;
+    cin>>n>>k>>x;
+
+    if(k>n || k-1>x){
+        debln(-1);
+        return;
+    }
+
+    int res = 0;
+
+    forn(i,k) {
+        res+=i;
     }
     
-    forn(i,n){
-        vector<int> a{i};
-        forn(j,n) {
-            if (b[j][i]) {
-                a.pb(j);
-            }
-        }
-        deb(sz(a));
-        for (auto x : a) {
-            deb(x+1);
-        }
-        debln("");
+    forn(i,n-k) {
+        res+=(x>k?x:k-1);
     }
+
+    debln(res);
 }
 
 int main(){

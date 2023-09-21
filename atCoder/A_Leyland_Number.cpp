@@ -15,39 +15,28 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
 
+long long binpow(long long a, long long b) {
+    if (b == 0)
+        return 1;
+    long long res = binpow(a, b / 2);
+    if (b % 2)
+        return res * res * a;
+    else
+        return res * res;
+}
+
 void sol(){
-    int n;
-    cin >> n;
-    
-    int b[n][n];
-    forn(i,n){
-        forn(j,n){
-            char x;
-            cin >> x;
-            b[i][j] = x - '0';
-        }
-    }
-    
-    forn(i,n){
-        vector<int> a{i};
-        forn(j,n) {
-            if (b[j][i]) {
-                a.pb(j);
-            }
-        }
-        deb(sz(a));
-        for (auto x : a) {
-            deb(x+1);
-        }
-        debln("");
-    }
+    ll a,b;
+    cin>>a>>b;
+
+    debln( (binpow(a,b) + binpow(b,a)) );
 }
 
 int main(){
     ios::sync_with_stdio(false);cin.tie(0);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
     while(t--){
         sol();
     }

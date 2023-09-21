@@ -15,39 +15,18 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
 
+const int mx = 2*1e5+1;
+int g[mx][4];
+
 void sol(){
-    int n;
-    cin >> n;
     
-    int b[n][n];
-    forn(i,n){
-        forn(j,n){
-            char x;
-            cin >> x;
-            b[i][j] = x - '0';
-        }
-    }
-    
-    forn(i,n){
-        vector<int> a{i};
-        forn(j,n) {
-            if (b[j][i]) {
-                a.pb(j);
-            }
-        }
-        deb(sz(a));
-        for (auto x : a) {
-            deb(x+1);
-        }
-        debln("");
-    }
 }
 
 int main(){
     ios::sync_with_stdio(false);cin.tie(0);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
     while(t--){
         sol();
     }
