@@ -14,46 +14,25 @@ using namespace std;
 typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
-int x;
 
 void sol(){
-    int n,m;
-    cin>>n>>m;
+    char g[10][10];
 
-    vi a(32,0);
-    forn(i,n){
-        cin>>x;
-        forn(j,32){
-            if( (1<<j) & x ) {
-                a[j]++;
+    int res = 0;
+    forn(i,10){
+        forn(j,10){
+            cin>>g[i][j];
+            if(g[i][j] == 'X'){
+                int nivel = min({i+1,j+1,10-i,10-j});
+                //deb(nivel);
+                res+=(nivel);
             }
         }
     }
 
-    int msk = 0;
-    forn(i,m) {
-        cin>>x;
-        msk|=x;
-    }
+    debln(res);
 
-    int mn = 0, mx = 0;
-    forn(i,32) {
-        if(a[i]&1) {
-            mx|=(1<<i);
-            
-            mn|=(1<<i);
-            if(!(n&1) && (msk&(1<<i))){
-                mn &= (~(1<<i));
-            }
-        }
-        else{
-            if( (n&1) && ((1<<i) & msk) ) {
-                mx|=(1<<i);
-            }
-        }
-    }
-    
-    deb(mn);debln(mx);
+
 }
 
 int main(){
