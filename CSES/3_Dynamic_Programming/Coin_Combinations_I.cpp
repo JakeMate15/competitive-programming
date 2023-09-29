@@ -2,6 +2,9 @@
 //https://cses.fi/problemset/task/1635
 #include<bits/stdc++.h>
 using namespace std;
+
+const int mx = 2e6;
+int dp[mx];
  
 int main(){
     int n,objetivo;
@@ -9,9 +12,6 @@ int main(){
     cin>>n>>objetivo;
     vector<int>monedas(n);
     for(int i=0;i<n;i++)    cin>>monedas[i];
-    
-    int dp[objetivo+1];
-    memset(dp,0,sizeof(dp));
  
     for(int i=1;i<=objetivo;i++){
         for(int c: monedas){
