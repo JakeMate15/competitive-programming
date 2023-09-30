@@ -36,7 +36,7 @@ void dfs(int u, int padre) {
     }
 }
 
-int bfs(int inicio, int destino, int n) {
+bool bfs(int inicio, int destino, int destino2, int n) {
     vi dist(n+1);
     vector<bool> ya(n+1,false);
     queue<int> q;
@@ -46,6 +46,9 @@ int bfs(int inicio, int destino, int n) {
     dist[inicio] = 0;
 
     while(!q.empty()) {
+        if(ya[destino2] && ya[destino]) {
+            break;
+        }
         int actual = q.front();q.pop();
 
         for(auto u: g[actual]) {
@@ -59,7 +62,7 @@ int bfs(int inicio, int destino, int n) {
         }
     }
 
-    return dist[destino];
+    return dist[destino] <= dist[destino2];
 }
 
 void sol(){
@@ -90,14 +93,12 @@ void sol(){
         return;
     }
     
-    int distV = bfs(va, entrada, n);
-    int distM = bfs(ma, entrada, n);
 
-    debln((distM <= distV? "NO": "YES"));
+    debln((bfs(entrada,ma,va,n)? "NO": "YES"));
 }
 
 int main(){
-    //ios::sync_with_stdio(false);cin.tie(0);
+    ios::sync_with_stdio(false);cin.tie(0);
 
     int t=1;
     cin>>t;
