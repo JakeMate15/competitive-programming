@@ -5,7 +5,7 @@ using namespace std;
 #define sz(a)           (int)a.size()
 #define debln(a)        cout << a << "\n"
 #define deb(a)          cout << a << " "
-#define nl()            cout << "\n"
+#define nl              cout << "\n";
 typedef long long ll;
 
 void sol(){

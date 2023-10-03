@@ -15,21 +15,31 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
 
+//Revisar en que casos cuantos casos es viable tomar el otro
+
 void sol(){
-    int a, b, n;
-    cin >> a >> b >> n;
+    int n;
+    cin >> n;
 
-    vector<int> t(n);
-    for(auto &x: t) {
-        cin >> x;
+    int gP, gR;
+    cin >> gP >> gR;
+
+    int iguales = 0, mejores = 0;
+    for(int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+
+        if(u >= gP && v >= gR) {
+            iguales++;
+        }
     }
 
-    ll res = b;
-    for(auto x: t) {
-        res += min(a - 1, x);
+    if(iguales) {
+        debln(-1);
     }
-
-    debln(res);
+    else{
+        debln(gP);
+    }
 }
 
 int main(){

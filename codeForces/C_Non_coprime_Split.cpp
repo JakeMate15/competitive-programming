@@ -15,21 +15,33 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
 
+
+//gcd(a, l - a) = gcd(a, l)
+//gcd(a, l + a) = gcd(a, l)
+
+ll divisor_min(ll x) {
+    for(ll i = 2; i * i <= x; i++) {
+        if(x % i == 0) {
+            return i;
+        }
+    }
+    
+    return x;
+}
+
 void sol(){
-    int a, b, n;
-    cin >> a >> b >> n;
+    ll l, r;
+    cin >> l >> r;
 
-    vector<int> t(n);
-    for(auto &x: t) {
-        cin >> x;
+    for(int i = max(l,4 * 1LL); i <= r; i++) {
+        ll mn = divisor_min(i);
+        if(mn != i) {
+            deb(i - mn); debln(mn);
+            return;
+        }
     }
 
-    ll res = b;
-    for(auto x: t) {
-        res += min(a - 1, x);
-    }
-
-    debln(res);
+    debln(-1);
 }
 
 int main(){

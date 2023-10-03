@@ -15,17 +15,37 @@ typedef long long ll;
 typedef vector<int> vi;
 typedef pair<int,int> ii;
 
-void sol(){
-    
+void sol(int t){
+    int l, r, x, a ,b;
+    cin >> l >> r >> x >> a >> b;
+
+    if(a == b) {
+        debln(0);
+    }
+    else if(abs(a - b) >= x) {
+        debln(1);
+    }
+    else if((abs(a - l) >= x && abs(l - b) >= x) || (abs(a - r) >= x && abs(r - b) >= x)) {
+        debln(2);
+    }
+    else if(abs(a - r) >= x && abs(r - l) >= x && abs(l - b) >= x) {
+        debln(3);
+    }
+    else if(abs(a - l) >= x && abs(l - r) >= x && abs(r - b) >= x) {
+        debln(3);
+    }
+    else{
+        debln(-1);
+    }
 }
 
 int main(){
     ios::sync_with_stdio(false);cin.tie(0);
 
     int t=1;
-    //cin>>t;
-    while(t--){
-        sol();
+    cin>>t;
+    fore(i, 1, t){
+        sol(i);
     }
 
     return 0;
