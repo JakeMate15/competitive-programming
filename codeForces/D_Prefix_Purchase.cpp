@@ -1,32 +1,6 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void __print(int x) {cerr << x;}
-void __print(long x) {cerr << x;}
-void __print(long long x) {cerr << x;}
-void __print(unsigned x) {cerr << x;}
-void __print(unsigned long x) {cerr << x;}
-void __print(unsigned long long x) {cerr << x;}
-void __print(float x) {cerr << x;}
-void __print(double x) {cerr << x;}
-void __print(long double x) {cerr << x;}
-void __print(char x) {cerr << '\'' << x << '\'';}
-void __print(const char *x) {cerr << '\"' << x << '\"';}
-void __print(const string &x) {cerr << '\"' << x << '\"';}
-void __print(bool x) {cerr << (x ? "true" : "false");}
-
-template<typename T, typename V>
-void __print(const pair<T, V> &x) {cerr << '{'; __print(x.first); cerr << ','; __print(x.second); cerr << '}';}
-template<typename T>
-void __print(const T &x) {int f = 0; cerr << '{'; for (auto &i: x) cerr << (f++ ? "," : ""), __print(i); cerr << "}";}
-void _print() {cerr << "]\n";}
-template <typename T, typename... V>
-void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v...);}
-#ifndef ONLINE_JUDGE
-#define debug(x...) cerr << "[" << #x << "] = ["; _print(x)
-#else
-#define debug(x...)
-#endif 
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
 #define debln(a)        cout << a << "\n"
@@ -34,7 +8,9 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define nl              cout << "\n";
 typedef long long ll;
 
-//Podemos verificar que siempre es mejor comprar un valor mas grande por menos 
+//Podemos verificar que siempre es mejor comprar un valor mas grande por menos
+//Siempre es mejor tomar el valor mas alto posible con la i menor, despues podemos reviasar si sobra dinero
+//Podemos construir un arreglo creciente donde a su vez podemos actualizar el valor para cada pos i
 
 void sol(){
     int n, k;
@@ -44,18 +20,25 @@ void sol(){
     for(int i = 0; i < n; i++) {
         cin >> c[i];
     }
-    debug(c);
+
     for(int i = n - 2; i >= 0; i--) {
         c[i] = min(c[i], c[i + 1]);
     }
-    debug(c);
 
     cin >> k;
+    
+    int t = k;
     for(int i = 0; i < n; i++) {
-       deb(k / c[i]); 
-    }
+        //Cuantas monedas mas me cuesta actualizar hasta aqui
+        int add = c[i] - (i == 0 ? 0 : c[i - 1]);
+        //Si no cuesta, entonces simplemente puedo actualizar al mismo valor
+        //Si cuesta algo, debo de ver si es posible tomar el siguiente 
+        t = min(t, add == 0 ? t : k / add);
+        k -= add * t;
 
-    nl
+        deb(t);
+    }
+    nl;
 }
 
 int main(){
