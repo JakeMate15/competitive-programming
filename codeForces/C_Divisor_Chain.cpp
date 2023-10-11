@@ -9,32 +9,31 @@ using namespace std;
 typedef long long ll;
 typedef long double ld;
 
+bool pot2(ll x) {
+    return __builtin_popcountll(x) == 1;
+}
+
 void sol(){
-    int n, k;
-    cin >> n >> k;
+    ll n;
+    cin >> n;
 
-    vector<int> bits(32, 0);
-    for(int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-
-        for(int j = 0; j <= 30; j++) {
-            if(x & (1 << j)) {
-                bits[j]++;
-            }
-        }
+    vector<ll> res = {n};
+    while(!pot2(n)) {
+        int tz = __builtin_ctzll(n);
+        n -= 1 << tz;
+        res.push_back(n);
     }
 
-    ll res = 0;
-    for(int i = 30; i >= 0; i--) {
-        if(n - bits[i] <= k) {
-            res |= (1 << i);
-            k -= (n - bits[i]);
-        }
+    while(n > 1) {
+        n >>= 1;
+        res.push_back(n);
     }
 
-    debln(res);
-
+    debln(sz(res));
+    for(auto x: res) {
+        deb(x);
+    }
+    nl;
 }
 
 int main(){
