@@ -42,18 +42,18 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #define raya    cerr << "==========================================\n";
 
 struct custom_hash {
-	static uint64_t splitmix64(uint64_t x) {
-		// http://xorshift.di.unimi.it/splitmix64.c
-		x += 0x9e3779b97f4a7c15;
-		x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-		x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-		return x ^ (x >> 31);
-	}
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
  
-	size_t operator()(uint64_t x) const {
-		static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-		return splitmix64(x + FIXED_RANDOM);
-	}
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
 };
 
 #define forn(i,n)       for(int i=0; i<n; i++)
@@ -72,36 +72,67 @@ const int mod = 1e9 + 7;
 const int mx = 1e5 + 5;
 
 void sol(){
-	int n;
-	cin >> n;
+    int t;
+    string s;
+    cin >> t >> s;
 
-	vector<int> a(n);
-	for(auto &x: a) {
-		cin >> x;
-	}
+    vector<string> res;
+    map<char, int> a;
+    int i = 0, n = sz(s);
+    char ant = s[0];
+    string curr = "";
 
-	ll res = 0;
-	ordered_multi_set<int> os;
-	for(int i = n - 1; i >= 0; i--) {
-		res += os.order_of_key(a[i] + 1);
-		os.insert(a[i]);
-	}
+    for(i = 1; (i < (n + 1) && sz(res) < t - 1); i++) {
+        curr = s[i - 1];
+        a[curr[0]]++;
 
-	debln(res);
+        while((s[i] == s[i - 1] || a[s[i]] >= 1) && i < n && sz(res) < t - 1) {
+            curr += s[i];
+            i++;
+        }
+
+        
+        res.push_back(curr);
+    }
+
+    string ult = s.substr(i - 1);
+    if(ult != "") {
+        res.push_back(ult);
+        a[ult[0]]++;
+    }
+
+    for(auto &[c, r]: a) {
+        if(r >= 2) {
+            debln("NO");
+            return;
+        }
+    }
+
+    if(sz(res) == t) {
+        debln("YES");
+        for(auto x: res) {
+            debln(x);
+        }
+    }
+    else{
+        debln("NO");
+    }
+    
+
 }
 
 int main(){
-	ios::sync_with_stdio(false);
-	cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-	//cout << fixed << setprecision(10);
+    //cout << fixed << setprecision(10);
 
-	int t=1;
-	cin>>t;
+    int t=1;
+    //cin>>t;
 
-	while(t--){
-		sol();
-	}
+    while(t--){
+        sol();
+    }
 
-	return 0;
+    return 0;
 }
