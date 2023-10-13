@@ -24,29 +24,37 @@ typedef long long ll;
 typedef long double ld;
 
 const int mod = 1e9 + 7;
-const int MX = 1e6 + 5;
+const int MX = 1e5 + 5;
 
-int n, x;
-int monedas[101], dp[1000001];
+int precio[1001], pags[1001], n, dinero;
+vector<vector<int>> dp(1001, vector<int>(MX, -1));
+
+int go(int dinero, int i) {
+    if(i >= n || dinero <= 0)
+        return 0;
+    
+    int &a = dp[i][dinero];
+    if(a != -1)
+        return a;
+
+    if(dinero < precio[i])
+        return a = go(dinero, i + 1);
+
+    return a = max(go(dinero, i + 1), go(dinero - precio[i], i + 1) + pags[i]);
+}
 
 void sol(){
-    cin >> n >> x;
+    cin >> n >> dinero;
 
     for(int i = 0; i < n; i++) {
-        cin >> monedas[i];
+        cin >> precio[i];
     }
 
-    dp[0] = 1;
-    for (int i = 1; i <= n; i++){
-        for(int j = 0; j <= x; j++) {
-            if(j - monedas[i - 1] >= 0) {
-                dp[j] += dp[j - monedas[i - 1]];
-                dp[j] %= mod;
-            }
-        }
+    for(int i = 0; i < n; i++) {
+        cin >> pags[i];
     }
 
-    debln(dp[x]);
+    debln(go(dinero, 0));
 }
 
 int main(){
