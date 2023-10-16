@@ -8,6 +8,9 @@
 using namespace std;
 using namespace __gnu_pbds;
 
+#define forn(i,n)       for(int i=0; i<n; i++)
+#define forr(i,a,n)     for(int i=a; i<n; i++)
+#define fore(i,a,n)     for(int i=a; i<=n; i++)
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
 #define debln(a)        cout << a << "\n"
@@ -26,38 +29,43 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+int n, a[MX], mem[MX];
+
+int dp(int i) {
+    if(i == n)  
+        return 0;
+    if(i > n)   
+        return 1e9;
+
+    int &res = mem[i];
+    if(res != -1)  
+        return res; 
+
+    return res = min(dp(i + a[i] + 1), dp(i + 1) + 1);
+}
+
 void sol(){
-	string s;
-	cin >> s;
+    cin >> n;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        mem[i] = -1;
+    }  
 
-	s = '0' + s;
-	int p = sz(s);
-	for(int i = sz(s) - 1; i >= 1; i--) {
-		if(s[i] >= '5') {
-			s[i - 1]++;
-			p = i;
-		}
-	}
-
-	for(int i = (s[0] == '0'); i < sz(s); i++) {
-		cout << (i >= p ? '0': s[i]);
-	}
-
-	nl;
+    debln(dp(0));
 }
 
 int main(){
-	ios::sync_with_stdio(false);
-	cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-	//cout << fixed << setprecision(10);
+    //cout << fixed << setprecision(10);
 
-	int t=1;
-	cin>>t;
+    int t=1;
+    cin>>t;
 
-	while(t--){
-		sol();
-	}
+    while(t--){
+        sol();
+    }
 
-	return 0;
+    return 0;
 }

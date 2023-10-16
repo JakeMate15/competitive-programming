@@ -27,37 +27,41 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-	string s;
-	cin >> s;
+    int n;
+    cin >> n;
 
-	s = '0' + s;
-	int p = sz(s);
-	for(int i = sz(s) - 1; i >= 1; i--) {
-		if(s[i] >= '5') {
-			s[i - 1]++;
-			p = i;
-		}
-	}
+    vector<pair<int, int>> a;
+    for(int i = 0; i < n; i++) {
+        int x, y;
+        cin >> x >> y;
 
-	for(int i = (s[0] == '0'); i < sz(s); i++) {
-		cout << (i >= p ? '0': s[i]);
-	}
+        a.emplace_back(x, 1);
+        a.emplace_back(y, -1);
+    }
 
-	nl;
+    sort(all(a));
+
+    int mx = 0, curr = 0;
+    for(auto [x, y]: a) {
+        curr += y;
+        mx = max(mx, curr);
+    }
+
+    debln(mx);
 }
 
 int main(){
-	ios::sync_with_stdio(false);
-	cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-	//cout << fixed << setprecision(10);
+    //cout << fixed << setprecision(10);
 
-	int t=1;
-	cin>>t;
+    int t=1;
+    //cin>>t;
 
-	while(t--){
-		sol();
-	}
+    while(t--){
+        sol();
+    }
 
-	return 0;
+    return 0;
 }

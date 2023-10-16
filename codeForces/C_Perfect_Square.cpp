@@ -24,40 +24,43 @@ typedef long long ll;
 typedef long double ld;
 
 const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const int mx = 1e3 + 5;
+
+char m[mx][mx];
 
 void sol(){
-	string s;
-	cin >> s;
+    int n;
+    cin >> n;
 
-	s = '0' + s;
-	int p = sz(s);
-	for(int i = sz(s) - 1; i >= 1; i--) {
-		if(s[i] >= '5') {
-			s[i - 1]++;
-			p = i;
-		}
-	}
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            cin >> m[i][j];
+        }
+    }
 
-	for(int i = (s[0] == '0'); i < sz(s); i++) {
-		cout << (i >= p ? '0': s[i]);
-	}
+    int res = 0;
+    for(int i = 0; i < n / 2; i++) {
+        for(int j = 0; j < n /2 ; j++) {
+            vector<char> a = {m[i][j], m[j][n - 1 -i], m[n - 1 - i][n - 1 - j], m[n - 1 - j][i]};
+            res += *max_element(all(a)) * 4 - accumulate(all(a), 0);
+        }
+    }
 
-	nl;
+    debln(res);
 }
 
 int main(){
-	ios::sync_with_stdio(false);
-	cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-	//cout << fixed << setprecision(10);
+    //cout << fixed << setprecision(10);
 
-	int t=1;
-	cin>>t;
+    int t=1;
+    cin>>t;
 
-	while(t--){
-		sol();
-	}
+    while(t--){
+        sol();
+    }
 
-	return 0;
+    return 0;
 }
