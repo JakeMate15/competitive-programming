@@ -24,52 +24,48 @@ typedef long long ll;
 typedef long double ld;
 
 const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const int MX = 100 + 5, W = 1e5 + 5;
+
+int pesos[MX], beneficio[MX], n, w;
+vector<vector<ll>> mem(W, vector<ll>(MX, -1));
+
+ll dp(int pRestante, int i) {
+    if(pRestante <= 0 || i > n) 
+        return 0;
+
+    ll &a = mem[pRestante][i];
+    if(a != -1)
+        return a;
+
+    if(pesos[i] > pRestante)
+        return a = dp(pRestante, i + 1);
+    
+
+    return a = max(dp(pRestante - pesos[i], i + 1) + beneficio[i], dp(pRestante, i + 1));
+}
 
 void sol(){
-	int n;
-	cin >> n;
+    cin >> n >> w;
 
-	vector<pair<ll, int>> a(n + 1, {0, 0});
-	for(int i = 1; i <= n; i++) {
-		cin >> a[i].first;
-		a[i].second = i;
-	}
+    for(int i = 1; i <= n; i++) {
+        cin >> pesos[i] >> beneficio[i];
+    }
 
-	sort(all(a));
-
-	vector<ll> pref(n + 2);
-	for(int i = 1; i <= n; i++) {
-		pref[i] = pref[i - 1] + a[i].first; 
-	}
-
-	map<int, ll> res;
-	for(int i = 1; i <= n; i++) {
-		ll curr = 1;
-		curr += (a[i].first + 1) * (i - 1) - pref[i - 1] + (1 - a[i].first) * (n - i) + pref[n] - pref[i];
-
-		res[a[i].second] = curr; 
-	}
-
-	for(auto [i, r]: res) {
-		deb(r);
-	}
-
-	nl;
+    debln(dp(w, 1));
 }
 
 int main(){
-	ios::sync_with_stdio(false);
-	cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-	//cout << fixed << setprecision(10);
+    //cout << fixed << setprecision(10);
 
-	int t=1;
-	cin>>t;
+    int t=1;
+    //cin>>t;
 
-	while(t--){
-		sol();
-	}
+    while(t--){
+        sol();
+    }
 
-	return 0;
+    return 0;
 }

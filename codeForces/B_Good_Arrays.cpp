@@ -27,49 +27,42 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-	int n;
-	cin >> n;
+    int n;
+    cin >> n;
 
-	vector<pair<ll, int>> a(n + 1, {0, 0});
-	for(int i = 1; i <= n; i++) {
-		cin >> a[i].first;
-		a[i].second = i;
-	}
+    vector<int> a(n);
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
 
-	sort(all(a));
+    ll sum = 0;
+    ll mn = 0;
 
-	vector<ll> pref(n + 2);
-	for(int i = 1; i <= n; i++) {
-		pref[i] = pref[i - 1] + a[i].first; 
-	}
+    for(int i = 0; i < n; i++) {
+        sum += a[i];
+        mn += a[i] == 1 ? 2 : 1;
+    }
 
-	map<int, ll> res;
-	for(int i = 1; i <= n; i++) {
-		ll curr = 1;
-		curr += (a[i].first + 1) * (i - 1) - pref[i - 1] + (1 - a[i].first) * (n - i) + pref[n] - pref[i];
-
-		res[a[i].second] = curr; 
-	}
-
-	for(auto [i, r]: res) {
-		deb(r);
-	}
-
-	nl;
+    if(mn > sum || n == 1) {
+        debln("NO");
+    }
+    else{
+        debln("YES");
+    }
 }
 
 int main(){
-	ios::sync_with_stdio(false);
-	cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-	//cout << fixed << setprecision(10);
+    //cout << fixed << setprecision(10);
 
-	int t=1;
-	cin>>t;
+    int t=1;
+    cin>>t;
 
-	while(t--){
-		sol();
-	}
+    while(t--){
+        sol();
+    }
 
-	return 0;
+    return 0;
 }

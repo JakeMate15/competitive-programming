@@ -72,9 +72,37 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 const int mod = 1e9 + 7;
 const int mx = 1e5 + 5;
+const int inf = INT_MAX;
 
 void sol(){
-    
+    int n, m, k;
+    cin >> n >> m >> k;
+
+    vector<int> personas(n);
+    for(auto &x: personas) {
+        cin >> x;
+    }
+    sort(all(personas));
+
+    multiset<int> depas;
+    forn(i, m) {
+        int x;
+        cin >> x;
+        depas.insert(x);
+    }
+
+    int res = 0;
+    forn(i, n) {
+        auto it = depas.lower_bound(personas[i] - k);
+        if(it != depas.end()) {
+            if(*it >= personas[i] - k && *it <= personas[i] + k) {
+                res++;
+                depas.erase(it);
+            }
+        } 
+    }
+
+    debln(res);
 }
 
 int main(){

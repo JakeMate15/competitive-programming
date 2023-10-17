@@ -4,6 +4,18 @@
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
 
+#define forn(i,n)       for(int i=0; i<n; i++)
+#define forr(i,a,n)     for(int i=a; i<n; i++)
+#define fore(i,a,n)     for(int i=a; i<=n; i++)
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define debln(a)        cout << a << "\n"
+#define deb(a)          cout << a << " "
+#define nl              cout << "\n";
+#define u_map           gp_hash_table
+#define uid(a, b)       uniform_int_distribution<int>(a, b)(rng)
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
 using namespace std;
 using namespace __gnu_pbds;
 
@@ -43,38 +55,39 @@ void _print(T t, V... v) {__print(t); if (sizeof...(v)) cerr << ", "; _print(v..
 #endif
 #define raya    cerr << "==========================================\n";
 
-struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
- 
-    size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
-};
-
-#define forn(i,n)       for(int i=0; i<n; i++)
-#define forr(i,a,n)     for(int i=a; i<n; i++)
-#define fore(i,a,n)     for(int i=a; i<=n; i++)
-#define all(v)          v.begin(),v.end()
-#define sz(a)           (int)a.size()
-#define debln(a)        cout << a << "\n"
-#define deb(a)          cout << a << " "
-#define nl              cout << "\n";
-#define u_map           gp_hash_table
-#define uid(a, b)       uniform_int_distribution<int>(a, b)(rng)
-mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
-
 const int mod = 1e9 + 7;
 const int mx = 1e5 + 5;
 
 void sol(){
+    int n, m;
+    cin >> n >> m;
+
+    multiset<int> tickes;
+    vector<int> personas(m);
+    forn(i, n) {
+        int x;
+        cin >> x;
+        tickes.insert(x);
+    }
     
+    for(auto &x: personas) {
+        cin >> x;
+        if(sz(tickes)) {
+            auto it = prev(tickes.lower_bound(x + 1));
+            if(it != tickes.end() && *it <= x) {
+                debln(*it);
+                tickes.erase(it);
+            }
+            else{
+                debln(-1);
+            }
+        }
+        else{
+            debln(-1);
+        }
+            
+    }
+
 }
 
 int main(){
