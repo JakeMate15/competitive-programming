@@ -1,53 +1,69 @@
 #include<bits/stdc++.h>
-using namespace std;
+#pragma GCC optimize ("O3")
+#pragma GCC target ("sse4")
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)	    v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace std;
+using namespace __gnu_pbds;
+
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define debln(a)        cout << a << "\n"
+#define deb(a)          cout << a << " "
+#define nl              cout << "\n";
+#define u_map           gp_hash_table
+#define uid(a, b)       uniform_int_distribution<int>(a, b)(rng)
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 typedef long long ll;
-typedef vector<int> vi;
-typedef pair<int,int> pii;
+typedef long double ld;
 
-const int mod = 1e9+7;
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
-    int n;cin>>n;
-    int par = 0, impar = 0;
+    int n;
+    cin >> n;
 
-    vector<pii> a(n),b(n);
+    vector<pair<int, int>> a(n),b(n);
     
-    fore(i,1,n){
+    for(int i = 1; i <= n; i++){
         int x;
-        cin>>x;
+        cin >> x;
 
-        a[i-1] = {x,x%2};
-        b[i-1] = {x,x%2};
+        a[i - 1] = {x, x % 2};
+        b[i - 1] = {x, x % 2};
     }
 
     sort(all(a));
 
-    forn(i,n){
+    for(int i = 0; i < n; i++) {
         if(a[i].second != b[i].second){
-            NO;
+            debln("NO");
             return;
         }
     }
 
-    YES;
-
-    
+    debln("YES"); 
 }
 
-int main(){IO
-	int t=1;
-	cin>>t;
-	while(t--)  sol();
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    //cout << fixed << setprecision(10);
+
+    int t=1;
+    cin>>t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }

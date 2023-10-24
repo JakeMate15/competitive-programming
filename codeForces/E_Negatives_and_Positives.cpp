@@ -26,35 +26,31 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+
 void sol(){
-    int n,k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    vector<int> a(n);
-    for(int &x: a){
+    ll sum = 0, z = 0, mn = LONG_LONG_MAX;
+    for(int i = 0; i < n; i++) {
+        ll x;
         cin >> x;
+
+        if(x <= 0) {
+            x *= -1;
+            z++;
+        }    
+
+        sum += x;
+        mn = min(mn, x);
     }
 
-    int x = 0,y = 0;
-    bool cambio = false;
-    for(int i = 0; i < n; i++){
-        if(cambio){
-            if(a[i] == a.back()) {
-                y++;
-            }
-        }
-        else{
-            if(a[i] == a[0]){
-                x++;
-                if(x >= k) {
-                    cambio = true;
-                }
-            }
-            
-        }
+    if(z & 1) {
+        sum += -2 * mn;
     }
 
-    cout << (((a[0]==a.back() && x>=k) || (x>=k && y>=k)) ? "YES" : "NO") << "\n";
+
+    cout << sum << "\n";
 }
 
 int main(){

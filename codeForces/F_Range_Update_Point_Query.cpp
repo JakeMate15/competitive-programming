@@ -26,35 +26,77 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol(){
-    int n,k;
-    cin >> n >> k;
+int a[MX], n, q;
 
-    vector<int> a(n);
-    for(int &x: a){
-        cin >> x;
+int sum(ll n) {
+    int res = 0;
+    while(n) {
+        res += n % 10;
+        n /= 10; 
     }
 
-    int x = 0,y = 0;
-    bool cambio = false;
-    for(int i = 0; i < n; i++){
-        if(cambio){
-            if(a[i] == a.back()) {
-                y++;
+    return res;
+}
+
+struct SegmentTree{
+	int N;
+	vector<int> ST;
+ 
+	//build from an array in O(n)
+	SegmentTree(int N): N(N){
+		ST.resize(N << 1,0);
+	}
+ 
+	void update(int l, int r, int value){
+		for (l += N, r += N; l < r; l >>= 1, r >>= 1){
+			if (l&1)     ST[l++] += value;
+			if (r & 1)   ST[--r] += value;
+		}
+	}
+ 
+	//Get element at i
+	int query(int p){
+		int v = 0, pos = p;
+
+		for (p += N; p > 0; p >>= 1) v += ST[p];
+
+		int res = a[pos];
+		for(int i = 0; i < v; i++) {
+            if(res < 10) {
+                break;
             }
+			res = sum(res);
+		}
+
+		return res;
+	}
+};
+
+void sol(){
+    cin >> n >> q;
+
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    SegmentTree st(n);
+    while(q--) {
+        int op, x, l, r;
+        cin >> op;
+
+        if(op == 1) {
+            cin >> l >> r;
+            st.update(l - 1, r, 1);
         }
         else{
-            if(a[i] == a[0]){
-                x++;
-                if(x >= k) {
-                    cambio = true;
-                }
-            }
-            
+            cin >> x;
+            x--;
+
+            cout << st.query(x) << "\n";
         }
     }
 
-    cout << (((a[0]==a.back() && x>=k) || (x>=k && y>=k)) ? "YES" : "NO") << "\n";
+
 }
 
 int main(){

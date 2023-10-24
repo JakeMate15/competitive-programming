@@ -27,34 +27,33 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n,k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    vector<int> a(n);
-    for(int &x: a){
-        cin >> x;
+    vector<ll> a(n);
+    ll res = 0, curr = 0;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        
+        if(i) {
+            int cnt = 0;
+            ll aux = a[i];
+            while(a[i - 1] > aux) {
+                aux *= 2;
+                cnt++;
+            }
+
+            while(a[i - 1] * 2 <= aux && curr) {
+                a[i - 1] *= 2;
+                curr--;
+            }
+
+            curr += cnt;
+            res += curr;
+        }
     }
 
-    int x = 0,y = 0;
-    bool cambio = false;
-    for(int i = 0; i < n; i++){
-        if(cambio){
-            if(a[i] == a.back()) {
-                y++;
-            }
-        }
-        else{
-            if(a[i] == a[0]){
-                x++;
-                if(x >= k) {
-                    cambio = true;
-                }
-            }
-            
-        }
-    }
-
-    cout << (((a[0]==a.back() && x>=k) || (x>=k && y>=k)) ? "YES" : "NO") << "\n";
+    cout << res << "\n";
 }
 
 int main(){

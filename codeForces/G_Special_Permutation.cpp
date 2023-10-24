@@ -21,24 +21,32 @@ void sol(){
     int n;
     cin>>n;
 
-    if(n<=3){
-        deb(-1);
+    if(n <= 3){
+        cout << -1 << "\n";
         return;
     }
 
-    if(n==4){
-        deb("2 4 1 3");
+    if(n == 4){
+        cout <<  "2 4 1 3\n";
         return;
     }
 
-    if(n&1) for(int i=n-1; i>=2; i-=2)   debl(i);
-    else    for(int i=n; i>=2; i-=2)     debl(i);
-    debl(5);
-    for(int i=1; i<=n; i+=2){
-        if(i!=5)    
-            debl(i);
+    if(n & 1) {
+        for(int i = n - 1; i >= 2; i -= 2)
+            cout << i << " ";
     }
-    deb("");
+    else {
+        for(int i = n; i >= 2; i -= 2)
+            cout << i << " ";
+    }
+
+    cout << 5 << " ";
+
+    for(int i = 1; i <= n; i += 2){
+        if(i != 5)    
+            cout << i << " ";
+    }
+    cout << "\n";
 }
 
 int main(){

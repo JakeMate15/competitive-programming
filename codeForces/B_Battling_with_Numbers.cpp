@@ -23,38 +23,44 @@ template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>
 typedef long long ll;
 typedef long double ld;
 
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const int mod = 998244353;
+const int V = 2e6;
 
 void sol(){
-    int n,k;
-    cin >> n >> k;
-
-    vector<int> a(n);
-    for(int &x: a){
-        cin >> x;
+    int N;
+    cin >> N;
+    
+    vector<int> A(N);
+    for (int i = 0; i < N; i++) {
+        cin >> A[i];
+    }
+    
+    vector<int> f(V), g(V);
+    for (int i = 0; i < N; i++) {
+        cin >> f[A[i]];
     }
 
-    int x = 0,y = 0;
-    bool cambio = false;
-    for(int i = 0; i < n; i++){
-        if(cambio){
-            if(a[i] == a.back()) {
-                y++;
-            }
+    int M;
+    cin >> M;
+    vector<int> B(M);
+    for (int i = 0; i < M; i++) {
+        cin >> B[i];
+    }
+    for (int i = 0; i < M; i++) {
+        cin >> g[B[i]];
+    }
+    
+    ll ans = 1;
+    for (int i = 0; i < V; i++) {
+        if (f[i] < g[i]) {
+            ans = 0;
         }
-        else{
-            if(a[i] == a[0]){
-                x++;
-                if(x >= k) {
-                    cambio = true;
-                }
-            }
-            
+        if (f[i] > g[i]) {
+            ans *= 2;
+            ans %= mod;
         }
     }
-
-    cout << (((a[0]==a.back() && x>=k) || (x>=k && y>=k)) ? "YES" : "NO") << "\n";
+    cout << ans << "\n";
 }
 
 int main(){
@@ -64,7 +70,7 @@ int main(){
     //cout << fixed << setprecision(10);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
 
     while(t--){
         sol();

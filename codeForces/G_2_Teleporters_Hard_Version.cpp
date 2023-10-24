@@ -26,35 +26,33 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+void borra(multiset<pair<int, int>> &m1, multiset<pair<int, int>> &m2, int i) {
+    m1.erase(m1.lower_bound({0, i}));
+    m2.erase(m2.lower_bound({0, i}));
+}
+
 void sol(){
-    int n,k;
-    cin >> n >> k;
+    int n, c;
+    cin >> n >> c;
 
     vector<int> a(n);
-    for(int &x: a){
-        cin >> x;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        a[i] += i == 0 ? 1 : min(i + 1, n - i);
     }
 
-    int x = 0,y = 0;
-    bool cambio = false;
-    for(int i = 0; i < n; i++){
-        if(cambio){
-            if(a[i] == a.back()) {
-                y++;
-            }
-        }
-        else{
-            if(a[i] == a[0]){
-                x++;
-                if(x >= k) {
-                    cambio = true;
-                }
-            }
-            
-        }
-    }
+    sort(a.begin() + 1, a.end());
 
-    cout << (((a[0]==a.back() && x>=k) || (x>=k && y>=k)) ? "YES" : "NO") << "\n";
+    int res = 0;
+    for(int i = 0; i < n; i++) {
+        if(c >= a[i]) {
+            res++;
+            c -= a[i];
+        }
+        //cerr << a[i] << " \n"[i == n - 1];
+    }
+    
+    cout << res << "\n";
 }
 
 int main(){

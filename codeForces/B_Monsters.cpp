@@ -27,41 +27,50 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n,k;
+    //cerr << "===========================\n";
+    ll n, k;
     cin >> n >> k;
 
-    vector<int> a(n);
-    for(int &x: a){
+    multiset<pair<ll, int>> a;
+    for(int i = 0; i < n; i++) {
+        ll x;
         cin >> x;
+        x = x % k == 0 ? k : x % k;
+        a.insert({x, -(i + 1)});
     }
 
-    int x = 0,y = 0;
-    bool cambio = false;
-    for(int i = 0; i < n; i++){
-        if(cambio){
-            if(a[i] == a.back()) {
-                y++;
-            }
+    while(sz(a) > 1) {
+        auto ult = prev(a.end());
+        auto pen = prev(ult);
+
+        auto ultV = *ult;
+        auto penV = *pen;
+
+        ll dif = max(ultV.first - penV.first, 1LL);
+        //cerr << ultV.first << " " << penV.first << " " << dif << "\n";
+        ll veces = ceil((1.0 * dif) / k);
+        ultV.first -= veces * k;
+        //cerr << ultV.first << " " << penV.first << " " << dif << "\n";
+
+        if(ultV.first <= 0) {
+            cout << -1 * ultV.second << " ";
+            a.erase(ult);
         }
-        else{
-            if(a[i] == a[0]){
-                x++;
-                if(x >= k) {
-                    cambio = true;
-                }
-            }
-            
+        else {
+            a.erase(ult);
+            a.insert(ultV);
         }
     }
 
-    cout << (((a[0]==a.back() && x>=k) || (x>=k && y>=k)) ? "YES" : "NO") << "\n";
+    cout << -1 * (*a.begin()).second << "\n";
+    //cerr << "\n\n";
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    //cout << fixed << setprecision(10);
+    cout << fixed << setprecision(10);
 
     int t=1;
     cin>>t;

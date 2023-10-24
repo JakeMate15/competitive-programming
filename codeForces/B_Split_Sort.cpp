@@ -27,34 +27,23 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n,k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    vector<int> a(n);
-    for(int &x: a){
-        cin >> x;
+    vector<pair<int, int>> a(n);
+    for(int i = 0; i < n; i++) {
+        cin >> a[i].first;
+        a[i].second = i + 1;
     }
 
-    int x = 0,y = 0;
-    bool cambio = false;
-    for(int i = 0; i < n; i++){
-        if(cambio){
-            if(a[i] == a.back()) {
-                y++;
-            }
-        }
-        else{
-            if(a[i] == a[0]){
-                x++;
-                if(x >= k) {
-                    cambio = true;
-                }
-            }
-            
-        }
+    sort(all(a));
+
+    int inv = 0;
+    for(int i = 0; i < n - 1; i++) {
+        inv += a[i].second > a[i + 1].second;
     }
 
-    cout << (((a[0]==a.back() && x>=k) || (x>=k && y>=k)) ? "YES" : "NO") << "\n";
+    cout << inv << "\n";
 }
 
 int main(){
@@ -72,3 +61,20 @@ int main(){
 
     return 0;
 }
+
+
+/*
+10 
+19 
+7 
+1 17 
+11 
+8 
+5 12 
+9 
+4 18 
+14 
+2 6 15 
+3 16 
+13
+*/
