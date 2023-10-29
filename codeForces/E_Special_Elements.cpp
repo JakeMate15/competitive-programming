@@ -27,7 +27,30 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+    unordered_map<int, int> rep;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        rep[a[i]]++;
+
+        a[i] += i == 0 ? 0 : a[i - 1];
+    }
+
+    int res = 0;
+    for(int i = 2; i <= n; i++) {
+        for(int j = 0; j < n - i + 1; j++) {
+            int sum = a[j + i - 1] - (j == 0 ? 0 : a[j - 1]);
+            if(rep.find(sum) != rep.end()) {
+                res += rep[sum];
+                rep.erase(sum);
+            }
+        }
+    }
+
+    cout << res << "\n";
 }
 
 int main(){
@@ -37,7 +60,7 @@ int main(){
     //cout << fixed << setprecision(10);
 
     int t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
         sol();

@@ -27,41 +27,39 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-	int n, q;
-    cin >> n >> q;
+    //cerr << "======================\n";
+    int n, s;
+    cin >> n >> s;
 
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) {
+    vector<int> a(n + 1);
+    for(int i = 1; i <= n; i++) {
         cin >> a[i];
-    }
-
-    sort(all(a));
-    reverse(all(a));
-    for(int i = 1; i < n; i++) {
         a[i] += a[i - 1];
     }
 
+    int mx = INT_MAX;
+    for(int i = 1; i <= n; i++) {
 
-    while(q--){
-        int x;
-        cin>>x;
-
-        int l = -1, r = n;
-        while(l + 1 < r) {
+        int l = i, r = n, res = -1;
+        while(l <= r) {
             int m = (l + r) / 2;
 
-            if(a[m] >= x) {
-                r = m;
+            if(a[m] - a[i - 1] <= s) {
+                res = m;
+                l = m + 1;
             }
             else{
-                l = m;
+                r = m - 1;
             }
         }
 
-        cout << (r == n ? -1 : r + 1) << "\n";
-        
+        //cerr << res << " " << a[res] - a[i - 1] << " " << s << "\n";
+        if(res == -1 || a[res] - a[i - 1] != s) 
+            continue;
+        mx = min(mx, n - (res - i + 1));
     }
 
+    cout << (mx == INT_MAX ? -1 : mx) << "\n";
 }
 
 int main(){

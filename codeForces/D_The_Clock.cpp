@@ -27,41 +27,28 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-	int n, q;
-    cin >> n >> q;
+    int horas, min, adelanto;
+    char p;
+    cin >> horas >> p >> min >> adelanto;
 
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) {
-        cin >> a[i];
-    }
+    adelanto = gcd(adelanto, 1440);
+    int inicio = min + horas * 60;
+    inicio %= adelanto;
 
-    sort(all(a));
-    reverse(all(a));
-    for(int i = 1; i < n; i++) {
-        a[i] += a[i - 1];
-    }
-
-
-    while(q--){
-        int x;
-        cin>>x;
-
-        int l = -1, r = n;
-        while(l + 1 < r) {
-            int m = (l + r) / 2;
-
-            if(a[m] >= x) {
-                r = m;
-            }
-            else{
-                l = m;
-            }
-        }
-
-        cout << (r == n ? -1 : r + 1) << "\n";
+    int res = 0;
+    for (int i = inicio; i < 1440; i += adelanto) {
+        int a = i / 600;
+        int b = i / 60 % 10;
+        int c = i / 10 % 6;
+        int d = i % 10;
         
+        if (a == d && b == c) {
+            res++;
+        }
     }
 
+
+    cout << res << "\n";
 }
 
 int main(){

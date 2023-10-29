@@ -1,67 +1,73 @@
 #include<bits/stdc++.h>
-using namespace std;
+#pragma GCC optimize ("O3")
+#pragma GCC target ("sse4")
 
-#define forn(i,n)       for(int i=0; i<n; i++)
-#define forr(i,a,n)     for(int i=a; i<n; i++)
-#define fore(i,a,n)     for(int i=a; i<=n; i++)
-#define fornd(i,n)      for(int i=n; i>=0; i--)
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace std;
+using namespace __gnu_pbds;
+
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
-#define deb(a)          cout << a << "\n"
-#define debl(a)         cout << a << " "
-#define pb              push_back
+#define debln(a)        cout << a << "\n"
+#define deb(a)          cout << a << " "
+#define nl              cout << "\n";
+#define u_map           gp_hash_table
+#define uid(a, b)       uniform_int_distribution<int>(a, b)(rng)
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 typedef long long ll;
-typedef vector<int> vi;
-const int mod = 1e9+7;
-const int mx = 1e9;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
-	int n;
-    cin>>n;
+    int n;
+    cin >> n;
 
-    vector<ll> a(n),pref(n),suf(n);
-    forn(i,n){
-        cin>>a[i];
-        if(i)   pref[i] = a[i]+pref[i-1];
-        else    pref[i] = a[i];
+    vector<int> a(n);
+    for(auto &x: a) {
+        cin >> x;
     }
 
-    suf[n-1] = a[n-1];
-    for(int i=n-2; i>=0; i--){
-        suf[i] = suf[i+1] + a[i];
+    int i = 0, j = n - 1, res = 0;
+    ll suml = a[i], sumr = a[j];
+
+    while(i < j) {
+        if(suml == sumr) {
+            res = max(res, i + 1 + n - j);
+        }
+
+        if(suml <= sumr) {
+            i++;
+            suml += a[i];
+        }
+        else {
+            j--;
+            sumr += a[j];
+        }
     }
 
-    map<ll,pair<int,int>> aux;
-    forn(i,n){
-        if(!aux.count(pref[i]))     aux[pref[i]] = {-1,-1};
-        if(!aux.count(suf[n-i-1]))  aux[suf[n-i-1]] = {-1,-1};
-
-        aux[ pref[i] ].first = i;
-        aux[ suf[n-i-1] ].second = n-i-1;
-    }
-
-    int res = 0;
-    for(auto x: aux){
-        int a = x.second.first;
-        int b = x.second.second;
-        
-        if(a>=0 && b>=0 && a<b) res = max(res, a+1 + n-b );
-    }
-
-    deb(res);
-
+    cout << res << "\n";
 }
 
 int main(){
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
+    //ios::sync_with_stdio(false);
+    //cin.tie(0);
 
-	int t=1;
-	cin>>t;
-	while(t--){
-		sol();
-	}
+    //cout << fixed << setprecision(10);
 
-	return 0;
+    int t=1;
+    cin>>t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }

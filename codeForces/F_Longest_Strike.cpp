@@ -1,100 +1,90 @@
 #include<bits/stdc++.h>
-using namespace std;
+#pragma GCC optimize ("O3")
+#pragma GCC target ("sse4")
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)		v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace std;
+using namespace __gnu_pbds;
+
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define debln(a)        cout << a << "\n"
+#define deb(a)          cout << a << " "
+#define nl              cout << "\n";
+#define u_map           gp_hash_table
+#define uid(a, b)       uniform_int_distribution<int>(a, b)(rng)
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
 typedef long long ll;
-typedef vector<int> vi;
-typedef pair<int,int> pii;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
-    int n,k;
-    cin>>n>>k;
+    int n, k;
+    cin >> n >> k;
 
-    vi a(n);
-    map<int,int> rep;
-    forn(i,n){
-        cin>>a[i];
-        if(rep.count(a[i])) rep[a[i]]++;
-        else                rep[a[i]]=1;
+    map<int, int> mp;
+    vector<int> a;
+
+    for(int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        mp[x]++;
     }
 
-    a.clear();
-
-    vi b;
-    for(auto x: rep){
-        if(x.second>=k) b.push_back(x.first);
+    for(auto [v,r]: mp) {
+        if(r >= k)
+            a.push_back(v);
     }
 
-    rep.clear();
-
-    if(!sz(b)){
-        debug(-1);
+    if(!sz(a)) {
+        cout << -1 << "\n";
         return;
     }
 
-    b.push_back(-50);
+    a.push_back(-10);
 
-    /*
-    11 13 14 -50
-    1 2 3 5 6 -50
-    -1
-    1 2 3 4 -50
-    */
-    
-    int mx, l, r, ant;
-    int curr, currL, currR;
+    int l, r, cl, cr, ant;
+    l = r = cl = cr = ant = a[0];
 
-    mx = curr = 1;
-    l = r = currL = currR = ant = b[0];
-
-    
-    forr(i,1,sz(b)+1){
-        //cout << l << " " << r << "\n";
-        //cout << currL << " " << currR << "\n";
-        //cout << ant << " " << b[i] << "\n";
-
-        if( b[i]==(ant+1) ){
-            //debug("verdadero");
-            currR = b[i];
-            curr++;
-            ant = b[i];
+    for(int i = 1; i < sz(a); i++) {
+        if(a[i] == ant + 1) {
+            cr = a[i];
         }
         else{
-            //cout << "falso " << curr << " " << mx << "\n";
-            if(curr>mx){
-                //cout << "Es mayor " << "\n";
-                l = currL;
-                r = currR;
-                mx = curr;
+            if(cr - cl >= r - l) {
+                r = cr;
+                l = cl;
             }
 
-            currL = b[i];
-            currR = b[i];
-            curr = 1;
-            ant = b[i];
+            cl = cr = a[i];
         }
-        //debug("");
-        
+
+        ant = a[i];
     }
 
     cout << l << " " << r << "\n";
-    
-
 }
 
-int main(){IO
-	int t=1;
-	cin>>t;
-	while(t--)  
-		sol();
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    //cout << fixed << setprecision(10);
+
+    int t=1;
+    cin>>t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }

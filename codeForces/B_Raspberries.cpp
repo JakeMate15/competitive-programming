@@ -27,8 +27,8 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-	int n, q;
-    cin >> n >> q;
+    int n, k;
+    cin >> n >> k;
 
     vector<int> a(n);
     for(int i = 0; i < n; i++) {
@@ -36,32 +36,23 @@ void sol(){
     }
 
     sort(all(a));
-    reverse(all(a));
-    for(int i = 1; i < n; i++) {
-        a[i] += a[i - 1];
+    int mn = -1, mx = -1;
+    for(int i = 0; i < n; i++) {
+        if(a[i] <= k) 
+            mn = a[i];
+        if(mx == -1 && a[i] > k) 
+            mx = a[i];
     }
 
+    int res = INT_MAX;
+    if(mn != -1 && mx != -1)
+        res = min(k - mn, mx - k);
+    else if(mn != -1)
+        res = min(k - mn, res);
+    else 
+        res = min(res, mx - k);
 
-    while(q--){
-        int x;
-        cin>>x;
-
-        int l = -1, r = n;
-        while(l + 1 < r) {
-            int m = (l + r) / 2;
-
-            if(a[m] >= x) {
-                r = m;
-            }
-            else{
-                l = m;
-            }
-        }
-
-        cout << (r == n ? -1 : r + 1) << "\n";
-        
-    }
-
+    cout << res << "\n";
 }
 
 int main(){

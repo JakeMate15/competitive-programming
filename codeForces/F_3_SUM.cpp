@@ -26,41 +26,55 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol(){
-	int n, q;
-    cin >> n >> q;
+bool twoSum(vector<int> a, int meta, int ignora) {
+    bool f = false;
+    set<int> mp;
+    int aux;
 
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) {
-        cin >> a[i];
-    }
-
-    sort(all(a));
-    reverse(all(a));
-    for(int i = 1; i < n; i++) {
-        a[i] += a[i - 1];
-    }
-
-
-    while(q--){
-        int x;
-        cin>>x;
-
-        int l = -1, r = n;
-        while(l + 1 < r) {
-            int m = (l + r) / 2;
-
-            if(a[m] >= x) {
-                r = m;
-            }
-            else{
-                l = m;
+    for(int i = 0; i < sz(a); i++) {
+        if(a[i] == ignora) {
+            if(!f) {
+                f = true;
+                continue;
             }
         }
 
-        cout << (r == n ? -1 : r + 1) << "\n";
-        
+        aux = meta - a[i];
+        if(mp.count(aux)) {
+            return true;
+        }
+        mp.insert(a[i]);
     }
+
+    return false;
+}
+
+void sol(){
+    //cerr << "======================\n";
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+    map<int, int> mp;
+    for(int i = 0; i < n; i++) {
+        string s;
+        cin >> s;
+        a[i] = s[sz(s) - 1] - '0';
+        mp[a[i]]++;
+    }
+
+    vector<int> sumas = {3, 13, 23};
+    for(auto [num, rep]: mp) {
+        for(auto sum: sumas) {
+            //cerr << sum - num << " " << num << "\n";
+            if(twoSum(a, sum - num, num)) {
+                cout << "YES\n";
+                return;
+            }
+        }
+    }
+
+    cout << "NO\n";
 
 }
 
