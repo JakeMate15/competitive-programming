@@ -27,39 +27,32 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    cerr << "====================\n";
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    vector<int> a(n);
-    int mn = INT_MAX / 2, mx = INT_MAX / 2;
-    for(int i = 0; i < n; i++) {
-        cin >> a[i];
-        if(a[i] <= k && abs(a[i] - k) < abs(mn - k)) 
-            mn = a[i];
-        if(a[i] > k) {
-            int veces = ceil((1.0 * a[i]) / k);
-            if(veces * k - a[i] <= mx) {
-                mx = a[i];
-            } 
-        }
-            
+    vector<int> a(n), b(n);
+    for(auto &x: a) {
+        cin >> x;
     }
-
-    cerr << mn << " " << mx << "\n";
-    int me = INT_MAX, ma = INT_MAX;
-    if(mn != INT_MAX / 2) {
-        me = k - mn;
+    for(auto &x: b) {
+        cin >> x;
     }
-    if(mx != INT_MAX / 2) {
-        int veces = ceil(1.0 * mx / k);
-        ma = veces * k - mx;
-        //cerr << veces << "\n";
-        //cerr << ma << "\n";
+  
+    int l = 0, r = n - 1;
+    while (a[l] == b[l]) {
+        l++;
     }
-
-    //cerr << ma << " " << me << "\n\n";
-    cout << min(ma, me) << "\n";
+    while (a[r] == b[r]) {
+        r--;
+    }
+    
+    while (l && b[l] >= b[l - 1]) {
+        l--;
+    }
+    while (r + 1 < n && b[r] <= b[r + 1]) {
+        r++;
+    }
+    cout << l + 1 << " " << r + 1 << "\n";
 }
 
 int main(){
@@ -68,8 +61,8 @@ int main(){
 
     //cout << fixed << setprecision(10);
 
-    int t=1;
-    cin>>t;
+    int t = 1;
+    cin >> t;
 
     while(t--){
         sol();

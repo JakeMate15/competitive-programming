@@ -27,39 +27,44 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    cerr << "====================\n";
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    vector<int> a(n);
-    int mn = INT_MAX / 2, mx = INT_MAX / 2;
-    for(int i = 0; i < n; i++) {
-        cin >> a[i];
-        if(a[i] <= k && abs(a[i] - k) < abs(mn - k)) 
-            mn = a[i];
-        if(a[i] > k) {
-            int veces = ceil((1.0 * a[i]) / k);
-            if(veces * k - a[i] <= mx) {
-                mx = a[i];
-            } 
+    vector<string> a(n);
+    for(auto &x: a) {
+        cin >> x;
+    }
+
+    int res = 0;
+    for(int i = 0; i < n / 2; i++) {
+        for(int j = 0; j < n / 2; j++) {
+            map<char, int> mp;
+            mp[a[i][j]]++;
+            mp[a[j][n - 1 - i]]++;
+            mp[a[n - 1 - i][n - 1 - j]]++;
+            mp[a[n - 1 - j][i]]++;
+
+            int mx = max(mp['0'], mp['1']);
+            res += (4 - mx);
         }
-            
     }
 
-    cerr << mn << " " << mx << "\n";
-    int me = INT_MAX, ma = INT_MAX;
-    if(mn != INT_MAX / 2) {
-        me = k - mn;
-    }
-    if(mx != INT_MAX / 2) {
-        int veces = ceil(1.0 * mx / k);
-        ma = veces * k - mx;
-        //cerr << veces << "\n";
-        //cerr << ma << "\n";
+    if(n & 1) {
+        int j = n / 2;
+        for(int i = 0; i < n / 2; i++) {
+            map<char, int> mp;
+
+            mp[a[i][j]]++;
+            mp[a[j][n - 1 - i]]++;
+            mp[a[n - 1 - i][n - 1 - j]]++;
+            mp[a[n - 1 - j][i]]++;
+
+            int mx = max(mp['0'], mp['1']);
+            res += (4 - mx);
+        }
     }
 
-    //cerr << ma << " " << me << "\n\n";
-    cout << min(ma, me) << "\n";
+    cout << res << "\n";
 }
 
 int main(){

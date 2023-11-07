@@ -22,44 +22,36 @@ template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>
 
 typedef long long ll;
 typedef long double ld;
+typedef pair<int, int> ii;
 
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    cerr << "====================\n";
-    int n, k;
-    cin >> n >> k;
+    int n, q;
+    cin >> n >> q;
 
-    vector<int> a(n);
-    int mn = INT_MAX / 2, mx = INT_MAX / 2;
+    vector<vector<ll>> mat(1005, vector<ll>(1005));
     for(int i = 0; i < n; i++) {
-        cin >> a[i];
-        if(a[i] <= k && abs(a[i] - k) < abs(mn - k)) 
-            mn = a[i];
-        if(a[i] > k) {
-            int veces = ceil((1.0 * a[i]) / k);
-            if(veces * k - a[i] <= mx) {
-                mx = a[i];
-            } 
+        int a, b;
+        cin >> a >> b;
+        mat[a][b] += 1LL * a * b;
+    }
+
+    for(int i = 1; i < 1002; i++) {
+        for(int j = 1; j < 1002; j++) {
+            mat[i][j] += mat[i - 1][j] + mat[i][j - 1] - mat[i - 1][j - 1];
         }
-            
     }
 
-    cerr << mn << " " << mx << "\n";
-    int me = INT_MAX, ma = INT_MAX;
-    if(mn != INT_MAX / 2) {
-        me = k - mn;
-    }
-    if(mx != INT_MAX / 2) {
-        int veces = ceil(1.0 * mx / k);
-        ma = veces * k - mx;
-        //cerr << veces << "\n";
-        //cerr << ma << "\n";
+    while(q--) {
+        int a, b, c, d;
+        cin >> a >> b >> c >> d;
+
+        ll res = mat[c - 1][d - 1] - mat[c - 1][b] - mat[a][d - 1] + mat[a][b];
+        cout << res << "\n";
     }
 
-    //cerr << ma << " " << me << "\n\n";
-    cout << min(ma, me) << "\n";
 }
 
 int main(){

@@ -26,40 +26,52 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol(){
-    cerr << "====================\n";
-    int n, k;
-    cin >> n >> k;
+vector<vector<int>> arbol;
+vector<int> padres;
 
-    vector<int> a(n);
-    int mn = INT_MAX / 2, mx = INT_MAX / 2;
-    for(int i = 0; i < n; i++) {
-        cin >> a[i];
-        if(a[i] <= k && abs(a[i] - k) < abs(mn - k)) 
-            mn = a[i];
-        if(a[i] > k) {
-            int veces = ceil((1.0 * a[i]) / k);
-            if(veces * k - a[i] <= mx) {
-                mx = a[i];
-            } 
+void dfs(int nodo, int padre) {
+    padres[nodo] = padre;
+    //cerr << nodo << " " << padre << "\n";
+
+    for(auto u: arbol[nodo]) {
+        if(u != padre) {
+            dfs(u, nodo);
         }
-            
     }
 
-    cerr << mn << " " << mx << "\n";
-    int me = INT_MAX, ma = INT_MAX;
-    if(mn != INT_MAX / 2) {
-        me = k - mn;
-    }
-    if(mx != INT_MAX / 2) {
-        int veces = ceil(1.0 * mx / k);
-        ma = veces * k - mx;
-        //cerr << veces << "\n";
-        //cerr << ma << "\n";
+}
+
+void sol(){
+    int n;
+    cin >> n;
+
+    arbol.resize(n + 1);
+    padres.resize(n + 1);
+
+    for(int i = 2; i <= n; i++) {
+        int u;
+        cin >> u;
+        arbol[i].push_back(u);
+        arbol[u].push_back(i);
     }
 
-    //cerr << ma << " " << me << "\n\n";
-    cout << min(ma, me) << "\n";
+    dfs(1, 0);
+    // for(auto x: padres) {
+    //     cerr << x << " ";
+    // }
+    vector<int> res = {n};
+    int actual = n;
+    while(actual != 1) {
+        res.push_back(padres[actual]);
+        actual = padres[actual];
+    }
+
+    reverse(all(res));
+    
+    for(auto x: res) {
+        cout << x << " ";
+    }
+
 }
 
 int main(){
@@ -69,7 +81,7 @@ int main(){
     //cout << fixed << setprecision(10);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
 
     while(t--){
         sol();

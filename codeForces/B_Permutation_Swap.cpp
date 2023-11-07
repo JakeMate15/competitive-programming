@@ -14,14 +14,17 @@ typedef vector<int> vi;
 #define debug(a)    cout << a << "\n"
 
 void sol(){
-    int n,sol=0,x,l;
-    cin>>n;
-    fore(i,1,n){
-        cin>>l;
-        x = abs(i-l);
-        sol = __gcd(sol,x);
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+    int mx = 0;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        mx = max(mx, k mabs(a[i] - i + 1));
     }
-    debug(sol);
+
+    cout << mx << "\n";
 }
 
 int main(){IO

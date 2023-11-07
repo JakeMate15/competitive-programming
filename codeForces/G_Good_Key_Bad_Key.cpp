@@ -24,42 +24,37 @@ typedef long long ll;
 typedef long double ld;
 
 const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const int MX = 1e5 + 5;
+
+int n, k;
+vector<int> a;
+vector<vector<ll>> dp;
+
+ll go(int i, int pot) {
+    if(i == n || pot == 30)
+        return 0;
+
+    ll &mem = dp[i][pot];
+    if(mem != -1)
+        return mem;
+
+    return mem = max(
+                go(i + 1, pot) + a[i] / (1 << pot) - k, 
+                go(i + 1, pot + 1) + a[i] / (1 << (pot + 1))    
+            );
+}
 
 void sol(){
-    cerr << "====================\n";
-    int n, k;
     cin >> n >> k;
 
-    vector<int> a(n);
-    int mn = INT_MAX / 2, mx = INT_MAX / 2;
+    a.clear();  a.resize(n + 1);
+    dp.clear(); dp.resize(n + 1, vector<ll>(30, -1));
+
     for(int i = 0; i < n; i++) {
         cin >> a[i];
-        if(a[i] <= k && abs(a[i] - k) < abs(mn - k)) 
-            mn = a[i];
-        if(a[i] > k) {
-            int veces = ceil((1.0 * a[i]) / k);
-            if(veces * k - a[i] <= mx) {
-                mx = a[i];
-            } 
-        }
-            
     }
 
-    cerr << mn << " " << mx << "\n";
-    int me = INT_MAX, ma = INT_MAX;
-    if(mn != INT_MAX / 2) {
-        me = k - mn;
-    }
-    if(mx != INT_MAX / 2) {
-        int veces = ceil(1.0 * mx / k);
-        ma = veces * k - mx;
-        //cerr << veces << "\n";
-        //cerr << ma << "\n";
-    }
-
-    //cerr << ma << " " << me << "\n\n";
-    cout << min(ma, me) << "\n";
+    cout << go(0, 0) << "\n";
 }
 
 int main(){

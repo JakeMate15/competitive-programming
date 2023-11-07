@@ -26,40 +26,65 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol(){
-    cerr << "====================\n";
-    int n, k;
-    cin >> n >> k;
+vector<vector<int>> arbol;
+vector<int> hojas;
+vector<bool> esHoja;
 
-    vector<int> a(n);
-    int mn = INT_MAX / 2, mx = INT_MAX / 2;
-    for(int i = 0; i < n; i++) {
-        cin >> a[i];
-        if(a[i] <= k && abs(a[i] - k) < abs(mn - k)) 
-            mn = a[i];
-        if(a[i] > k) {
-            int veces = ceil((1.0 * a[i]) / k);
-            if(veces * k - a[i] <= mx) {
-                mx = a[i];
-            } 
+void dfs(int nodo, int padre) {
+
+    for(auto u: arbol[nodo]) {
+        if(u == padre) {
+            if(sz(arbol[nodo]) == 1) {
+                hojas[nodo] = 1;
+                esHoja[nodo] = true;
+            }
         }
-            
+        else{
+            dfs(u, nodo);
+        }
+    }
+}
+
+void dfs2(int nodo, int padre) {
+
+    for(auto u: arbol[nodo]) {
+        if(u != padre) {
+            dfs2(u, nodo);
+            if(esHoja[u]) {
+                hojas[nodo] += hojas[u];
+            }
+        }   
     }
 
-    cerr << mn << " " << mx << "\n";
-    int me = INT_MAX, ma = INT_MAX;
-    if(mn != INT_MAX / 2) {
-        me = k - mn;
-    }
-    if(mx != INT_MAX / 2) {
-        int veces = ceil(1.0 * mx / k);
-        ma = veces * k - mx;
-        //cerr << veces << "\n";
-        //cerr << ma << "\n";
+}
+
+void sol(){
+    int n;
+    cin >> n;
+
+    arbol.clear(); arbol.resize(n + 1);
+    hojas.clear(); hojas.resize(n + 1, 0);
+    esHoja.clear(); esHoja.resize(n + 1, 0);
+    
+    for(int i = 2; i <= n; i++) {
+        int u;
+        cin >> u;
+        arbol[i].push_back(u);
+        arbol[u].push_back(i);
     }
 
-    //cerr << ma << " " << me << "\n\n";
-    cout << min(ma, me) << "\n";
+    dfs(1, 0);
+    dfs2(1, 0);
+
+    for(int i = 1; i <= n; i++) {
+        if(!esHoja[i] && hojas[i] < 3) {
+            cout << "No\n";
+            return;
+        }
+    }
+
+    cout << "Yes\n";
+
 }
 
 int main(){
@@ -69,7 +94,7 @@ int main(){
     //cout << fixed << setprecision(10);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
 
     while(t--){
         sol();
@@ -77,3 +102,4 @@ int main(){
 
     return 0;
 }
+

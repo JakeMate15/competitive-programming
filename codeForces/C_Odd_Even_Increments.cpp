@@ -21,7 +21,8 @@ void sol(){
     cin>>n;
 
     int a[n];
-    forn(i,n)   cin>>a[i];
+    forn(i,n)   
+        cin>>a[i];
 
     for(int i=0; i<n; i+=2){
         if(a[i]%2 != a[0]%2){
