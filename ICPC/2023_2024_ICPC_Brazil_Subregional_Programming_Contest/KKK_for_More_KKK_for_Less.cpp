@@ -36,7 +36,7 @@ template <int p > struct mod_int {
 		return ret;
 	}
 	ll inv(ll b) { return expo(b, p-2); }
- 
+
 	using m = mod_int;
 	int v;
 	mod_int() : v(0) {}
@@ -74,7 +74,7 @@ template <int p > struct mod_int {
 	}
 	bool operator ==(const m& a) { return v == a.v; }
 	bool operator !=(const m& a) { return v != a.v; }
- 
+
 	friend m operator +(m a, m b) { return a += b; }
 	friend m operator -(m a, m b) { return a -= b; }
 	friend m operator *(m a, m b) { return a *= b; }
@@ -82,74 +82,109 @@ template <int p > struct mod_int {
 	friend m operator ^(m a, ll e) { return a ^= e; }
 };
 
-typedef mod_int<mod> mint;
+const int MOD = 998244353;
+typedef mod_int<MOD> mint;
 
-const int N = 1e6;
-vector<mint> fac(N + 5);
+void ntt(vector<mint>& a, bool rev) {
+	int n = a.size(); auto b = a;
+	assert(!(n&(n-1)));
+	mint g = 1;
+	while ((g^((MOD-1)/2)) == mint(1)) g += 1;
+	if (rev) g = 1 / g;
 
-void sol() {
-    int n,k;
-    cin>>n>>k;
- 
-    vector<mint> a(n);
-    map<int,int> rep;
+	for (int step = n / 2; step; step /= 2) {
+		mint w = g^((MOD-1)/(n/step)), wn = 1;
+		for (int i = 0; i < n/2; i += step) {
+			for (int j = 0; j < step; j++) {
+				auto u = a[2*i + j], v = wn * a[2*i + j + step];
+				b[i+j] = u + v; b[i + n/2 + j] = u - v;
+			}
+			wn = wn * w;
+		}
+		swap(a, b);
+	}
+	if (rev) {
+		auto n1 = mint(1) / n;
+		for (auto &x : a) x *= n1;
+	}
+}
+
+vector<mint> convolution(vector<mint>& a, vector<mint>& b) {
+	vector<mint> l(a.begin(), a.end()), r(b.begin(), b.end());
+	int N = l.size()+r.size()-1, n = 1;
+	while (n <= N) n *= 2;
+	l.resize(n);
+	r.resize(n);
+	ntt(l, false);
+	ntt(r, false);
+	for (int i = 0; i < n; i++) l[i] *= r[i];
+	ntt(l, true);
+	l.resize(N);
+	return l;
+}
+
+const int MAX = 1e5 + 10;
+vector<mint> fat(MAX);
+
+vector<mint> sol(vector<mint> p, mint k){
+    int n = sz(p);
+    vector<mint> a(n), b(n);
+
     for(int i = 0; i < n; i++) {
-        int x;
-        cin >> x;
-        a[i] = x;
-
-        rep[a[i].v]++;
-    }
- 
-    fac[0] = 1;
-    for(int i = 1; i < N; i++) {
-        fac[i] = fac[i - 1] * i;
-    }
- 
-    mint q = 1;
-    for(auto x: rep){
-        q *= fac[x.second];
+        a[i] = fat[i] * p[i];
     }
 
-    cout << (q / fac[n]).v << "\n";
-
-    while(k--){
-        int A,B;
-        cin >> A >> B;
-        A--;
- 
-        int keyR = a[A].v;
-        if(keyR != B){
-            if(!rep.count(B))   
-                rep[B]=0;
-            if(rep[keyR] == 0)    
-                (q /= 1);
-            else                
-                q /= rep[keyR];
-        
-            rep[keyR]--;
-            rep[B]++;
-            q *= rep[B];
-            a[A] = B;
-        }
-
-        cout << (q /fac[n]).v << "\n";
- 
+    for(int d = 0; d < n; d++) {
+        b[d] = (k ^ d) / fat[d];
     }
+
+    reverse(all(b));
+    auto c = convolution(a, b);
+
+    vector<mint> res(n);
+    for(int j = 0; j < n; j++) {
+        res[j] = c[j + n - 1] / fat[j];
+    }
+
+    return res;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    //cout << fixed << setprecision(10);
-
-    int t=1;
-    //cin>>t;
-
-    while(t--){
-        sol();
+    fat[0] = 1;
+    for(int i = 1; i < MAX; i++) {
+        fat[i] = i * fat[i - 1];
     }
+
+    int n, k;
+    cin >> n >> k;
+    n++;
+
+    vector<int> p(n), q(n);
+    for(int i = 0; i < n; i++) {
+        cin >> p[i];
+    }
+    for(int i = 0; i < n; i++) {
+        cin >> q[i];
+    }
+
+    vector<mint> P(n), Q(n);
+    for(int i = 0; i < n; i++) {
+        P[i] = p[i];
+    }
+    for(int i = 0; i < n; i++) {
+        Q[i] = q[i];
+    }
+
+    auto a = sol(P, k);
+    auto b = sol(Q, -k);
+
+    for(int i = 0; i < n; i++) {
+        cout << (a[i] + b[i]).v << " ";
+    }
+    nl;
 
     return 0;
 }

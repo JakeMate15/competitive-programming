@@ -1,87 +1,144 @@
 #include<bits/stdc++.h>
-#define fore(i,a,b) for(int i = a; i < b; i++)
-#define forn(i,a,b) for(int i = a; i <= b; i++)
-#define ENDL '\n';
+#pragma GCC optimize ("O3")
+#pragma GCC target ("sse4")
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 
 using namespace std;
-typedef long long lli;
+using namespace __gnu_pbds;
 
-const lli mod = 1e9 + 7;
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define debln(a)        cout << a << "\n"
+#define deb(a)          cout << a << " "
+#define nl              cout << "\n";
+#define u_map           gp_hash_table
+#define uid(a, b)       uniform_int_distribution<int>(a, b)(rng)
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
-lli sum(lli a, lli b){
-    return ((a%mod) + (b%mod))%mod;
-}
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-lli mul(lli a, lli b){
-    return ((a % mod) * (b % mod)) % mod;
-}
+typedef long long ll;
+typedef long double ld;
 
-lli sub(lli a, lli b){
-    return ((a - b)+mod)%mod;
-}
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
-lli modpow(lli x, lli n){
-    if(n == 1) return x%mod;
-    if(n == 0) return 1%mod;
-    lli u = modpow(x, n/2);
-    u = mul(u, u);
-    if(n%2 == 1) u = mul(u, x);
-    return u;
-}
-lli inv(lli a){
-    return modpow(a, mod-2);
-}
+template <int p > struct mod_int {
+	ll expo(ll b, ll e) {
+		ll ret = 1;
+		while (e) {
+			if (e % 2) ret = ret * b % p;
+			e /= 2, b = b * b % p;
+		}
+		return ret;
+	}
+	ll inv(ll b) { return expo(b, p-2); }
+ 
+	using m = mod_int;
+	int v;
+	mod_int() : v(0) {}
+	mod_int(ll v_) {
+		if (v_ >= p or v_ <= -p) v_ %= p;
+		if (v_ < 0) v_ += p;
+		v = v_;
+	}
+	m& operator +=(const m& a) {
+		v += a.v;
+		if (v >= p) v -= p;
+		return *this;
+	}
+	m& operator -=(const m& a) {
+		v -= a.v;
+		if (v < 0) v += p;
+		return *this;
+	}
+	m& operator *=(const m& a) {
+		v = v * ll(a.v) % p;
+		return *this;
+	}
+	m& operator /=(const m& a) {
+		v = v * inv(a.v) % p;
+		return *this;
+	}
+	m operator -(){ return m(-v); }
+	m& operator ^=(ll e) {
+		if (e < 0) {
+			v = inv(v);
+			e = -e;
+		}
+		v = expo(v, e%(p-1));
+		return *this;
+	}
+	bool operator ==(const m& a) { return v == a.v; }
+	bool operator !=(const m& a) { return v != a.v; }
+ 
+	friend m operator +(m a, m b) { return a += b; }
+	friend m operator -(m a, m b) { return a -= b; }
+	friend m operator *(m a, m b) { return a *= b; }
+	friend m operator /(m a, m b) { return a /= b; }
+	friend m operator ^(m a, ll e) { return a ^= e; }
+};
 
-lli division(lli a, lli b){
-    return mul(a, inv(b));
+typedef mod_int<mod> mint;
+
+void sol(){
+    int n,q;
+    cin>>n>>q;
+    
+    vector<mint> pref(n), prefC(n), a(n);
+ 
+    for(int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        a[i] = x;
+    } 
+        
+    pref[0] = a[0];
+    
+    for(int i = 1; i < n; i++) {
+        pref[i] = pref[i - 1] + a[i];
+    }   
+
+    prefC[0] = a[0] * a[0];
+    for(int i = 1; i < n; i++) {
+        prefC[i] = prefC[i - 1] + a[i] * a[i];
+    }
+        
+    while(q--){
+        int l, r;
+        cin >> l >> r;
+        l--;r--;
+
+        mint ans;
+        if(l==0){
+            ans = (pref[r] * pref[r] - prefC[r]) / 2;
+        }
+        else{
+            mint pL = pref[r] - pref[l - 1];
+            mint pC = prefC[r] - prefC[l - 1];
+            ans = (pL * pL - pC) / 2;
+        }
+ 
+        cout << ans.v << "\n";
+    }
+ 
 }
 
 int main(){
-    cout.tie(0);
+    ios::sync_with_stdio(false);
     cin.tie(0);
-    ios_base::sync_with_stdio(0);
-    int n, q; cin >> n >> q;
-    vector <int> nums(n+1);
-    vector <lli> sums(n+1);
-    vector <lli> squares(n+1);
-    sums[0] = 0;
-    squares[0] = 0;
-    
-    forn(i, 1, n){
-        cin >> nums[i];
-        sums[i] = sum(sums[i-1], nums[i]);
-        squares[i] = sum(squares[i-1], modpow(nums[i], 2));
+
+    //cout << fixed << setprecision(10);
+
+    int t=1;
+    //cin>>t;
+
+    while(t--){
+        sol();
     }
-    
-    fore(i, 0, q){
-        int l, r;
-        cin >> l >> r;
 
-        if(l == r){
-            cout << 0 << ENDL;
-            continue;
-        }
-        
-        if(r - l == 1){
-            lli ans = mul(nums[l], nums[r]);
-            cout << ans << ENDL;
-            continue;
-        }
-
-        if(l == 1 and r == n){
-            lli res = division(sub(modpow(sums[r], 2), squares[r]), 2);
-            cout << res << ENDL;
-            continue;
-        }
-
-        lli sm = sum(sub(sums[r], sums[l]), nums[l]);
-        sm = modpow(sm, 2);
-        
-        lli sq = sum(sub(squares[r], squares[l]), (squares[l] - squares[l-1]));
-        
-        lli res = division(sub(sm, sq), 2);
-        
-        cout << res << ENDL;
-    }
     return 0;
 }
