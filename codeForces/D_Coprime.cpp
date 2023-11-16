@@ -29,47 +29,36 @@ const int MX = 2e5 + 5;
 void sol(){
     int n;
     cin >> n;
-    
-    vector<int> a(n + 1);
-    for(int i = 1; i <= n; i++) {
-        cin >> a[i];
-        a[i] += a[i - 1];
+
+    vector<int> a(1005);
+    int res = -1;
+    for(int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        a[x] = i + 1;
     }
 
-    int l = 1, r = n;
-    while(l <= r) {
-        int m = (l + r) / 2;
-        
-        cout << "? " << m << " ";
-        for(int i = 1; i <= m; i++) {
-            cout << i << " ";
+    for(int i = 1; i <= 1000; i++) {
+        for(int j = 1; j <= i; j++) {
+            if(a[i] == 0 || a[j] == 0) {
+                continue;
+            }
+            if(gcd(i, j) == 1) {
+                res = max(res, a[i] + a[j]);
+            }
         }
-        nl;
-
-        int res;
-        cin >> res;
-
-        if(res > a[m]) {
-            r = m - 1;
-        }
-        else {
-            l = m + 1;
-        }
-
     }
-
-    cout << "! " << r + 1 << "\n";
-
+    cout << res << "\n";
 }
 
 int main(){
-    //ios::sync_with_stdio(false);
-    //cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
     //cout << fixed << setprecision(10);
 
-    int t = 1;
-    cin >> t;
+    int t=1;
+    cin>>t;
 
     while(t--){
         sol();

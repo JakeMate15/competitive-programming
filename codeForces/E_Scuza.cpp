@@ -27,49 +27,40 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n;
-    cin >> n;
-    
-    vector<int> a(n + 1);
-    for(int i = 1; i <= n; i++) {
+    int n, q;
+    cin >> n >> q;
+
+    vector<ll> a(n), pref(n);
+    for(int i = 0; i < n; i++) {
         cin >> a[i];
-        a[i] += a[i - 1];
+        pref[i] = a[i] + (i ? pref[i - 1] : 0);
+        a[i] = i ?  max(a[i], a[i - 1]) : a[i];
     }
 
-    int l = 1, r = n;
-    while(l <= r) {
-        int m = (l + r) / 2;
-        
-        cout << "? " << m << " ";
-        for(int i = 1; i <= m; i++) {
-            cout << i << " ";
-        }
-        nl;
+    while(q--) {
+        int h;
+        cin >> h;
 
-        int res;
-        cin >> res;
-
-        if(res > a[m]) {
-            r = m - 1;
+        auto it = prev(lower_bound(all(a), h + 1));
+        int pos = it - a.begin();
+        if(it == a.end() || pos == -1) {
+            cout << 0 << " ";
         }
         else {
-            l = m + 1;
+            cout << pref[pos] << " ";
         }
-
     }
-
-    cout << "! " << r + 1 << "\n";
-
+    nl;
 }
 
 int main(){
-    //ios::sync_with_stdio(false);
-    //cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
     //cout << fixed << setprecision(10);
 
-    int t = 1;
-    cin >> t;
+    int t=1;
+        cin>>t;
 
     while(t--){
         sol();

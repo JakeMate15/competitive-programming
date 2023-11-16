@@ -26,24 +26,39 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol(){
-    int n, q;
-    cin >> n >> q;
+long long getMaxAdditionalDinersCount(long long N, long long K, int M, vector<long long> S) {
+    ll result = 0LL;
 
-    vector<ll> a(n + 1), pref(n + 1);
-    for(int i = 1; i <= n; i++) {
-        cin >> a[i];
-        pref[i] = pref[i - 1] + a[i];
+    ll minSeats = K + 1;
+    if (M == 0) {
+        return N / minSeats + 1;
     }
 
-    while(q--) {
-        int l, r, k;
-        cin >> l >> r >> k;
+    sort(S.begin(), S.end());
+    
 
-        ll p = pref[r] - pref[l - 1];
-        ll sum = pref[n] - p + k * (r - l + 1);
-        cout << (sum & 1 ? "YES" : "NO") << "\n"; 
+    ll firstChair = S[0];
+    ll firstAvailableIndex = (firstChair - 1) - minSeats;
+    if (firstAvailableIndex >= 0) {
+        result += firstAvailableIndex / minSeats + 1;
     }
+
+    for (int i = 0; i < M - 1; i++) {
+        ll leftFreeChair = S[i] + minSeats;
+        ll rightFreeChair = S[i + 1] - minSeats;
+        ll diffSpace = rightFreeChair - leftFreeChair;
+        if (diffSpace >= 0) {
+            result += diffSpace / minSeats + 1;
+        }
+    }
+
+    ll lastChair = S[M - 1];
+    ll lastAvailableIndex = (lastChair - 1) + minSeats;
+    if (lastAvailableIndex <= N-1) {
+        result += (N - 1 - lastAvailableIndex)/ minSeats + 1;
+    }
+
+    return result;
 }
 
 int main(){
@@ -53,11 +68,17 @@ int main(){
     //cout << fixed << setprecision(10);
 
     int t=1;
-    cin>>t;
+    //cin>>t;
 
-    while(t--){
-        sol();
+    ll N, K, M;
+    cin >> N >> K >> M;
+    vector<ll> a(M);
+    for(auto &x: a) {
+        cin >> x;
     }
+
+
+    cout << getMaxAdditionalDinersCount(N, K, M, a) << "\n";
 
     return 0;
 }

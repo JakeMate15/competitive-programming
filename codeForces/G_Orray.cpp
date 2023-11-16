@@ -29,42 +29,41 @@ const int MX = 2e5 + 5;
 void sol(){
     int n;
     cin >> n;
-    
-    vector<int> a(n + 1);
-    for(int i = 1; i <= n; i++) {
-        cin >> a[i];
-        a[i] += a[i - 1];
+
+    vector<pair<int, int>> a(n);
+    for(auto &x: a) {
+        cin >> x.first;
     }
 
-    int l = 1, r = n;
-    while(l <= r) {
-        int m = (l + r) / 2;
-        
-        cout << "? " << m << " ";
-        for(int i = 1; i <= m; i++) {
-            cout << i << " ";
+    int OR = 0;
+    for(int i = 0; i < min(32, n); i++) {
+        int mx = 0, donde = -1;
+        for(int j = 0; j < n; j++) {
+            if(a[j].second) {
+                continue;
+            }
+            if((OR | a[j].first) > mx) {
+                mx = (OR | a[j].first);
+                donde = j;
+            }
         }
-        nl;
-
-        int res;
-        cin >> res;
-
-        if(res > a[m]) {
-            r = m - 1;
-        }
-        else {
-            l = m + 1;
-        }
-
+        a[donde].second = true;
+        cout << a[donde].first << " ";
+        OR |= a[donde].first;
     }
 
-    cout << "! " << r + 1 << "\n";
+    for(auto [num, ok]: a) {
+        if(!ok) {
+            cout << num << " ";
+        }
+    }
 
+    nl;
 }
 
 int main(){
-    //ios::sync_with_stdio(false);
-    //cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
     //cout << fixed << setprecision(10);
 

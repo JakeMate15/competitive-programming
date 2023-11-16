@@ -29,47 +29,50 @@ const int MX = 2e5 + 5;
 void sol(){
     int n;
     cin >> n;
+
+    bool masA = false, masB = false;
+    ll cntA = 0, cntB = 0;
     
-    vector<int> a(n + 1);
-    for(int i = 1; i <= n; i++) {
-        cin >> a[i];
-        a[i] += a[i - 1];
-    }
+    while(n--) {
+        int d, k;
+        string s;
+        cin >> d >> k >> s;
 
-    int l = 1, r = n;
-    while(l <= r) {
-        int m = (l + r) / 2;
-        
-        cout << "? " << m << " ";
-        for(int i = 1; i <= m; i++) {
-            cout << i << " ";
+        for(char c: s) {
+            if(d == 1) {
+                if(c != 'a') 
+                    masA = true;
+                else
+                    cntA += k;
+            }
+            else {
+                if(c != 'a')
+                    masB = true;
+                else
+                    cntB += k;
+            }
         }
-        nl;
 
-        int res;
-        cin >> res;
-
-        if(res > a[m]) {
-            r = m - 1;
+        if(masB) {
+            cout << "YES\n";
+        }
+        else if(!masA && (cntA < cntB)) {
+            cout << "YES\n";
         }
         else {
-            l = m + 1;
+            cout << "NO\n";
         }
-
     }
-
-    cout << "! " << r + 1 << "\n";
-
 }
 
 int main(){
-    //ios::sync_with_stdio(false);
-    //cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
     //cout << fixed << setprecision(10);
 
-    int t = 1;
-    cin >> t;
+    int t=1;
+    cin>>t;
 
     while(t--){
         sol();
