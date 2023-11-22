@@ -1,36 +1,52 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+
 typedef long long ll;
+typedef long double ld;
 
-bool f(int n, int m){
-    if(n==m)    return true;
-    if(n<m)     return false;
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
-    int a = (n*2)/3;
-    int b = n/3;
-    if(a+b != n)    return false;
+bool f(ll n, ll m) {
+    if(n == m) 
+        return true;
 
-    return (f(a,m) | f(b,m));
+    if(n < m)
+        return false;
+    ll a = (n * 2) / 3;
+    ll b = n / 3;
+
+    if(a + b != n)
+        return false;
+
+    if(a == m || b == m)
+        return true;
+
+    return f(a, m) | f(b, m);
 }
 
 void sol(){
-	int n,m;
-    cin>>n>>m;
+    ll n, m;
+    cin >> n >> m;
 
-    if( f(n,m) )    cout << "YES\n";
-    else            cout << "NO\n";
+    cout << (f(n, m) ? "YES" : "NO") << "\n";
 }
 
 int main(){
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-	int t=1;
-	cin>>t;
-	while(t--){
-		sol();
-	}
+    //cout << fixed << setprecision(10);
 
-	return 0;
+    int t=1;
+    cin>>t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }

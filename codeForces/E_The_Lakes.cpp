@@ -1,9 +1,15 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-typedef long long ll;
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
 
-const int mx = 1000+100;
+typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int mx = 1000 + 10;
+
 int g[mx][mx];
 bool vis[mx][mx];
 int n,m;
@@ -50,8 +56,6 @@ void sol(){
     }
 
     cout << maxV << "\n";
-
-
 }
 
 int main(){
