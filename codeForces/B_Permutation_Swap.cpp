@@ -1,34 +1,42 @@
 #include<bits/stdc++.h>
 using namespace std;
+ 
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+ 
+typedef long long ll;
+typedef long double ld;
 
-typedef long long int lli;
-typedef vector<int> vi;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(lli (i)=0; i<n; i++)
-#define forr(i,a,n) for(lli i=(a); i<n; i++)
-#define fore(i,a,n) for(lli i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
     int n;
     cin >> n;
 
-    vector<int> a(n);
-    int mx = 0;
-    for(int i = 0; i < n; i++) {
-        cin >> a[i];
-        mx = max(mx, k mabs(a[i] - i + 1));
+    int x;
+    int g = 0;
+    for(int i = 1; i <= n; i++) { 
+        cin >> x;
+        x = abs(x - i); 
+        g = gcd(g, x);
     }
 
-    cout << mx << "\n";
+    cout << g << "\n";
 }
 
-int main(){IO
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    //cout << fixed << setprecision(10);
+
     int t=1;
     cin>>t;
-    while(t--)  sol();
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }
