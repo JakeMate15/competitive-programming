@@ -195,12 +195,9 @@ void sol() {
         cin >> l >> r >> t;
         l--; r--;
 
-        // Recoge las frecuencias de los caracteres en el rango
         Info queryResult = ST.rangeQuery(l, r);
 
-        // Reordena los caracteres basado en el tipo de operación
         if (t == 1) {
-            // Orden ascendente
             for (int j = 0; j < 26; j++) {
                 if (queryResult.freq[j] > 0) {
                     ST.rangeApply(l, l + queryResult.freq[j], Tag{j});
@@ -208,7 +205,6 @@ void sol() {
                 }
             }
         } else {
-            // Orden descendente
             for (int j = 25; j >= 0; j--) {
                 if (queryResult.freq[j] > 0) {
                     ST.rangeApply(l, l + queryResult.freq[j], Tag{j});
