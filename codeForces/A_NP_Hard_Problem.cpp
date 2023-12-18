@@ -1,12 +1,15 @@
 #include<bits/stdc++.h>
 using namespace std;
- 
+
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
-#define debln(a)        cout << a << "\n"
-#define deb(a)          cout << a << " "
 #define nl              cout << "\n";
+
 typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 vector<vector<int>> graph;
 vector<int> side;
@@ -50,7 +53,7 @@ void sol(){
     }
 
     if(!isBipartite(n)) {
-        debln(-1);
+        cout << -1 << "\n";
     }
     else{
         
@@ -64,15 +67,15 @@ void sol(){
             }
         }
 
-        debln(sz(c1));
+        cout << sz(c1) << "\n";
         for(auto x: c1) {
-            deb(x);
+            cout << x << "\n";
         }
         nl;
 
-        debln(sz(c2));
+        cout << sz(c2) << "\n";
         for(auto x: c2) {
-            deb(x);
+            cout << x << "\n";
         }
         nl;
     }
@@ -80,10 +83,14 @@ void sol(){
 }
 
 int main(){
-    ios::sync_with_stdio(false);cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    //cout << fixed << setprecision(10);
 
     int t=1;
     //cin>>t;
+
     while(t--){
         sol();
     }

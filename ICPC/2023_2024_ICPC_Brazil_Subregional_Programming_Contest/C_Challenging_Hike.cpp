@@ -1,50 +1,47 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define forn(i,n)       for(int i=0; i<n; i++)
-#define forr(i,a,n)     for(int i=a; i<n; i++)
-#define fore(i,a,n)     for(int i=a; i<=n; i++)
-#define fornd(i,n)      for(int i=n; i>=0; i--)
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
-#define debln(a)        cout << a << "\n"
-#define deb(a)          cout << a << " "
-#define pb              push_back
+#define nl              cout << "\n";
 
 typedef long long ll;
-typedef vector<int> vi;
-typedef pair<int,int> ii;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 const int mx = 1e5+5;
-vi g[mx];
+vector<int> g[mx];
 int v[mx];
+
 struct query{
     int op,num,pos;
 };
 vector<query> q(mx);
-vi dp;
+vector<int> dp;
 int res[mx];
 
 void dfs(int nodo, int padre){
-    if(dp.back()<v[nodo]){
-        dp.pb(v[nodo]);
+    if(dp.back() < v[nodo]){
+        dp.push_back(v[nodo]);
         q[nodo].op = 1;
     }
     else{
-        int i = lower_bound(all(dp),v[nodo])-dp.begin();
-        q[nodo].op = 2,q[nodo].num = dp[i], q[nodo].pos = i;
+        int i = lower_bound(all(dp), v[nodo]) - dp.begin();
+        q[nodo].op = 2, q[nodo].num = dp[i], q[nodo].pos = i;
         dp[i] = v[nodo];
     }
 
-    res[nodo] = sz(dp)-1;
+    res[nodo] = sz(dp) - 1;
     
     for(auto u: g[nodo]){
-        if(u!=padre){
+        if(u != padre){
             dfs(u,nodo);
         }
     }
 
-    if(q[nodo].op==1){
+    if(q[nodo].op == 1){
         dp.pop_back();
     }
     else if(q[nodo].op == 2){
@@ -56,33 +53,36 @@ void sol(){
     int n;
     cin>>n;
 
-    fore(i,2,n){
+    for(int i = 2; i <= n; i++) {
         int u;
-        cin>>u;
+        cin >> u;
 
-        g[i].pb(u);
-        g[u].pb(i);
+        g[i].push_back(u);
+        g[u].push_back(i);
     }
 
-    fore(i,1,n){
-        cin>>v[i];
+    for(int i = 1; i <= n; i++) {
+        cin >> v[i];
     }
 
     dp.push_back(-1);
     dfs(1,0);
 
-    fore(i,2,n){
-        deb(res[i]);
+    for(int i = 2; i <= n; i++) {
+        cout << res[i] << " ";
     }
 
-    debln("");
+    nl;
 }
-
 int main(){
-    ios::sync_with_stdio(false);cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-    int t=1;
-    //cin>>t;
+    //cout << fixed << setprecision(10);
+
+    int t = 1;
+    //cin >> t;
+
     while(t--){
         sol();
     }

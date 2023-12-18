@@ -13,9 +13,6 @@ using namespace __gnu_pbds;
 #define debln(a)        cout << a << "\n"
 #define deb(a)          cout << a << " "
 #define nl              cout << "\n";
-#define u_map           gp_hash_table
-#define uid(a, b)       uniform_int_distribution<int>(a, b)(rng)
-mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
@@ -52,7 +49,8 @@ struct DSU {
     int find(int x) {
         if (par[x] == x) {
             return x;
-        } else {
+        } 
+        else {
             return (par[x] = find(par[x])); // Path Compression
         }
     }
