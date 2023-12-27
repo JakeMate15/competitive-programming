@@ -11,37 +11,45 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-ll gauss(ll n) {
-    if(n <= 0) return 0;
-    return (n * (n + 1)) / 2;
-}
-
 void sol(){
-    int n, mn, temp;
-    cin >> n >> mn >> temp;
+    int n;
+    cin >> n;
 
-    vector<int> a(n), curr;
-    vector<vector<int>> aux;
+    vector<int> a(n);
     for(int i = 0; i < n; i++) {
         cin >> a[i];
-        if(a[i] <= temp) {
-            curr.push_back(a[i]);
-        }
-        else {
-            aux.push_back(curr);
-            curr = vector<int>();
+    }
+
+    sort(all(a));
+
+    int g = 0;
+    for(int i = 0; i < n; i++) {
+        g = gcd(g, a[n - 1] - a[i]);
+        // cerr << a[i] << " \n"[i == n - 1];
+    }
+
+    ll res = 0;
+    for(int i = 0; i < n; i++) {
+        res += (a[n - 1] - a[i]) / (g == 0 ? 1 : g);
+    }
+
+    int mx = INT_MAX;
+    for(int i = n - 1; i >= 1; i--) {
+        if(a[i] - a[i - 1] > g) {
+            mx = a[i] - g;
+            break;
         }
     }
-    aux.push_back(curr);
-    
-    ll res = 0;
-    for(auto x: aux) {
-        if(sz(x) >= mn) {
-            res += gauss(sz(x) - mn + 1);
-        }
+
+    if(mx == INT_MAX) {
+        res += n;
+    }
+    else {
+        res = res + (a[n - 1] - mx) / g;
     }
 
     cout << res << "\n";
+
 }
 
 int main(){

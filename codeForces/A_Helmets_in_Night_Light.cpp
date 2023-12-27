@@ -7,38 +7,39 @@ using namespace std;
 
 typedef long long ll;
 typedef long double ld;
+typedef pair<int, int> ii;
 
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-ll gauss(ll n) {
-    if(n <= 0) return 0;
-    return (n * (n + 1)) / 2;
-}
-
 void sol(){
-    int n, mn, temp;
-    cin >> n >> mn >> temp;
+    int n, p;
+    cin >> n >> p;
 
-    vector<int> a(n), curr;
-    vector<vector<int>> aux;
+    vector<pair<int, int>> a(n);
     for(int i = 0; i < n; i++) {
-        cin >> a[i];
-        if(a[i] <= temp) {
-            curr.push_back(a[i]);
-        }
-        else {
-            aux.push_back(curr);
-            curr = vector<int>();
-        }
+        cin >> a[i].second;
     }
-    aux.push_back(curr);
+    for(int i = 0; i < n; i++) {
+        cin >> a[i].first;
+    }
+
+    sort(all(a));
     
+    priority_queue<ii, vector<ii>, greater<ii>> pq;
+    pq.push({p, n});
     ll res = 0;
-    for(auto x: aux) {
-        if(sz(x) >= mn) {
-            res += gauss(sz(x) - mn + 1);
+
+    for(int i = 0; i < n; i++) {
+        auto m = pq.top();  pq.pop();
+        res += m.first;
+        m.second--;
+
+        if(m.second > 0) {
+            pq.push(m);
         }
+
+        pq.push(a[i]);
     }
 
     cout << res << "\n";

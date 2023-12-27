@@ -12,22 +12,9 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n;
-    string s;
-    cin >> n >> s;
-
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
-        }
-    }
-    cout << res.substr(0, sz(res) - 1) << "\n";
+    int a, b;
+    cin >> a >> b;
+    cout << a + b << '\n';
 }
 
 int main(){

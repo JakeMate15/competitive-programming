@@ -12,22 +12,27 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n;
-    string s;
-    cin >> n >> s;
+    ll n, k;
+    cin >> n >> k;
 
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
+    vector<ll> res;
+    for(ll i = 1; i * i <= n; i++) {
+        if(n % i == 0) {
+            res.push_back(i);
+            if(i * i < n) {
+                res.push_back(n / i);
+            }
         }
     }
-    cout << res.substr(0, sz(res) - 1) << "\n";
+
+    sort(all(res));
+
+    if(sz(res) < k) {
+        cout << "-1\n";
+    }
+    else {
+        cout << res[k - 1] << "\n";
+    }
 }
 
 int main(){
@@ -37,7 +42,7 @@ int main(){
     //cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

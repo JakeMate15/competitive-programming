@@ -11,23 +11,42 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+/*
+
+1 2 3 4 5 6
+1 6
+2 5
+3 4
+4 3
+5 2
+6 1
+
+2 3 5 7 11 13 17 19
+
+*/
+
 void sol(){
     int n;
-    string s;
-    cin >> n >> s;
+    cin >> n;
 
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
+    if(n <= 2) {
+        for(int i = n; i >= 1; i--) {
+            cout << i << " ";
         }
+        nl;
+        return;
     }
-    cout << res.substr(0, sz(res) - 1) << "\n";
+
+    vector<int> res(n, 0);
+    res[n / 2] = 1, res[0] = 2, res[n - 1] = 3;
+    int cnt = 4;
+    for(auto &x: res) {
+        if(x == 0) {
+            x = cnt++;
+        }
+        cout << x << ' ';
+    }
+    nl;
 }
 
 int main(){

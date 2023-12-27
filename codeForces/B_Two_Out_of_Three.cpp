@@ -11,37 +11,35 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-ll gauss(ll n) {
-    if(n <= 0) return 0;
-    return (n * (n + 1)) / 2;
-}
-
 void sol(){
-    int n, mn, temp;
-    cin >> n >> mn >> temp;
+    int n;
+    cin >> n;
 
-    vector<int> a(n), curr;
-    vector<vector<int>> aux;
+    vector<int> b(101), a(n);
     for(int i = 0; i < n; i++) {
         cin >> a[i];
-        if(a[i] <= temp) {
-            curr.push_back(a[i]);
-        }
-        else {
-            aux.push_back(curr);
-            curr = vector<int>();
-        }
+        b[a[i]]++;
     }
-    aux.push_back(curr);
-    
-    ll res = 0;
-    for(auto x: aux) {
-        if(sz(x) >= mn) {
-            res += gauss(sz(x) - mn + 1);
+
+    vector<int> aux;
+    for(int i = 1; i <= 100; i++) {
+        if(b[i] >= 2) {
+            aux.push_back(i);
         }
     }
 
-    cout << res << "\n";
+    
+    if(sz(aux) < 2) {
+        cout << -1 << "\n";
+    } 
+    else {
+        vector<int> res(n, 1);
+        res[find(all(a), aux[0]) - a.begin()] = 2;
+        res[find(all(a), aux[1]) - a.begin()] = 3;
+        for(int i = 0; i < n; i++) {
+            cout << res[i] << " \n"[i == n - 1];
+        }
+    }
 }
 
 int main(){

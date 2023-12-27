@@ -13,21 +13,30 @@ const int MX = 2e5 + 5;
 
 void sol(){
     int n;
-    string s;
-    cin >> n >> s;
+    cin >> n;
 
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
+    vector<int> a(n);
+    map<int, int> cnt;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        cnt[a[i]]++;
+    }
+
+    if(sz(cnt) > 2) {
+        cout << "No\n";
+    }
+    else if(sz(cnt) == 1) {
+        cout << "Yes\n";
+    }
+    else {
+        int n1 = (*cnt.begin()).second, n2 = (*next(cnt.begin())).second;
+        if(n1 == n2 || max(n1, n2) - min(n1, n2) == 1) {
+            cout << "Yes\n";
+        }
+        else {
+            cout << "No\n";
         }
     }
-    cout << res.substr(0, sz(res) - 1) << "\n";
 }
 
 int main(){

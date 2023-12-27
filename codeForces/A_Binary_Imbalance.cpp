@@ -16,18 +16,13 @@ void sol(){
     string s;
     cin >> n >> s;
 
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
-        }
+    int u = count(all(s), '1');
+    if(u == n) {
+        cout << "NO\n";
     }
-    cout << res.substr(0, sz(res) - 1) << "\n";
+    else {
+        cout << "YES\n";
+    }
 }
 
 int main(){

@@ -16,18 +16,29 @@ void sol(){
     string s;
     cin >> n >> s;
 
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
+    int l1 = 0, o1 = 0, l2 = 0, o2 = 0;
+    for(auto x: s) {
+        l1 += x == 'L';
+        o1 += x == 'O';
+    }
+
+    for(int i = 0; i < n; i++) {
+        if(s[i] == 'L') {
+            l1--;
+            l2++;
+        }
+        else {
+            o1--;
+            o2++;
+        }
+
+        if(l1 != l2 && o1 != o2 && (l2 | o2) && (l1 | o1)) {
+            cout << i + 1 << "\n";
+            return;
         }
     }
-    cout << res.substr(0, sz(res) - 1) << "\n";
+
+    cout << "-1\n";
 }
 
 int main(){
@@ -37,7 +48,7 @@ int main(){
     //cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

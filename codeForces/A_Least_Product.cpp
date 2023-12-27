@@ -13,21 +13,27 @@ const int MX = 2e5 + 5;
 
 void sol(){
     int n;
-    string s;
-    cin >> n >> s;
+    cin >> n;
 
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
+    vector<int> a(n);
+    int sgn = 1;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        if(a[i] < 0) {
+            sgn *= -1;
+        }
+        else if(a[i] == 0) {
+            sgn *= 0;
         }
     }
-    cout << res.substr(0, sz(res) - 1) << "\n";
+
+    if(sgn <= 0) {
+        cout << "0\n" << "\n";
+    }
+    else {
+        cout << 1 << "\n";
+        cout << 1 << " 0" << "\n";
+    }
 }
 
 int main(){

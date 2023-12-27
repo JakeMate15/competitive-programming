@@ -16,18 +16,14 @@ void sol(){
     string s;
     cin >> n >> s;
 
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
-        }
+    set<int> rep;
+    ll res = 0;
+    for(int i = 0; i < n; i++) {
+        rep.insert(s[i]);
+        res += sz(rep);
     }
-    cout << res.substr(0, sz(res) - 1) << "\n";
+
+    cout << res << "\n";
 }
 
 int main(){

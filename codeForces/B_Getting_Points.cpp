@@ -12,22 +12,22 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n;
-    string s;
-    cin >> n >> s;
+    ll n, p, l, t;
+    cin >> n >> p >> l >> t;
+    ll tareas = (n - 1) / 7 + 1;
 
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
-        }
+    ll lo = -1, hi = n + 1;
+    while(lo + 1 < hi) {
+        ll mid = (lo + hi) / 2;
+
+        ll dT = n - mid;
+        ll pts = dT * l + min(2 * dT, tareas) * t;
+
+        if(pts >= p)    lo = mid;
+        else            hi = mid;
     }
-    cout << res.substr(0, sz(res) - 1) << "\n";
+
+    cout << lo << "\n";
 }
 
 int main(){

@@ -13,21 +13,9 @@ const int MX = 2e5 + 5;
 
 void sol(){
     int n;
-    string s;
-    cin >> n >> s;
+    cin >> n;
 
-    s += "9";
-    string res = s.substr(0, 1);
-    char ant = s[0];
-    for(int i = 1; i < n; i++) {
-        if(s[i] == ant) {
-            i++;
-            char aux = s[i];
-            res += s[i];
-            ant = s[i];
-        }
-    }
-    cout << res.substr(0, sz(res) - 1) << "\n";
+    cout << __builtin_popcount(n) << "\n";
 }
 
 int main(){
@@ -37,7 +25,7 @@ int main(){
     //cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

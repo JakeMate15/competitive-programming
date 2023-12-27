@@ -11,28 +11,18 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-vector<ll> veces(30);
-
-void precal() {
-    int i = 9;
-    for(int j = 0; j <= i; j++) {
-        for(int k = 0; k <= i; k++) {
-            for(int l = 0; l <= i; l++) {
-                veces[j + k + l]++;
-            }
-        }
-    }
-}
+ll calc[10];
 
 void sol(){
-    string s;
-    cin >> s;
+    string n;
+    cin >> n;
 
     ll res = 1;
 
-    for(auto x: s) {
-        ll dig = x - '0';
-        res *= veces[dig];
+    for(auto x: n) {
+        int dig = x - '0';
+        res *= calc[dig];
+        // res *= res[x - '0']; 
     }
 
     cout << res << "\n";
@@ -44,10 +34,20 @@ int main(){
 
     //cout << fixed << setprecision(10);
 
+    for(ll i = 0; i <= 9; i++) {
+        for(ll j = 0; j <= i; j++) {
+            for(ll k = 0; k <= i; k++) {
+                for(ll l = 0; l <= i; l++) {
+                    if(j + k + l == i) {
+                        calc[i]++;
+                    }
+                }
+            }
+        }
+    }
+
     int t = 1;
     cin >> t;
-
-    precal();
 
     while(t--){
         sol();
