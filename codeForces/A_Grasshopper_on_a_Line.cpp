@@ -1,49 +1,42 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-typedef long long int lli;
-typedef vector<int> vi;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(lli (i)=0; i<n; i++)
-#define forr(i,a,n) for(lli i=(a); i<n; i++)
-#define fore(i,a,n) for(lli i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
+
+typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
-    //cout << "hola" << endl;
-    int x,k;cin>>x>>k;
-    if(k>x){
-        debug(1);
-        debug(x);
-        return;
-    }
-    //cout << x << " " << k << endl;
+    int n, k;
+    cin >> n >> k;
 
-    vector<int> res;
-    int meta = x;
-    int aux = meta;
-    while(meta!=0){
-        if(aux%k!=0){
-            res.push_back(aux);
-            meta-=aux;
-            aux = meta;
-        }   
-        else{
-            aux--;
-        }
+    if(n % k) {
+        cout << 1 << "\n";
+        cout << n << "\n";
     }
-
-    debug(res.size());
-    for(int x: res) cout << x << " ";
-    debug("");
+    else {
+        cout << 2 << "\n";
+        cout << n - 1 << " 1\n";
+    }
 }
 
 int main(){
-    int t=1;
-    cin>>t;
-    while(t--)  sol();
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    //cout << fixed << setprecision(10);
+
+    int t = 1;
+    cin >> t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }

@@ -16,18 +16,12 @@ void sol(){
     string s;
     cin >> n >> s;
 
-    int res = 2, aux = 2;
-    for(int i = 1; i < n; i++) {
-        if(s[i] == s[i - 1]) {
-            aux++;
-        }
-        else {
-            aux = 2;
-        }
-        res = max(res, aux);
+    int res = 0;
+    for(auto x: s) {
+        int d = x - '0';
+        res += (d == 1 || d == 2 || d == 3 || d == 5 || d == 7 || d == 4 || d == 9);
     }
-
-    cout << res << "\n";
+    cout << res << '\n';
 }
 
 int main(){
@@ -37,7 +31,7 @@ int main(){
     //cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

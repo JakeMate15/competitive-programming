@@ -9,25 +9,14 @@ typedef long long ll;
 typedef long double ld;
 
 const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const int MX = 1e6 + 5;
+
+int criba[MX];
 
 void sol(){
-    int n;
-    string s;
-    cin >> n >> s;
-
-    int res = 2, aux = 2;
-    for(int i = 1; i < n; i++) {
-        if(s[i] == s[i - 1]) {
-            aux++;
-        }
-        else {
-            aux = 2;
-        }
-        res = max(res, aux);
-    }
-
-    cout << res << "\n";
+    int x;
+    cin >> x;
+    cout << criba[x] << "\n";
 }
 
 int main(){
@@ -38,6 +27,12 @@ int main(){
 
     int t = 1;
     cin >> t;
+
+    for(int i = 1; i <= MX; i++) {
+        for(int j = i; j <= MX; j += i) {
+            criba[j]++;
+        }
+    }
 
     while(t--){
         sol();

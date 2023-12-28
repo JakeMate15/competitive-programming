@@ -22,7 +22,7 @@ struct SegmentTree{
 		for(int i = 0; i < N; ++i)
 			ST[N + i] = arr[i];    
 		for(int i = N - 1; i > 0; --i)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
+			ST[i] = max(ST[i << 1] , ST[i << 1 | 1]);
 	}
 
     void build(int n, vector<int> &a) {
@@ -31,21 +31,21 @@ struct SegmentTree{
 		for(int i = 0; i < N; ++i)
 			ST[N + i] = a[i];    
 		for(int i = N - 1; i > 0; --i)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
+			ST[i] = max(ST[i << 1] , ST[i << 1 | 1]);
     }
  
 	void update(int i, ll value){
 		ST[i += N] = value;
 		while(i >>= 1)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
+			ST[i] = max(ST[i << 1] , ST[i << 1 | 1]);
 	}
  
 	//query en [l, r]
 	ll query(int l, int r){
 		ll res = 0;  
 		for(l += N, r += N; l <= r; l >>= 1, r >>= 1){
-			if(l & 1)       res += ST[l++]; 
-			if(!(r & 1))    res += ST[r--]; 
+			if(l & 1)       res = max(res, ST[l++]); 
+			if(!(r & 1))    res = max(res, ST[r--]); 
 		}
 		return res;                 
 	}
@@ -198,11 +198,11 @@ struct HLD {
         while (top[u] != top[v]) {
             if (dep[top[u]] < dep[top[v]]) swap(u, v);
             // Consulta en [l, r]
-            res += st.query(in[top[u]], in[u]);
+            res = max(st.query(in[top[u]], in[u]), res);
             u = parent[top[u]];
         }
         if (dep[u] > dep[v]) swap(u, v);
-        res += st.query(in[u], in[v]); // Incluye el LCA
+        res = max(res, st.query(in[u], in[v]));
         return res;
     }
 };
@@ -230,14 +230,13 @@ void sol(){
         int op, x, l;
         cin >> op;
 
-        if(op == 2) {
-            cin >> x;
-            cout << t.querySubArbol(--x) << "\n";
+        if(op == 1) {
+            cin >> l >> x;
+            t.updateValor(--l, x);
         }
         else {
             cin >> l >> x;
-            l--;
-            t.updateValor(l, x);
+            cout << t.queryCamino(--l, --x) << " ";
         }
     }
 }

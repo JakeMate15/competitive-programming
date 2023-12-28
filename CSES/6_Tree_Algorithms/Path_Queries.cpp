@@ -1,20 +1,20 @@
 #include<bits/stdc++.h>
 using namespace std;
-
+ 
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
 #define nl              cout << "\n";
-
+ 
 typedef long long ll;
 typedef long double ld;
-
+ 
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
-
+ 
 struct SegmentTree{
 	int N;
 	vector<ll> ST;
-
+ 
     SegmentTree() {}
  
 	SegmentTree(int N, vector<int> & arr): N(N){
@@ -24,7 +24,7 @@ struct SegmentTree{
 		for(int i = N - 1; i > 0; --i)
 			ST[i] = ST[i << 1] + ST[i << 1 | 1];
 	}
-
+ 
     void build(int n, vector<int> &a) {
         N = n;
 		ST.resize(N << 1);
@@ -49,15 +49,15 @@ struct SegmentTree{
 		}
 		return res;                 
 	}
-
+ 
     void imp() {
 		for(int i = 0; i < N; ++i)
 			cerr << ST[N + i] << " "; 
         cerr << "\n";
     }
 };
-
-
+ 
+ 
 struct HLD {
     int n;
     vector<int> siz, top, dep, parent, in, out, seq, valor;
@@ -122,7 +122,7 @@ struct HLD {
         }
         out[u] = cur;
     }
-
+ 
     int lca(int u, int v) {
         while (top[u] != top[v]) {
             if (dep[top[u]] > dep[top[v]]) {
@@ -183,16 +183,16 @@ struct HLD {
     int rootedLca(int a, int b, int c) {
         return lca(a, b) ^ lca(b, c) ^ lca(c, a);
     }
-
+ 
     ll querySubArbol(int u) {
         return st.query(in[u], out[u] - 1);
     }
-
+ 
     void updateValor(int u, ll x) {
         valor[u] = x;
         st.update(in[u], x);
     }
-
+ 
     ll queryCamino(int u, int v) {
         ll res = 0;
         while (top[u] != top[v]) {
@@ -206,17 +206,17 @@ struct HLD {
         return res;
     }
 };
-
+ 
 void sol(){
     int n, q;
     cin >> n >> q;
-
+ 
     vector<int> a(n);
     for(int i = 0; i < n; i++) {
         cin >> a[i];
     }
     HLD t(n);
-
+ 
     for(int i = 0; i < n - 1; i++) {
         int u, v;
         cin >> u >> v;
@@ -225,35 +225,34 @@ void sol(){
         // cerr << u << " " << v << "\n";
     }
     t.work(a);
-
+ 
     while(q--) {
         int op, x, l;
         cin >> op;
-
-        if(op == 2) {
-            cin >> x;
-            cout << t.querySubArbol(--x) << "\n";
+ 
+        if(op == 1) {
+            cin >> l >> x;
+            t.updateValor(--l, x);
         }
         else {
-            cin >> l >> x;
-            l--;
-            t.updateValor(l, x);
+            cin >> l;
+            cout << t.queryCamino(0, --l) << "\n";
         }
     }
 }
-
+ 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
-
+ 
     //cout << fixed << setprecision(10);
-
+ 
     int t = 1;
     //cin >> t;
-
+ 
     while(t--){
         sol();
     }
-
+ 
     return 0;
 }

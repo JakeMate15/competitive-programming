@@ -11,23 +11,26 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol(){
-    int n;
-    string s;
-    cin >> n >> s;
-
-    int res = 2, aux = 2;
-    for(int i = 1; i < n; i++) {
-        if(s[i] == s[i - 1]) {
-            aux++;
-        }
-        else {
-            aux = 2;
-        }
-        res = max(res, aux);
+ll binPow(ll x, ll n, ll m) {
+    assert(n >= 0);
+    x %= m;
+    ll res = 1;
+    
+    while (n > 0) {
+        if (n & 1)
+            res = res * x % m;
+        x = x * x % m;
+        n >>= 1;
     }
+    
+    return res;
+}
 
-    cout << res << "\n";
+void sol(){
+    int a, b, c;
+    cin >> a >> b >> c;
+
+    cout << binPow(a, binPow(b, c, mod - 1), mod) << "\n";
 }
 
 int main(){

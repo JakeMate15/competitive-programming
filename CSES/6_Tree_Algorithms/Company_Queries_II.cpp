@@ -11,58 +11,10 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-struct SegmentTree{
-	int N;
-	vector<ll> ST;
-
-    SegmentTree() {}
- 
-	SegmentTree(int N, vector<int> & arr): N(N){
-		ST.resize(N << 1);
-		for(int i = 0; i < N; ++i)
-			ST[N + i] = arr[i];    
-		for(int i = N - 1; i > 0; --i)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
-	}
-
-    void build(int n, vector<int> &a) {
-        N = n;
-		ST.resize(N << 1);
-		for(int i = 0; i < N; ++i)
-			ST[N + i] = a[i];    
-		for(int i = N - 1; i > 0; --i)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
-    }
- 
-	void update(int i, ll value){
-		ST[i += N] = value;
-		while(i >>= 1)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
-	}
- 
-	//query en [l, r]
-	ll query(int l, int r){
-		ll res = 0;  
-		for(l += N, r += N; l <= r; l >>= 1, r >>= 1){
-			if(l & 1)       res += ST[l++]; 
-			if(!(r & 1))    res += ST[r--]; 
-		}
-		return res;                 
-	}
-
-    void imp() {
-		for(int i = 0; i < N; ++i)
-			cerr << ST[N + i] << " "; 
-        cerr << "\n";
-    }
-};
-
-
 struct HLD {
     int n;
     vector<int> siz, top, dep, parent, in, out, seq, valor;
     vector<vector<int>> adj;
-    SegmentTree st;
     int cur;
     
     HLD() {}
@@ -86,16 +38,12 @@ struct HLD {
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
-    void work(vector<int> v, int root = 0) {
+    void work(int root = 0) {
         top[root] = root;
         dep[root] = 0;
         parent[root] = -1;
         dfs1(root);
         dfs2(root);
-        for(int i = 0; i < n; i++) {
-            valor[i] = v[seq[i]];
-        }
-        st.build(sz(v), valor);
     }
     void dfs1(int u) {
         if (parent[u] != -1) {
@@ -184,61 +132,24 @@ struct HLD {
         return lca(a, b) ^ lca(b, c) ^ lca(c, a);
     }
 
-    ll querySubArbol(int u) {
-        return st.query(in[u], out[u] - 1);
-    }
-
-    void updateValor(int u, ll x) {
-        valor[u] = x;
-        st.update(in[u], x);
-    }
-
-    ll queryCamino(int u, int v) {
-        ll res = 0;
-        while (top[u] != top[v]) {
-            if (dep[top[u]] < dep[top[v]]) swap(u, v);
-            // Consulta en [l, r]
-            res += st.query(in[top[u]], in[u]);
-            u = parent[top[u]];
-        }
-        if (dep[u] > dep[v]) swap(u, v);
-        res += st.query(in[u], in[v]); // Incluye el LCA
-        return res;
-    }
 };
 
 void sol(){
     int n, q;
     cin >> n >> q;
 
-    vector<int> a(n);
-    for(int i = 0; i < n; i++) {
-        cin >> a[i];
+    HLD h(n + 1);
+    for(int i = 2; i <= n; i++) {
+        int v;
+        cin >> v;
+        h.addEdge(i, v);
     }
-    HLD t(n);
-
-    for(int i = 0; i < n - 1; i++) {
-        int u, v;
-        cin >> u >> v;
-        u--, v--;
-        t.addEdge(u, v);
-        // cerr << u << " " << v << "\n";
-    }
-    t.work(a);
+    h.work(1);
 
     while(q--) {
-        int op, x, l;
-        cin >> op;
-
-        if(op == 2) {
-            cin >> x;
-            cout << t.querySubArbol(--x) << "\n";
-        }
-        else {
-            cin >> l >> x;
-            l--;
-            t.updateValor(l, x);
-        }
+        int u, k;
+        cin >> u >> k;
+        cout << h.lca(u, k) << "\n";
     }
 }
 

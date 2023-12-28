@@ -1,26 +1,38 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-typedef long long int lli;
-typedef vector<int> vi;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(lli (i)=0; i<n; i++)
-#define forr(i,a,n) for(lli i=(a); i<n; i++)
-#define fore(i,a,n) for(lli i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
+
+typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
-    int n,m,k;cin>>n>>m>>k;
-    if(n/k>=m)  debug("Iron fist Ketil");
-    else        debug("King Canute");
+    int a, b, c;
+    cin >> a >> b >> c;
+
+    if(a / b >= c) 
+        cout << "Iron fist Ketil\n";
+    else 
+        cout << "King Canute\n";
 }
 
-int main(){IO
-    int t=1;
-    //cin>>t;
-    while(t--)  sol();
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    //cout << fixed << setprecision(10);
+
+    int t = 1;
+    //cin >> t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }
