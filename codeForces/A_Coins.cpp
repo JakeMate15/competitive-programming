@@ -12,15 +12,15 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    string s;
-    cin >> s;
+    ll n, k;
+    cin >> n >> k;
 
-    int l = 0, r = 0;
-    for(int i = 0; i < 6; i++) {
-        l += (i < 3 ? s[i] - '0' : 0);
-        r += (i >= 3 ? s[i] - '0' : 0);
+    if(((n & 1) && k % 2 == 0) || n == 1 && k != 1) {
+        cout << "NO\n";
     }
-    cout << (l == r ? "YES" : "NO") << "\n";
+    else {
+        cout << "YES\n";
+    }
 }
 
 int main(){
