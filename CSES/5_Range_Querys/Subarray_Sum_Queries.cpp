@@ -66,37 +66,34 @@ struct SegmentTree {
 };
 
 void sol(){
-	int n, q;
-	cin >> n >> q;
+    int n, q;
+    cin >> n >> q;
 
-	vector<ll> a(n);
-	for(auto &x: a) {
-		cin >> x;
-	}
+    vector<ll> a(n);
+    for(auto &x: a) {
+        cin >> x;
+    }
 
-	SegmentTree<ll> st(n, a);
-	cout << st.query(0, n).seg << "\n";
+    SegmentTree<ll> st(n, a);
+    while(q--) {
+        ll l, r;
+        cin >> l >> r;
 
-	while(q--) {
-		ll i, v;	
-		cin >> i >> v;
-
-		st.update(i, v);
-		cout << st.query(0, n).seg << "\n";
-	}
+        st.update(--l, r);
+        cout << st.query(0, n).seg << "\n";
+    }
 }
 
 int main(){
-	ios::sync_with_stdio(false);
-	cin.tie(0);
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
+    int t = 1;
+    //cin >> t;
 
-	int t = 1;
-	//cin >> t;
+    while(t--){
+        sol();
+    }
 
-	while(t--){
-		sol();
-	}
-
-	return 0;
+    return 0;
 }

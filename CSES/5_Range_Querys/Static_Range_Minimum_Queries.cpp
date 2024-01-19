@@ -1,71 +1,86 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
 
 typedef long long ll;
-typedef vector<int> vi;
-typedef pair<int,int> pii;
+typedef long double ld;
 
-template<typename T>
-struct SegmentTree{
-	int N;
-	vector<T> ST;
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
-	//build from an array in O(n)
-	SegmentTree(int N, vector<T> & arr): N(N){
-		ST.resize(N << 1);
-		for(int i = 0; i < N; ++i)
-			ST[N + i] = arr[i];
-		for(int i = N - 1; i > 0; --i)
-			ST[i] = min(ST[i << 1] , ST[i << 1 | 1]);
-	}
+#define neutro  LONG_LONG_MAX
+struct nodo {
+	ll valor = neutro;
 
-	//single element update in [l, r]
-	void update(int l, int r, T value){
-		l += N, r += N;
-		for(int i = l; i <= r; ++i)
-			ST[i] = value;
-		l >>= 1, r >>= 1;
-		while(l >= 1){
-			for(int i = r; i >= l; --i)
-				ST[i] = min(ST[i << 1] , ST[i << 1 | 1]);
-			l >>= 1, r >>= 1;
-		}
-	}
+	nodo(ll v) : valor(v) {}
+	nodo() {}
 
-	//range query, [l, r]
-	T query(int l, int r){
-		T res = INT_MAX;
-		for(l += N, r += N; l <= r; l >>= 1, r >>= 1){
-			if(l & 1)       res = min(ST[l++],res);
-			if(!(r & 1))    res = min(ST[r--],res);
-		}
+	nodo operator+(const nodo &b) {
+		nodo res;
+
+		res.valor = min(valor , b.valor);
+
 		return res;
 	}
 };
 
+template<typename T>
+struct SegmentTree {
+	int n;
+	vector<nodo> st;
 
-int main(){IO
-    int n,q;
-    cin>>n>>q;
+	SegmentTree(int n, vector<T> a) : n(n) {
+		st.resize(n << 1);
+		for(int i = 0; i < n; i++)
+			st[n + i] = nodo(a[i]);
+		for(int i = n - 1; i > 0; i--)
+			st[i] = st[i << 1] + st[i << 1 | 1];
+	}
 
-    vi a(n);
-    for(int &x: a)  cin>>x;
+	void update(int i, T v) {
+		for (st[i += n] = nodo(v); i >>= 1; )
+			st[i] = st[i << 1] + st[i << 1 | 1];
+	}
 
-    SegmentTree<int> st(n,a);
-    while(q--){
-        int l,r;cin>>l>>r;
-        l--;r--;
-        debug(st.query(l,r));
-    }
+	nodo query(int l, int r) {//[l, r)
+		nodo resl, resr;
+		for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
+			if(l & 1)   resl = resl + st[l++];
+			if(r & 1)   resr = st[--r] + resr;
+		}
+		return resl + resr;
+	}
+
+	void imp() {
+		for(auto x: st) {
+			cerr << x.valor << " ";
+		}
+		cerr << "\n";
+	}
+};
+
+int main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+	int n, q;
+	cin >> n >> q;
+	
+	vector<int> a(n);
+	for(auto &x: a) {
+		cin >> x;
+	}
+
+	SegmentTree<int> st(n, a);
+	while(q--) {
+		int l, r;
+		cin >> l >> r;
+
+		cout << st.query(--l, r).valor << "\n";
+	}
+
+	return 0;
 }

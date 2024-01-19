@@ -41,8 +41,8 @@ struct SegmentTree {
     }
 
     void update(int i, T v) {
-        for (st[i += n] = nodo(v); i > 1; i >>= 1) 
-            st[i >> 1] = st[i] + st[i ^ 1];
+        for (st[i += n] = nodo(v); i >>= 1; )
+            st[i] = st[i << 1] + st[i << 1 | 1];
     }
 
     nodo query(int l, int r) {//[l, r)

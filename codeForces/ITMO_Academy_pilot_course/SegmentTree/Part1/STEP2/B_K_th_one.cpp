@@ -1,79 +1,114 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-typedef long long int ll;
-typedef vector<int> vi;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(ll (i)=0; i<n; i++)
-#define forr(i,a,n) for(ll i=(a); i<n; i++)
-#define fore(i,a,n) for(ll i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
+
+typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
+
+#define neutro  0
+struct nodo {
+    ll valor = neutro;
+
+    nodo(ll v) : valor(v) {}
+    nodo() {}
+
+    nodo operator+(const nodo &b) {
+        nodo res;
+
+        res.valor = valor + b.valor;
+
+        return res;
+    }
+};
 
 template<typename T>
-struct SegmentTree{
-	int N;
-	vector<T> ST;
+struct SegmentTree {
+    int n;
+    vector<nodo> st;
 
-	//build from an array in O(n)
-	SegmentTree(int N, vector<T> & arr): N(N){
-		ST.resize(N << 1);
-		for(int i = 0; i < N; ++i)
-			ST[N + i] = arr[i];
-		for(int i = N - 1; i > 0; --i)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
-	}
+    SegmentTree(int n, vector<T> a) : n(n) {
+        st.resize(n << 1);
+        for(int i = 0; i < n; i++)
+            st[n + i] = nodo(a[i]);
+        for(int i = n - 1; i > 0; i--)
+            st[i] = st[i << 1] + st[i << 1 | 1];
+    }
 
-	//single element update in i
-	void update(int i){
-		ST[i += N] ^= 1; //update the element accordingly
-		while(i >>= 1)
-			ST[i] = ST[i << 1] + ST[i << 1 | 1];
-	}
+    void update(int i, T v) {
+        for (st[i += n].valor ^= 1; i >>= 1; )
+            st[i] = st[i << 1] + st[i << 1 | 1];
+    }
 
-	int Kth_One(int k) {
-        int i = 0, s = N >> 1;
-        for(int p = 2; p < 2 * N; p <<= 1, s >>= 1) {
-            //cout << "P: " << p << " s:" << s << "\n"; 
-            if(k < ST[p])	continue;
-            //cout << "P: " << p << " s:" << s << "\n"; 
-            k -= ST[p++];	i += s;
+    nodo query(int l, int r) {//[l, r)
+        nodo resl, resr;
+        for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
+            if(l & 1)   resl = resl + st[l++];
+            if(r & 1)   resr = st[--r] + resr;
+        }
+        return resl + resr;
+    }
+
+    int kth_one (int k) {
+        int i = 0, s = n >> 1;
+        for(int p = 2; p < 2 * n; p <<= 1, s >>= 1) {
+            if(k < st[p].valor)   continue;
+            k -= st[p++].valor;
+            i += s;
         }
         return i;
     }
 
-
-    void imp(){
-        for(auto x: ST) cout << x << " ";
-        //for(int i=0; i<N; i++) cout << ST[N+i] << " ";
-        debug("");
+    void imp() {
+        for(auto x: st) {
+            cerr << x.valor << " ";
+        }
+        cerr << "\n";
     }
 };
 
+void sol(){
+    int n, q;
+    cin >> n >> q;
 
-int main(){IO
-    int n,q;cin>>n>>q;
-    ll nT = 1;
-    while(nT<n) nT<<=1;
-    vector<int> a(nT,0);
-    for(int i=0; i<n; i++)  cin>>a[i];
+    int nn = 1;
+    while(nn < n)
+        nn <<= 1;
 
-    SegmentTree<int> st(nT,a);
+    vector<int> a(nn, 0);
+    for(int i = 0; i < n; i++) 
+        cin >> a[i];
+    SegmentTree<int> st(nn, a);
     
-    while(q--){
-        int op,k;
-        cin>>op>>k;
-        
-        if(op==1){
-            st.update(k);
-        }
-        else{
-            debug(st.Kth_One(k));
-        }
+    while(q--) {
+        int op, i;
+        cin >> op >> i;
 
+        if(op == 1) {
+            st.update(i, i + 1);
+        }
+        else {
+            cout << st.kth_one(i) << "\n";
+        }
+    }
+}
+
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+
+    int t = 1;
+    //cin >> t;
+
+    while(t--){
+        sol();
     }
 
+    return 0;
 }

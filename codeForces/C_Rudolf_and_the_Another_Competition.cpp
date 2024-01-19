@@ -1,78 +1,84 @@
-//https://codeforces.com/contest/1846/problem/C
 #include<bits/stdc++.h>
 using namespace std;
 
-typedef long long int ll;
-typedef vector<int> vi;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
+
+typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
+
+struct p{
+    ll cnt = 0, sum = LONG_LONG_MAX, r = 0;
+};
+
+bool cmp(p a, p b) {
+    if(a.cnt == b.cnt) {
+        if(a.sum == b.sum) 
+            return a.r == 1;
+
+        return a.sum < b.sum;
+    }
+
+    return a.cnt > b.cnt;
+}
 
 void sol(){
-    int n,m,h;
-    cin>>n>>m>>h;
+    // cerr << "============\n";
+    int n, m, h;
+    cin >> n >> m >> h;
 
-    vector<pair<int,int>> a(n);
-    forn(i,n){
-        vi b(m);
-        forn(j,m)   cin>>b[j];
-        sort(all(b));
-        int cur = 0;
-        for(int x: b){
-            cur+=x;
-            if(cur<=h){
-                a[i].first++;
-                a[i].second+=cur;
-            }
+    vector<vector<int>> a(n, vector<int>(m));
+    vector<p> aux(n);
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < m; j++) {
+            cin >> a[i][j];
         }
+
+        sort(all(a[i]));
+
+        for(int k = 1; k < m; k++) {
+            a[i][k] += a[i][k - 1];
+        }
+
+        ll cnt = 0, sum = 0;
+        for(auto x: a[i]) {
+            if(x > h) {
+                break;
+            }
+            cnt++;
+            sum += x;
+        }
+        
+        aux[i].cnt = cnt, aux[i].sum = sum, aux[i].r = (i == 0 ? 1 : 0); 
+        // cerr << cnt << " " << sum << "\n";
     }
 
-    forn(i,n)   a[i].second = (-a[i].second);
-    int res = 1;
-    forn(i,n)   if(a[i]>a[0])   res++;
+    sort(all(aux), cmp);
 
-    debug(res);
+    for(int i = 0; i < n; i++) {
+        if(aux[i].r) {
+            cout << i + 1 << '\n';
+            return;
+        }
+    }
 }
 
-int main(){IO
-    int t;
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+
+    int t = 1;
     cin >> t;
-    while(t--) {
+
+    while(t--){
         sol();
     }
+
+    return 0;
 }
-
-
-
-
-
-/*
-vector< pair<ll,int> > a(p);
-    vector< map<> >
-
-    ll aux = 0;
-    forn(i,p){
-        aux = 0;
-        forn(j,np){
-            ll lec;cin>>lec;
-            aux+=lec;
-        }
-        a[i] = {aux,i};
-    }
-
-    sort(all(a));
-
-    int i=1;
-    for(auto x: a){
-        if(x.second == 0)   break;
-        i++;
-    }
-
-*/
