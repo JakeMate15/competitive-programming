@@ -17,11 +17,15 @@ struct nodo {
 
     nodo(ll v) : valor(v) {}
     nodo() {}
-};
 
-nodo operator+(const nodo& a, const nodo &b) {
-    return a.valor + b.valor;
-}
+    nodo operator+(const nodo &b) {
+        nodo res;
+
+        res.valor = valor + b.valor;
+
+        return res;
+    }
+};
 
 template<typename T>
 struct SegmentTree {
@@ -29,36 +33,34 @@ struct SegmentTree {
     vector<nodo> st;
 
     SegmentTree(int n, vector<T> a) : n(n) {
-        st.resize(n * 2);
-        for(int i = 0; i < n; i++) 
-            st[i] = nodo(a[i]);
+        st.resize(n << 1);
+        for(int i = 0; i < n; i++)
+            st[n + i] = nodo(a[i]);
         for(int i = n - 1; i > 0; i--)
             st[i] = st[i << 1] + st[i << 1 | 1];
     }
 
     void update(int i, T v) {
-        nodo nvo(v);
-        st[i += n] = nvo;
-        while(i >>= 1) 
-            st[i] = st[i << 1] + st[i << 1 | 1];
+        for (st[i += n] = nodo(v); i > 1; i >>= 1) 
+            st[i >> 1] = st[i] + st[i ^ 1];
     }
 
-    T query(int l, int r) {
-        nodo resl(neutro), resr(neutro);
-        for(l += n, r += n; l <= r; l >>= 1, r >>= 1) {
+    nodo query(int l, int r) {//[l, r)
+        nodo resl, resr;
+        for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
             if(l & 1)   resl = resl + st[l++];
             if(r & 1)   resr = st[--r] + resr;
         }
-        return (resl + resr).valor;
+        return resl + resr;
     }
 
     void imp() {
-        for(int i = 1; i < 2 * n; i++) {
-            cerr << st[i].valor << " \n"[i == 2 * n];
+        for(auto x: st) {
+            cerr << x.valor << " ";
         }
+        cerr << "\n";
     }
 };
-
 
 void sol(){
     int n, q;
@@ -70,15 +72,16 @@ void sol(){
     }
 
     SegmentTree<ll> st(n, a);
-    st.imp();
 
     while(q--) {
-        int op, l, r;
+        ll op, l, r;
+        cin >> op >> l >> r;
+
         if(op == 1) {
             st.update(l, r);
         }
         else {
-            cout << st.query(l, r) << "\n";
+            cout << st.query(l, r).valor << "\n";
         }
     }
 }

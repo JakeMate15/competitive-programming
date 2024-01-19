@@ -1,63 +1,113 @@
-#include <bits/stdc++.h>
+#include<bits/stdc++.h>
 using namespace std;
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
+
 typedef long long ll;
-typedef pair<ll,int> pll;
+typedef long double ld;
 
-template<typename T>
-struct SegmentTree{
-	int N;
-	vector<pll> ST;
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
-    pll aux( pll a, pll b ){
-        if(a.first < b.first)       return a;
-        else if(a.first > b.first)  return b;
-        else                        return {a.first, a.second+b.second};
-    }
+#define neutro  LONG_LONG_MAX
+struct nodo {
+	ll valor = neutro, cnt = 1;
 
-	//build from an array in O(n)
-	SegmentTree(int N, vector<T> & arr): N(N){
-		ST.resize(N << 1);
-		for(int i = 0; i < N; ++i)
-			ST[N + i] = {arr[i],1};
-		for(int i = N - 1; i > 0; --i)
-			ST[i] = aux(ST[i << 1], ST[i << 1 | 1]);
-	}
+	nodo(ll v) : valor(v) {}
+	nodo() {}
 
-	//single element update in i
-	void update(int i, T value){
-		ST[i += N] = {value,1}; //update the element accordingly
-		while(i >>= 1)
-			ST[i] = aux(ST[i << 1], ST[i << 1 | 1]);
-	}
+	nodo operator+(const nodo &b) {
+		nodo res;
 
-	//range query, [l, r]
-	pll query(int l, int r){
-		pll res = {LLONG_MAX,0};
-		for(l += N, r += N; l <= r; l >>= 1, r >>= 1){
-			if(l & 1) res = aux(ST[l++], res);
-			if(!(r & 1)) res = aux(ST[r--], res);
+		if(valor == b.valor) {
+			res.cnt = cnt + b.cnt;
+			res.valor = valor;
 		}
+		else if(valor > b.valor) {
+			res.valor = b.valor;
+			res.cnt = b.cnt;
+		}
+		else {
+			res.valor = valor;
+			res.cnt = cnt;
+		}
+
 		return res;
 	}
 };
 
-int main(){IO
-    int n,q;cin>>n>>q;
-    vector<long long> a(n);
-    for(long long &x: a)  cin>>x;
+template<typename T>
+struct SegmentTree {
+	int n;
+	vector<nodo> st;
 
-    SegmentTree<long long> st(n,a);
-    while(q--){
-        int i,l,r;
-        cin>>i>>l>>r;
+	SegmentTree(int n, vector<T> a) : n(n) {
+		st.resize(n << 1);
+		for(int i = 0; i < n; i++)
+			st[n + i] = nodo(a[i]);
+		for(int i = n - 1; i > 0; i--)
+			st[i] = st[i << 1] + st[i << 1 | 1];
+	}
 
-        if(i==1)    st.update(l,r);
-        else{
-            pll res = st.query(l,r-1);
-            cout << res.first << " " << res.second << "\n";
-        }
-    }
+	void update(int i, T v) {
+		for (st[i += n] = nodo(v); i > 1; i >>= 1) 
+			st[i >> 1] = st[i] + st[i ^ 1];
+	}
 
+	nodo query(int l, int r) {//[l, r)
+		nodo resl, resr;
+		for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
+			if(l & 1)   resl = resl + st[l++];
+			if(r & 1)   resr = st[--r] + resr;
+		}
+		return resl + resr;
+	}
+
+	void imp() {
+		for(auto x: st) {
+			cerr << x.valor << " ";
+		}
+		cerr << "\n";
+	}
+};
+
+void sol(){
+	int n, q;
+	cin >> n >> q;
+
+	vector<ll> a(n);
+	for(auto &x: a) {
+		cin >> x;
+	}
+
+	SegmentTree<ll> st(n, a);
+	while(q--) {
+		ll op, l, r;
+		cin >> op >> l >> r;
+
+		if(op == 1) {
+			st.update(l, r);
+		}
+		else {
+			auto res = st.query(l, r);
+			cout << res.valor << " " << res.cnt << "\n";
+		}
+	}
+}
+
+int main(){
+	ios::sync_with_stdio(false);
+	cin.tie(0);
+
+
+	int t = 1;
+	//cin >> t;
+
+	while(t--){
+		sol();
+	}
+
+	return 0;
 }
