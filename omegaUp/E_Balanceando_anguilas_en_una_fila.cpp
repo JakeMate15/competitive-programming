@@ -12,27 +12,32 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, t;
-    cin >> n >> t;
+    int n;
+    cin >> n;
 
-    vector<int> a(n), b(n);
-    for(int i = 0; i < n; i++) {
+    vector<ll> a(n + 1), p(n + 1), s(n + 2, 0);
+    for(int i = 1; i <= n; i++) {
         cin >> a[i];
-        a[i] += i;
-    }
-    for(int i = 0; i < n; i++) {
-        cin >> b[i];
+        p[i] = p[i - 1] + a[i];
     }
 
-    int res = -2, mx = -1;
-    for(int i = 0; i < n; i++) {
-        if(a[i] <= t && b[i] > mx) {
+    for(int i = n; i >= 1; i--) {
+        s[i] = s[i + 1] + a[i];
+    }
+
+    int i = 1, j = n, res = INT_MAX, mn = INT_MAX;
+    while(i < j) {
+        int dif = abs(p[i] - s[j]);
+        if(dif < mn) {
             res = i;
-            mx = b[i];
+            mn = dif;
         }
+
+        i++, j--;
     }
 
-    cout << ++res << "\n";
+    cout << res << "\n";
+    cout << p[res] << " " << s[n - res + 1] << "\n";
 }
 
 int main(){
@@ -41,7 +46,7 @@ int main(){
 
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

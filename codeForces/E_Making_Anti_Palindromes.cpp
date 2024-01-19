@@ -1,72 +1,59 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-typedef long long int lli;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(lli (i)=0; i<n; i++)
-#define forr(i,a,n) for(lli i=(a); i<n; i++)
-#define fore(i,a,n) for(lli i=(a); i<=n; i++)
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
 
-bool grupos(vector<int>& a) {
-    map<int, unordered_set<int>> valorN;
-    for (int i = 0; i < a.size(); i++) {
-        if (a[i] != 0) {
-            valorN[a[i]].insert(i);
-        }
-    }
+typedef long long ll;
+typedef long double ld;
 
-    unordered_set<int> posAsig;
-    for (auto const& [valor, posi] : valorN) {
-        bool is_possible = true;
-        for (auto const& pos : posi) {
-            if (posAsig.count(pos) > 0) {
-                is_possible = false;
-                break;
-            }
-        }
-        if (is_possible) {
-            posAsig.insert(posi.begin(), posi.end());
-        } else {
-            return false;
-        }
-    }
-
-    return true;
-}
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
-    int n;cin>>n;
-    string s;cin>>s;
-    if(n&1){
-        debug(-1);
-        return;
-    }
+    int n;
+    string s, aux;
+    cin >> n >> s;
 
-    int iguales = 0;
-    vector<int> a(26);
+    map<char, int> rep;
+    for(auto x: s) {
+        rep[x]++;
 
-    forn(i,n/2){
-        if(s[i] == s[n-i-1]){
-            iguales++;
-            a[s[i]-'a']++;
+        if(rep[x] > n / 2 || (n & 1)) {
+            cout << -1 << "\n";
+            return;
         }
     }
 
-    if(iguales==0){
-        debug(0);
-        return;
-    }
-    else{
-        if(grupos(a)){
-            if()
+    int res = 0;
+    map<char, int> rep2;
+    for(int i = 0; i * 2 < n; i++) {
+        if(s[i] == s[n - i - 1]) {
+            res++;
+            rep2[s[i]]++;
         }
     }
+
+    for(char c = 'a'; c <= 'z'; c++) {
+
+    }
+
+
+    cout << (res + 1) / 2 << "\n";
 }
 
-int main(){IO
-    int t=1;cin>>t;
-    while(t--)  sol();
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+
+    int t = 1;
+    cin >> t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }

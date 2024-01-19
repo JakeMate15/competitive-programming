@@ -11,21 +11,35 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+ll binPow(ll x, ll n, ll m) {
+    ll res = 1;
+    
+    while (n > 0) {
+        if (n & 1)
+            res = res * x;
+        x = x * x;
+        n >>= 1;
+    }   
+    
+    return res;
+}
+
 void sol(){
     int n;
     cin >> n;
 
-    if((n & 1) && n > 1) {
-        cout << "-1\n";
+    int c = 1;
+    for(int p = 9;; n -= p, c++, p = 9 * binPow(10, c - 1, mod) * c) {
+        if(n - p <= 0)  break;
     }
-    else if(n == 1) {
-        cout << "1\n";
-    }
-    else {
-        for(int i = n; i > 1; i -= 2) {
-            cout << i << " " << n - i + 1 << " \n"[i == 2];
-        }
-    }
+
+    n--;
+    int x = n / c;
+    int y = n % c;
+
+    int res = binPow(10, c - 1, mod) + x;
+    string r = to_string(res);
+    cout << r[y] << "\n";
 }
 
 int main(){

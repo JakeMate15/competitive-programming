@@ -12,20 +12,34 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n;
-    cin >> n;
+    int n, k;
+    cin >> n >> k;
 
-    if((n & 1) && n > 1) {
-        cout << "-1\n";
+    vector<int> a(n);
+    int impares = 0;
+    for(auto &x: a) {
+        cin >> x;
+        impares += (x & 1);
     }
-    else if(n == 1) {
-        cout << "1\n";
+
+    if(impares < k || ((impares - k) & 1)) {
+        cout << "NO\n";
+        return;
     }
-    else {
-        for(int i = n; i > 1; i -= 2) {
-            cout << i << " " << n - i + 1 << " \n"[i == 2];
+
+    cout << "YES\n";
+
+    for(int i = 0; i < n; i++) {
+        if(k == 1) {
+            break;
+        }
+        if(a[i] & 1) {
+            cout << i + 1 << " ";
+            k--;
         }
     }
+
+    cout << n << "\n";
 }
 
 int main(){

@@ -1,71 +1,74 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-typedef long long int lli;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(lli (i)=0; i<n; i++)
-#define forr(i,a,n) for(lli i=(a); i<n; i++)
-#define fore(i,a,n) for(lli i=(a); i<=n; i++)
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
 
-const int maxV = 2*1e5+1;
-lli n,largo,costo;
-vector<vector<int>> arbol;
+typedef long long ll;
+typedef long double ld;
 
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
-void dfs(int u, int p, vector<lli> &dist){
-    for (auto v : arbol[u]) {
-        if (v != p) {
-            dist[v] = dist[u] + 1;
-            dfs(v,u,dist);
+vector<vector<int>> g;
+
+void dfs(int nodoInicial, int p, vector<ll> &a) {
+    stack<pair<int, int>> pila;
+    pila.push({nodoInicial, 0});
+
+    while (!pila.empty()) {
+        auto [nodo, padre] = pila.top();
+        pila.pop();
+
+        for (auto u: g[nodo]) {
+            if (u != padre) {
+                a[u] = a[nodo] + 1;
+                pila.push({u, nodo});
+            }
         }
     }
 }
 
 void sol(){
-    cin>>n>>largo>>costo;
-    vector<lli> distMaxima1(n+1,0),distMaxima2(n+1,0),dist(n+1,0);
-    arbol.clear();
-    arbol.resize(n+1);
+    int n, k, c;
+    cin >> n >> k >> c;
 
-    forn(i,n-1){
-        int u,v;cin>>u>>v;
-        arbol[u].push_back(v);
-        arbol[v].push_back(u);
+    g = vector<vector<int>>(n + 1);
+    for(int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
     }
 
-    dfs(1,0,dist);
-    int a=0,b=0;
-    fore(i,1,n){
-        if(dist[i]>dist[a])
-            a=i;
-    }
-
-    dfs(a,0,distMaxima1);
-    fore(i,1,n){
-        if(distMaxima1[i]>distMaxima1[b])
-            b=i;
-    }
-
-    dfs(b,0,distMaxima2);
-
-    //fore(i,1,n)   cout << max(distMaxima1[i],distMaxima2[i]) << " ";
-    //cout << endl;
-
-    lli ans = -1;
-    fore(i,1,n) ans = max(ans,largo*(max(distMaxima1[i],distMaxima2[i]))-dist[i]*costo);
-    cout << ans << endl;
+    vector<ll> dInd(n + 1), a(n + 1), b(n + 1);
+    dfs(1, 0, dInd);
+    int nodo = max_element(all(dInd)) - dInd.begin();
     
-    //cout << *max_element( costos,costos+n+1 ) << endl;
-}
+    dfs(nodo, 0, a);
+    nodo = max_element(all(a)) - a.begin();
 
+    dfs(nodo, 0, b);
+    
+    ll res = 0;
+    for(int i = 1; i <= n; i++) {
+        res = max(res, max(a[i], b[i]) * k - dInd[i] * c);
+    }
+    cout << res << "\n";
+}
 
 int main(){
-    int t=1;cin>>t;
-    while(t--)
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+
+    int t = 1;
+    cin >> t;
+
+    while(t--){
         sol();
+    }
+
+    return 0;
 }
-
-

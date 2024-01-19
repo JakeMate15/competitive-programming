@@ -12,19 +12,27 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n;
-    cin >> n;
+    int n, m;
+    cin >> n >> m;
 
-    if((n & 1) && n > 1) {
-        cout << "-1\n";
+    vector<int> a(n);
+    for(auto &x: a) {
+        cin >> x;
     }
-    else if(n == 1) {
-        cout << "1\n";
+
+    vector<int> aux(n);
+    aux[0] = 0;
+    for(int i = 1; i < n; i++) {
+        aux[i] = max(0, a[i] - a[i - 1]);
+        // cerr << aux[i] << " ";
+    }
+
+    auto mx = *max_element(all(aux));
+    if(mx > m) {
+        cout << "IMPOSIBLE " << mx;
     }
     else {
-        for(int i = n; i > 1; i -= 2) {
-            cout << i << " " << n - i + 1 << " \n"[i == 2];
-        }
+        cout << "POSIBLE";
     }
 }
 
@@ -34,7 +42,7 @@ int main(){
 
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

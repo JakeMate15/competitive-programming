@@ -11,29 +11,21 @@ typedef long double ld;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-/*
-4 -> 10
-5 -> 12
-6 -> 14
-
-1 1
-2 3
-3 6
-4 10
-5 15
-6 21
-
-*/
-
-ll g(ll n) {
-    return (n * (n + 1)) / 2;
-}
-
 void sol(){
-    ll n;
+    int n;
     cin >> n;
 
-    ll res = n * 4 + g(n - 1) + g(n - 2) + 1;
+    vector<ll> a(n);
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    sort(all(a));
+
+    ll res = 1;
+    for(int i = 0; i < n && a[i] <= res; i++) {
+        res += a[i];
+    }
     cout << res << "\n";
 }
 
@@ -43,7 +35,7 @@ int main(){
 
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

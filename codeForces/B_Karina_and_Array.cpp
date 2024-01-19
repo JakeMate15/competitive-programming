@@ -1,25 +1,40 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-typedef long long int lli;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(lli (i)=0; i<n; i++)
-#define forr(i,a,n) for(lli i=(a); i<n; i++)
-#define fore(i,a,n) for(lli i=(a); i<=n; i++)
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
+
+typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
-    int n;cin>>n;
-    lli a[n];
-    forn(i,n)   cin>>a[i];
+    int n;
+    cin >> n;
 
-    sort(a,a+n);
-    cout << max(a[0]*a[1],a[n-1]*a[n-2]) << endl;
+    vector<ll> a(n);
+    for(int i = 0; i < n; i++) 
+        cin >> a[i];
+
+    sort(all(a));
+
+    cout << max(a[0] * a[1], a[n - 1] * a[n - 2]) << "\n";
 }
 
-int main(){IO
-    int t=1;cin>>t;
-    while(t--)  sol();
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+
+    int t = 1;
+    cin >> t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }
