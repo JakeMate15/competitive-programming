@@ -56,15 +56,14 @@ void init(const string& s) {
 void sol(){
     string s;
     cin >> s;
-    int n = sz(s);
 
+    int n = sz(s);
     init(s);
 
-    for(int i = 1; i <= n - 1; i++) {
-        if(get(0, i) == get(n - i, n)) {
-            cout << i << " ";
-        }
-    }
+    H ss = get(0, n);
+    cout << ss.x << " " << ss.y << "\n";
+    H curr = get(0, 3) * ;
+    cout << get(0, 3).x << " " << get(0, 3).y << "\n";
 }
 
 int main(){
