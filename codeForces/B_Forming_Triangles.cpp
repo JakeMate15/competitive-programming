@@ -15,23 +15,20 @@ void sol(){
     int n;
     cin >> n;
 
-    vector<int> a(n);
-    map<int, int> rep;
-    ll res = 0;
-
+    map<ll, ll> rep;
     for(int i = 0; i < n; i++) {
-        cin >> a[i];
-        rep[a[i]]++;
+        ll x;
+        cin >> x;
+        rep[x]++;
     }
 
-    vector<int> aux;
+    ll res = 0, sum = 0;
     for(auto [v, r]: rep) {
-        res += (r >= 3 ? );
-        aux.push_back(v);
-    }
-
-    for(int i = 2; i < sz(aux); i++) {
-        res += (aux[i - 1] + aux[i - 2] != aux[i]);
+        if(r >= 3) 
+            res += r * (r - 1) * (r - 2) / 6;
+        if(r >= 2)
+            res += r * (r - 1) / 2 * sum;
+        sum += r;
     }
 
     cout << res << "\n";

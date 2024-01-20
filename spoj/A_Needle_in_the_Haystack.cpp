@@ -22,7 +22,6 @@ struct H {
     H operator-(const H& h) const { return H(sub(x, h.x, MOD_X), sub(y, h.y, MOD_Y)); }
     H operator*(const H& h) const { return H(mul(x, h.x, MOD_X), mul(y, h.y, MOD_Y)); }
     bool operator==(const H& h) const { return x == h.x && y == h.y; }
-	bool operator<(const H& h) const {if (x == h.x) {return y < h.y; } return x < h.x; }
 
     static ll add(ll a, ll b, ll mod) {
         a += b;
@@ -53,9 +52,8 @@ void init(const string& s) {
         h[i + 1] = h[i] * P + s[i], p[i + 1] = p[i] * P;
 }
 
-void sol(){
-    string haystack, needle;
-	cin >> haystack >> needle;
+void sol(string a, string needle, string haystack){
+    // cerr << "=============\n";
     int n = sz(needle), m = sz(haystack);
 
     init(needle + haystack);
@@ -71,15 +69,25 @@ void sol(){
             res.push_back(i - n);
         }
     }
-
-	cout << sz(res) << "\n";
+    for(int i = 0; i < sz(res); i++) {
+        cout << res[i] << "\n "[i == sz(res) - 1];
+    }
+    cout << "\n";
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-	sol();
+    string s;
+    vector<string> a;
+    while(cin >> s) {
+        a.push_back(s);
+    }
+
+    for(int i = 0; i < sz(a); i += 3) {
+        sol(a[i], a[i + 1], a[i + 2]);
+    }
 
     return 0;
 }
