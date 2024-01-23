@@ -1,47 +1,69 @@
 #include<bits/stdc++.h>
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
 using namespace std;
+using namespace __gnu_pbds;
 
-typedef long long int lli;
-typedef vector<int> vi;
-typedef pair<int,int> pii;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(lli (i)=0; i<n; i++)
-#define forr(i,a,n) for(lli i=(a); i<n; i++)
-#define fore(i,a,n) for(lli i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
 
-vector<vector<pair<int,int>>> g;
-int ans;
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
+
+vector<vector<pair<int, int>>> g;
+int res;
 
 void dfs(int v, int p, int ct) {
-    ans = max(ans, ct);
+    res = max(res, ct);
     for(auto &[u, i] : g[v]) {
         if (i == p) continue;
+        // cerr << i << " " << p << "\n";
         if (i < p) dfs(u, i, ct + 1);
         else dfs(u, i, ct);
     }
 }
 
-void sol() {
-    int n; cin >> n;
-    g.clear();
-    g.resize(n+5);
-    forn(i, n - 1) {
-        int u, v; cin >> u >> v;
-        g[v].emplace_back(u, i);
+void sol(){
+    // cerr << "===============\n";
+    int n;
+    cin >> n;
+
+    g = vector<vector<pair<int, int>>>(n + 1);
+    for(int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+
         g[u].emplace_back(v, i);
+        g[v].emplace_back(u, i);
     }
-    ans = 1;
+
+    res = 1;
     dfs(1, -1, 1);
-    debug(ans);
+    cout << res << "\n";
+
 }
 
-int main(){IO
-    int t=1;
-    cin>>t;
-    while(t--)  sol();
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    // cout << fixed << setprecision(10);
+
+    int t = 1;
+    cin >> t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }

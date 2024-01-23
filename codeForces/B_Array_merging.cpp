@@ -1,55 +1,114 @@
 #include<bits/stdc++.h>
-using namespace std;
 
-typedef long long int lli;
-typedef vector<int> vi;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(int (i)=0; i<n; i++)
-#define forr(i,a,n) for(int i=(a); i<n; i++)
-#define fore(i,a,n) for(int i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace std;
+using namespace __gnu_pbds;
+
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
+
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
+    // cerr << "==========\n";
     int n;
     cin >> n;
-    vector<int> a(n + 1), b(n + 1);
-    fore(i,1,n) cin>>a[i];
-    fore(i,1,n) cin >> b[i];
-    
-    vector<int> maxAp1(n*2 + 1),maxAp2(n*2 + 1);
-    int inicio= 1;
 
-    fore(i,2,n){
-        if (a[i] != a[i - 1]){
-            maxAp1[a[i - 1]] = max(maxAp1[a[i - 1]], i - inicio);
-            inicio= i;
+    vector<int> a(n), b(n);
+    map<int, int> ra, rb;
+
+    int ant = 0, cnt = 1;
+    for(int i = 0; i < n; i++) {
+        cin >> a[i];
+        if(a[i] != ant) {
+            ra[ant] = max(ra[ant], cnt);
+            cnt = 1;
+            ant = a[i];
+        }
+        else {
+            cnt++;
         }
     }
-    maxAp1[a[n]] = max(maxAp1[a[n]], n - inicio+ 1);
+    ra[ant] = max(ra[ant], cnt);
 
-
-    inicio= 1;
-    fore(i,2,n){
-        if (b[i] != b[i - 1]){
-            maxAp2[b[i - 1]] = max(maxAp2[b[i - 1]], i - inicio);
-            inicio= i;
+    ant = 0, cnt = 1;
+    for(int i = 0; i < n; i++) {
+        cin >> b[i];
+        if(b[i] != ant) {
+            rb[ant] = max(rb[ant], cnt);
+            cnt = 1;
+            ant = b[i];
+        }
+        else {
+            cnt++;
         }
     }
-    maxAp2[b[n]] = max(maxAp2[b[n]], n - inicio+ 1);
+    rb[ant] = max(rb[ant], cnt);
 
-    int ans = 0;
-    fore(i,1,n*2)   ans = max(ans, maxAp1[i] + maxAp2[i]);
+    int res = 1;
+    for(auto [v, r]: ra) {
+        if(v == 0)  continue;
+        res = max(res, r + rb[v]);
+        // cerr << v << " " << r << "\n";
+    }
 
-    debug(ans);
+    for(auto [v, r]: rb) {
+        if(v == 0)  continue;
+        res = max(res, r + ra[v]);
+        // cerr << v << " " << r << "\n";
+    }
+
+    cnt = 0;
+    int i = n - 1;
+    while(i >= 0 && a[i] == a[n - 1]) {
+        cnt++;
+        i--;
+    }
+    i = 0;
+    while(i < n && b[i] == a[n - 1]) {
+        i++;
+        cnt++;
+    }
+    res = max(res, cnt);
+
+    i = n - 1;
+    cnt = 0;
+    while(i >= 0 && b[i] == b[n - 1]) {
+        cnt++;
+        i--;
+    }
+    i = 0;
+    while(i < n && a[i] == b[n - 1]) {
+        i++;
+        cnt++;
+    }
+    res = max(res, cnt);
+
+    cout << res << "\n";
 }
 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
 
-int main(){IO
-    int t=1;
-    cin>>t;
-    while(t--)  sol();
+    // cout << fixed << setprecision(10);
+
+    int t = 1;
+    cin >> t;
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }

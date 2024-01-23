@@ -15,38 +15,29 @@ template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>
 
 typedef long long ll;
 typedef long double ld;
+typedef pair<int, int> ii;
+typedef vector<int> vi;
+typedef vector<vector<int>> vvi;
 
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+ll g(ll n) {
+    return (n * (n + 1)) / 2;
+}
+
 void sol(){
-    string s1, s2;
-    cin >> s1 >> s2;
-    
-    int len1 = sz(s1), len2 = sz(s2);
-    
-    if (len1 < len2) {
-        s1 = string(len2 - len1, '0') + s1;
+    int n;
+    cin >> n;
+
+    ll res = g(n);
+
+    ll pot = 1;
+    while(pot <= n) {
+        res -= 2 * pot;
+        pot <<= 1;
     }
-    
-    ll res = 0;
-    len1 = sz(s1), len2 = sz(s2);
-    for (int i = 0; i < len1; i++) {
-        int c1, c2;
-        c1 = s1[i] - '0';
-        c2 = s2[i] - '0';
- 
-        if(abs(c1 - c2) == 0) {
-            continue;
-        }
- 
-        res += abs(c1 - c2);
-        i++;
-        for(; i < len1; i++) {
-            res += 9;
-        }
-    }
- 
+
     cout << res << "\n";
 }
 

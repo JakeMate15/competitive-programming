@@ -20,33 +20,22 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    string s1, s2;
-    cin >> s1 >> s2;
-    
-    int len1 = sz(s1), len2 = sz(s2);
-    
-    if (len1 < len2) {
-        s1 = string(len2 - len1, '0') + s1;
+    int n, q;
+    cin >> n >> q;
+
+    vector<ll> a(n + 1);
+    for(int i = 1; i <= n; i++) {
+        cin >> a[i];
+        a[i] += a[i - 1];
     }
-    
+
     ll res = 0;
-    len1 = sz(s1), len2 = sz(s2);
-    for (int i = 0; i < len1; i++) {
-        int c1, c2;
-        c1 = s1[i] - '0';
-        c2 = s2[i] - '0';
- 
-        if(abs(c1 - c2) == 0) {
-            continue;
-        }
- 
-        res += abs(c1 - c2);
-        i++;
-        for(; i < len1; i++) {
-            res += 9;
-        }
+    while (q--) {
+        int l, r;
+        cin >> l >> r;
+        ll sum = a[r] - a[l - 1];
+        res += (sum > 0 ? sum : 0);
     }
- 
     cout << res << "\n";
 }
 
@@ -57,7 +46,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

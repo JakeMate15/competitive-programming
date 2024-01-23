@@ -1,71 +1,87 @@
 #include<bits/stdc++.h>
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
 using namespace std;
+using namespace __gnu_pbds;
 
-typedef long long int ll;
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
+
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<int, int> ii;
 typedef vector<int> vi;
-typedef pair<int,int> pii;
+typedef vector<vector<int>> vvi;
 
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(ll (i)=0; i<n; i++)
-#define forr(i,a,n) for(ll i=(a); i<n; i++)
-#define fore(i,a,n) for(ll i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
-#define sz(a)       (int)a.size()
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
 
 void sol(){
-    int n,m;
-    cin>>n>>m;
-
-    vector<pii> seg(m);
-    for(auto &x: seg){
-        int a,b;cin>>a>>b;
-        x={a,b};
+    int n, m;
+    cin >> n >> m;
+ 
+    vector<ii> seg(m);
+    for(auto &[l, r]: seg){
+        cin >> l >> r;
     }
-
-    int q;cin>>q;
-    vi querys(q);
-    for(int &x: querys)
+ 
+    int q;
+    cin >> q;
+    vi queries(q);
+    for(int &x: queries) {
         cin >> x;
-
-    int l=0,r=q-1,mid;
-
-    while( l<=r){
-        mid = (r+l)/2;
-
-        vi a(n+1,0);
-        fore(i,0,mid)
-            a[querys[i]] = 1;
-
-        vi pref(n+1,0);
-        fore(i,1,n)
-            pref[i] = pref[i-1] + a[i];
-
+    }
+ 
+    int l = -1, r = q, mid;
+    while(l + 1 < r){
+        mid = (r + l) / 2;
+        // mid = min(q - 1, mid);
+        // cerr << mid << " " << q << "\n";
+        assert(mid < q);
+ 
+        vi a(n + 1);
+        for(int i = 0; i <= mid; i++) {
+            a[queries[i]] = 1;
+        }
+ 
+        for(int i = 1; i <= n; i++) {
+            a[i] += a[i - 1];
+        }
+ 
         bool ok = false;
-        for(auto x: seg){
-            //cout << x.first << "," << x.second << " " << (x.second-x.first+1)/2  << " " << (pref[x.second] - pref[x.first-1]) << "\n";
-            if( (x.second-x.first+1)/2 < (pref[x.second] - pref[x.first-1]) ){
-                ok=true;
+        for(auto [ll, rr]: seg){
+            if( (rr - ll + 1) / 2 < a[rr] - a[ll - 1]) {
+                ok = true;
                 break;
             }
         }
-
-        if(ok)  r = mid-1;
-        else    l = mid+1;
-
+ 
+        if(ok)  r = mid;
+        else    l = mid;
+ 
     }
-
-    debug( ((l==q)?-1:l+1) );
+ 
+    cout << (r == q ? -1 : r + 1) << "\n";
 }
 
-int main(){IO
-    int t=1;
-    cin>>t;
-    while(t--)  
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    // cout << fixed << setprecision(10);
+
+    int t = 1;
+    cin >> t;
+
+    while(t--){
         sol();
+    }
 
     return 0;
 }

@@ -1,59 +1,82 @@
-//https://codeforces.com/contest/1843/problem/D
 #include<bits/stdc++.h>
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
 using namespace std;
+using namespace __gnu_pbds;
 
-typedef long long int lli;
-typedef vector<int> vi;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(lli (i)=0; i<n; i++)
-#define forr(i,a,n) for(lli i=(a); i<n; i++)
-#define fore(i,a,n) for(lli i=(a); i<=n; i++)
-#define all(v)      v.begin(),v.end()
-#define borra(s)    s.erase(unique(all(s)),s.end())
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
 
-void sol(){
-    int n; cin >> n;
-    vector< vector<int> > arbol(n+1);
-    vector<lli> hojas(n+1);
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
 
-    forn(i, n - 1){
-        int u, v; cin >> u >> v;
-        arbol[u].push_back(v);
-        arbol[v].push_back(u);
+typedef long long ll;
+typedef long double ld;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
+
+vector<vector<int>> g;
+vector<ll> dp;
+
+void dfs(int nodo, int padre) {
+
+    for (auto u: g[nodo]) {
+        dp[u] += (sz(g[u]) == 1 && u != 1);
+
+        if(u != padre) {
+            dfs(u, nodo);
+            dp[nodo] += dp[u]; 
+        }
     }
 
-    auto dfs = [&](int nodo, int padre, auto &&dfs) -> void{
-        lli contador_hojas = 0;
+}
 
-        for (auto adyacente : arbol[nodo]) {
-            if (adyacente != padre) {
-                dfs(adyacente, nodo, dfs);
-                contador_hojas += hojas[adyacente];
-            }
-        }
+void sol(){
+    int n;
+    cin >> n;
 
-        if (contador_hojas == 0) {
-            contador_hojas = 1;
-        }
+    g = vector<vector<int>>(n + 1);
+    dp = vector<ll>(n + 1);
 
-        hojas[nodo] = contador_hojas;
-    };
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        g[u].push_back(v);
+        g[v].push_back(u);
+    }
 
-    dfs(1,0,dfs);
+    dfs(1, 0);
 
-    int q;cin>>q;
-    while(q--){
-        int x,y;cin>>x>>y;
-        debug( hojas[x]*hojas[y] );
+    // for(int i = 1; i <= n; i++) {
+    //     cout << dp[i] << " \n"[i == n];
+    // }
+
+    int q;
+    cin >> q;
+    while(q--) {
+        int u, v;
+        cin >> u >> v;
+
+        cout << dp[u] * dp[v] << "\n";
     }
 }
 
 int main(){
-    IO
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    // cout << fixed << setprecision(10);
+
     int t = 1;
     cin >> t;
-    while (t--) sol();
+
+    while(t--){
+        sol();
+    }
+
+    return 0;
 }
