@@ -23,19 +23,10 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
-    }
-    cout << ans;
+    int a, b, c;
+    cin >> a >> b >> c;
+    
+    cout << (b + c + 1) % 2 << " " << (c + a + 1) % 2 << " " << (a + b + 1) % 2 << "\n";
 }
 
 int main(){

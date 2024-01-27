@@ -23,19 +23,23 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+    for (auto &x: a) {
+        cin >> x;
     }
-    cout << ans;
+
+    int ans = 0;
+	for (int i = 0; i < n; ++i) {
+		int j = i;
+		while (j + 1 < n && a[j + 1] <= a[j] * 2)
+			++j;
+		ans = max(ans, j - i + 1);
+		i = j;
+    }
+    cout << ans << "\n";
 }
 
 int main(){
@@ -45,7 +49,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
 
     while(t--){
         sol();

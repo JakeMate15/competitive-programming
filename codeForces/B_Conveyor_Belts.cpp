@@ -23,19 +23,12 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
-    }
-    cout << ans;
+    int n, x1, y1, x2, y2;
+    cin >> n >> x1 >> y1 >> x2 >> y2;
+
+    int n1 = min({n - x1, n - y1, x1 - 1, y1 - 1}), n2 = min({n - x2, n - y2, x2 - 1, y2 - 1});
+
+    cout << abs(n1 - n2) << "\n";
 }
 
 int main(){

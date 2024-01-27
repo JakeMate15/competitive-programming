@@ -23,19 +23,51 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
+    int n;
+    cin >> n;
+
+    vector<ll> a(n + 2);
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+
+    vector<ll> l(n + 2), r(n + 2);
+    l[2] = r[n - 1] = 1;
+    for (int i = 2; i <= n; i++) {
+        if (abs(a[i] - a[i + 1]) < abs(a[i] - a[i - 1])) {
+            l[i + 1] = 1;
+        }
+        else {
+            l[i + 1] = abs(a[i] - a[i + 1]);
+        }
+
+        l[i] += l[i - 1];
+    }
+
+    for (int i = n - 1; i >= 1; i--) {
+        if (abs(a[i] - a[i + 1]) > abs(a[i] - a[i - 1])) {
+            r[i - 1] = 1; 
+        }
+        else {
+            r[i - 1] = abs(a[i] - a[i - 1]);
+        }
+
+        r[i] += r[i + 1];
+    }
+
+    int q;
+    cin >> q;
+    while (q--) {
+        int a, b;
+        cin >> a >> b;
+
+        if (a < b) {
+            cout << abs(l[a] - l[b]) << "\n";
+        }
+        else {
+            cout << r[b] - r[a] << "\n";
         }
     }
-    cout << ans;
 }
 
 int main(){

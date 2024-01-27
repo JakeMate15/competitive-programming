@@ -22,20 +22,25 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+int suerte(int x) {
+    auto s = to_string(x);
+    auto [pmin, pmax] = minmax_element(all(s));
+    return *pmax - *pmin;
+}
+
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
+    int l, r;
+    cin >> l >> r;
+
+    int res = l;
+
+    for (int i = l; i <= min(r, l + 100); i++) {
+        if (suerte(i) > suerte(res)) {
+            res = i;
         }
     }
-    cout << ans;
+
+    cout << res << "\n";
 }
 
 int main(){

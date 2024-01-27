@@ -23,19 +23,33 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
+    int n, k;
+    cin >> n >> k;
+
+    vector<int> a(n);
+    for (auto &x: a) {
+        cin >> x;
     }
-    cout << ans;
+
+    int mn = INT_MAX, dos = 0;
+    for (int i = 0; i < n; i++) {
+        if (a[i] % k == 0) {
+            cout << 0 << "\n";
+            return;
+        }
+
+        if (a[i] < k)   mn = min(mn, k - a[i]);
+        else            mn = min(mn, k - a[i] % k);
+
+        dos += (a[i] % 2 == 0);
+    }
+    
+    if (k == 4) {
+        cout << min(max(0, 2 - dos), mn) << "\n";
+    }
+    else {
+        cout << mn << "\n";
+    }
 }
 
 int main(){

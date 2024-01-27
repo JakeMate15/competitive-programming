@@ -22,20 +22,44 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+ll g (ll n) {
+    return (n * (n + 1)) / 2;
+}
+
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
+    cerr << "========\n";
+    ll n;
+    cin >> n;
+
+    ll lo = 0, hi = n + 1;
+    while (lo + 1 < hi) {
+        ll mid = (lo + hi) / 2;
+        cerr << lo << " " << hi << " " << mid << "\n";
+
+        ll ok = 8 * g(mid) - 4 * n;
+        cerr << ok << "\n";
+        if (ok >= n)    hi = mid;
+        else            lo = mid;
     }
-    cout << ans;
+    cerr << hi << "\n";
+    ll res1 = (hi * 2) - 1;
+
+    cerr << "-------------\n";
+
+    lo = 0, hi = n + 1;
+    while (lo + 1 < hi) {
+        ll mid = (lo + hi) / 2;
+        cerr << lo << " " << hi << " " << mid << "\n";
+
+        ll ok = 8 * g(mid);
+        cerr << ok << "\n";
+        if (ok >= n)    hi = mid;
+        else            lo = mid;
+    }
+    ll res2 = 2 * (hi - 1);
+    cerr << hi << "\n";
+
+    cout << min(res1, res2) << "\n";
 }
 
 int main(){

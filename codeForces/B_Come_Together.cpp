@@ -23,19 +23,24 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
+    int xA, yA, xB, yB, xC, yC;
+    cin >> xA >> yA >> xB >> yB >> xC >> yC;
+
+    int ans = 1;
+    if (xA < xB && xA < xC) {
+        ans += min(xB, xC) - xA;
     }
-    cout << ans;
+    if (xA > xB && xA > xC) {
+        ans += xA - max(xB, xC);
+    }
+    if (yA < yB && yA < yC) {
+        ans += min(yB, yC) - yA;
+    }
+    if (yA > yB && yA > yC) {
+        ans += yA - max(yB, yC);
+    }
+    
+    cout << ans << "\n";
 }
 
 int main(){
@@ -53,3 +58,26 @@ int main(){
 
     return 0;
 }
+
+/*
+
+    if (xb > xa && xc > xa) {
+        mn = min(xb - xa + 1, xc - xa + 1);
+    }
+
+    if (xb < xa && xc < xa) {
+        mn = min(xa - xb + 1, xa - xc + 1);
+    }
+
+    res += (mn == INT_MAX ? 0 : mn);
+    mn = INT_MAX;
+
+    if (yb > ya && yc > ya) {
+        mn = min(yb - ya + 1, yc - ya + 1);
+    }
+
+    if (yb < xa && yc < ya) {
+        mn = min(ya - yb + 1, ya - yc + 1);
+    }
+
+*/

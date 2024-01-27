@@ -22,20 +22,43 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
+bool ok (vector<int> a, int inicio, int capacidad) {
+    for (auto x: a) {
+        inicio += x;
+        if (inicio < 0 || inicio > capacidad)    return false;
     }
-    cout << ans;
+    return true;
+}
+
+void sol(){
+    int n, m;
+    cin >> n >> m;
+
+    vector<int> a(n);
+    for (auto &x: a) {
+        cin >> x;
+    }
+
+    int lo = -1, hi = m + 1;
+    while (lo + 1 < hi) {
+        int mid = lo + (hi - lo) / 2;
+
+        if (ok(a, mid, m))  lo = mid;
+        else                hi = mid;
+    }
+
+    int mx = (lo == -1 ? m : lo);
+    lo = -1, hi = mx + 1;
+    while (lo + 1 < hi) {
+        int mid = lo + (hi - lo) / 2;
+
+        if (ok(a, mid, m))  hi = mid;
+        else                lo = mid;
+    }
+
+    // cerr << lo << ' ' << hi << "\n";
+
+    cout << max(0, mx - lo) << "\n";
 }
 
 int main(){
@@ -45,7 +68,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
 
     while(t--){
         sol();

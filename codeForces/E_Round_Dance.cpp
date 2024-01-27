@@ -1,12 +1,23 @@
 #include<bits/stdc++.h>
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
 using namespace std;
+using namespace __gnu_pbds;
 
 #define all(v)          v.begin(),v.end()
 #define sz(a)           (int)a.size()
 #define nl              cout << "\n";
 
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
 typedef long long ll;
 typedef long double ld;
+typedef pair<int, int> ii;
+typedef vector<int> vi;
+typedef vector<vector<int>> vvi;
 
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
@@ -55,25 +66,6 @@ struct DSU {
     }
 };
 
-/*
-
-2 1 4 3 6 5
-
-1 2
-3 4
-5 6
-
-
-2 3 1 5 6 4
-1 2
-2 3
-3 1
-4 5
-5 6
-6 4
-
-*/
-
 void sol(){
     int n;
     cin >> n;
@@ -105,12 +97,11 @@ void sol(){
     cout << ds.tam << " " << mx << "\n";
 
 }
-
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    //cout << fixed << setprecision(10);
+    // cout << fixed << setprecision(10);
 
     int t = 1;
     cin >> t;

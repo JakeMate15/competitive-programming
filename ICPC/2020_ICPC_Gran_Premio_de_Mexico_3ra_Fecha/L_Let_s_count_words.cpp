@@ -23,19 +23,32 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
+    int n;
+    cin >> n;
+
+    set<string> st;
+    string s, aux;
+    cin >> s;
+    st.insert(s);
+
+    for (int i = 0; i < n - 1; i++) {
+        cin >> s;
+        aux = s + s;
+        bool f = false;
+
+        for (int i = 0; i < sz(s); i++) {
+            if (st.count(aux.substr(sz(s) - i, sz(s)))) {
+                f = true;
+                break;
+            }
+        }
+
+        if (!f) {
+            st.insert(s);
         }
     }
-    cout << ans;
+
+    cout << sz(st) << "\n";
 }
 
 int main(){
@@ -45,7 +58,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

@@ -23,19 +23,43 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
+    int n, cal;
+    cin >> n >> cal;
+
+    vector<int> a(n);
+    int total = 0;
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        total += a[i];
+    }
+
+    map<int, vector<pair<int, vector<int>>>> res;
+    for (int i = 0; i < (1 << n); i++) {
+        vector<int> curr;
+        int sum = 0, calf;
+
+        for (int j = 0; j <= 20; j++) {
+            if (i & (1 << j)) {
+                sum += a[j];
+                curr.push_back(j + 1);
+            }
+        }
+        
+        calf = sum * 100 / total;
+        if (calf >= cal) {
+            res[sz(curr)].push_back({calf, {curr}});
         }
     }
-    cout << ans;
+
+    auto [tam, st] = *res.begin();
+    cout << tam << " " << sz(st) << "\n";
+    for (auto [c, v]: st) {
+        cout << c;
+        for (int i = 0; i < sz(v); i++) {
+            cout << " " << v[i];
+        }
+        nl;
+    }
 }
 
 int main(){
@@ -45,7 +69,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

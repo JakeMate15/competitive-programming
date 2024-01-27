@@ -20,19 +20,13 @@ void sol(){
         cin >> a[i];
     }
 
-    set<int> st;
+    map<int, int> mp;
     int res = 0;
-
-    for(int i = 0; i < n; i++) {
-        if(st.count(a[i])) {
-            res = max(res, sz(st));
-            st.clear();
-        }
-        else {
-            st.insert(a[i]);
-        }
+    for (int i = 0, j = 0; i < n; i++) {
+        j = max(j, mp[a[i]]);
+        res = max(res, i - j + 1);
+        mp[a[i]] = i + 1;
     }
-    res = max(res, sz(st));
 
     cout << res << "\n";
 }

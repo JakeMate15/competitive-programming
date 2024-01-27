@@ -23,19 +23,24 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
+    int n, x;
+    cin >> n;
+
+    multiset<int> st;
+    cin >> x;
+    st.insert(x);
+
+    for (int i = 1; i < n; i++) {
+        cin >> x;
+        auto it = st.upper_bound(x);
+        if (it != st.end()) {
+            st.erase(it);
         }
+  
+        st.insert(x);
     }
-    cout << ans;
+
+    cout << sz(st) << "\n";
 }
 
 int main(){
@@ -45,7 +50,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

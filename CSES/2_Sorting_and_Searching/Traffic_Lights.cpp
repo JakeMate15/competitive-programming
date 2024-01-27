@@ -23,19 +23,29 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
+    int street_len;
+    int light_num;
+    cin >> street_len >> light_num;
+
+
+    set<int> lights{0, street_len};
+    multiset<int> dist{street_len};
+
+    for (int l = 0; l < light_num; l++) {
+        int pos;
+        cin >> pos;
+
+        auto it1 = lights.upper_bound(pos);
+        auto it2 = prev(it1);
+
+
+        dist.erase(dist.find(*it1 - *it2));
+        dist.insert(pos - *it2);
+        dist.insert(*it1 - pos);
+        lights.insert(pos);
+
+        cout << *dist.rbegin() << " ";
     }
-    cout << ans;
 }
 
 int main(){
@@ -45,7 +55,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

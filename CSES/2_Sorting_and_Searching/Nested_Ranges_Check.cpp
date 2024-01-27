@@ -23,19 +23,22 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
+    int n;
+    cin >> n;
+
+    vector<ii> a(n);
+    for (auto &[x, y]: a) {
+        cin >> x >> y;
     }
-    cout << ans;
+
+    sort(all(a));
+
+    for (int i = 0; i < n; i++) {
+        auto it1 = lower_bound(all(a), make_pair(a[i].first + 1, -1));
+        auto it2 = lower_bound(all(a), make_pair(a[i].first, -1));
+
+        cout << it2 - it1 << " ";
+    }
 }
 
 int main(){
@@ -45,7 +48,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

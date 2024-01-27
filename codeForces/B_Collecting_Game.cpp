@@ -22,20 +22,42 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol(){
-    int n, m, k;
-    cin >> n >> m >> k;
-    int x, y;
-    cin >> x >> y;
-    string ans = "YES\n";
-    for (int i = 0; i < k; ++i) {
-        int xx, yy;
-        cin >> xx >> yy;
-        if ((x + y) % 2 == (xx + yy) % 2) {
-            ans = "NO\n";
-        }
+struct info {
+    int pos, res;
+    ll val, vv;
+};
+
+void sol() {
+    int n;
+    cin >> n;
+
+    vector<info> a(n + 1);
+    for (int i = 1; i <= n; i++) {
+        a[i].pos = i;
+        cin >> a[i].val;
+        a[i].vv = a[i].val;
     }
-    cout << ans;
+
+    sort(a.begin() + 1, a.end(), [] (info a, info b) {
+        return a.val < b.val;
+    });
+
+    for (int i = 1; i <= n; i++) {
+        a[i].val += a[i - 1].val;
+    }
+
+    a[n].res = n - 1;
+    for (int i = n - 1; i >= 1; i--) {
+        a[i].res = (a[i].val >= a[i + 1].vv ? a[i + 1].res : i - 1);
+    }
+
+    sort(all(a), [] (info a, info b) {
+        return a.pos < b.pos;
+    }); 
+
+    for (int i = 1; i <= n; i++) {
+        cout << a[i].res << " \n"[i == n];
+    }  
 }
 
 int main(){
