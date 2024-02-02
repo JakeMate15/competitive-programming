@@ -20,27 +20,20 @@ typedef vector<int> vi;
 typedef vector<vector<int>> vvi;
 
 const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const int MX = 1e5 + 5;
+
+int dp[MX][105];
 
 void sol(){
-    int n;
-    cin >> n;
+    int n, m;
+    cin >> n >> m;
 
-    vector<ii> a(n);
-    for (int i = 0; i < n; i++) {
-        cin >> a[i].first >> a[i].second;
+    int i = 0;
+    for (int i = 0; i <= MX; i++) {
+        for (int j = 0; j <= 105; j++) {
+            i++;
+        }
     }
-
-    sort(all(a));
-
-    ordered_set<int> os;
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        res += sz(os) - os.order_of_key(a[i].second); 
-        os.insert(a[i].second);
-    }
-
-    cout << res << "\n";
 }
 
 int main(){
@@ -50,7 +43,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

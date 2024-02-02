@@ -21,23 +21,6 @@ numberOfSubaarraysWithOddSum
 
 */
 
-bool subarrayWithSum(vector<int> a, ll sum) {
-    set<ll> aux = {0};
-    ll currSum = 0;
-
-    for(int i = 0; i < sz(a); i++) {
-        currSum += a[i];
-
-        if(aux.count(currSum)) {
-            return true;
-        }
-        
-        aux.insert(currSum);
-    }
-
-    return false;
-}
-
 void sol(){
     int n;
     cin >> n;
@@ -50,12 +33,16 @@ void sol(){
         }
     }
 
-    if(subarrayWithSum(a, 0)) {
-        cout << "YES\n";
+    ll pref = 0, sum = 0, cnt = 0;
+    map<ll, int> mp;
+    for (int i = 0; i < n; i++) {
+        pref += a[i];
+        if (pref == sum)    cnt++;
+        cnt += mp[pref - sum];
+        mp[pref]++;
     }
-    else {
-        cout << "NO\n";
-    }
+
+    cout << (cnt ? "YES" : "NO") << "\n";
     
 }
 

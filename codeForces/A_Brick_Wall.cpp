@@ -23,24 +23,10 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n;
-    cin >> n;
+    ll a, b;
+    cin >> a >> b;
 
-    vector<ii> a(n);
-    for (int i = 0; i < n; i++) {
-        cin >> a[i].first >> a[i].second;
-    }
-
-    sort(all(a));
-
-    ordered_set<int> os;
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        res += sz(os) - os.order_of_key(a[i].second); 
-        os.insert(a[i].second);
-    }
-
-    cout << res << "\n";
+    cout << (b / 2 * a) << "\n";
 }
 
 int main(){

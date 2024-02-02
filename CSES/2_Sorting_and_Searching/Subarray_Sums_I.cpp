@@ -23,23 +23,22 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n;
-    cin >> n;
+    int n, sum;
+    cin >> n >> sum;
 
-    vector<ii> a(n);
-    for (int i = 0; i < n; i++) {
-        cin >> a[i].first >> a[i].second;
+    vector<int> a(n);
+    for (auto &x: a) {
+        cin >> x;
     }
 
-    sort(all(a));
-
-    ordered_set<int> os;
-    ll res = 0;
+    ll pref = 0, res = 0;
+    map<ll, int> mp;
     for (int i = 0; i < n; i++) {
-        res += sz(os) - os.order_of_key(a[i].second); 
-        os.insert(a[i].second);
+        pref += a[i];
+        if (pref == sum)  res++;
+        res += mp[pref - sum];
+        mp[pref]++;
     }
-
     cout << res << "\n";
 }
 
@@ -50,7 +49,7 @@ int main(){
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    //cin >> t;
 
     while(t--){
         sol();

@@ -26,21 +26,34 @@ void sol(){
     int n;
     cin >> n;
 
-    vector<ii> a(n);
+    vvi a(n, vi(n));
+    vi res(n);
     for (int i = 0; i < n; i++) {
-        cin >> a[i].first >> a[i].second;
+        int curr = ~0;
+        for (int j = 0; j < n; j++) {
+            cin >> a[i][j];
+            if (i != j) {
+                curr &= a[i][j];
+            }
+        }
+        res[i] = (curr == ~0 ? 1 : curr);
     }
 
-    sort(all(a));
-
-    ordered_set<int> os;
-    ll res = 0;
     for (int i = 0; i < n; i++) {
-        res += sz(os) - os.order_of_key(a[i].second); 
-        os.insert(a[i].second);
+        for (int j = 0; j < n; j++) {
+            if (i != j) {
+                if ((res[i] | res[j]) != a[i][j]) {
+                    cout << "NO\n";
+                    return;
+                }
+            }
+        }
     }
 
-    cout << res << "\n";
+    cout << "YES\n";
+    for (int i = 0; i < n; i++) {
+        cout << res[i] << " \n"[i == n - 1];
+    }
 }
 
 int main(){

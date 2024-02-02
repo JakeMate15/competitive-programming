@@ -22,23 +22,52 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+string s;
+vvi g;
+vector<ll> dp, hijo;
+ll n, res;
+
+void dfs (int nodo, int padre) {
+    dp[nodo] += (s[padre - 1] == 'L' && !hijo[nodo] || s[padre - 1] == 'R' && hijo[nodo]);
+    dp[nodo] += (s[padre - 1] == 'U');
+    dp[nodo] += dp[padre];
+
+    for (auto u: g[nodo]) {
+        if (u != padre) {
+            dfs(u, nodo);
+
+            if (sz(g[u]) == 1 && u != 1) {
+                res = min(res, dp[u]);
+            }
+        }
+    }
+
+}
+
 void sol(){
-    int n;
-    cin >> n;
+    cin >> n >> s;
 
-    vector<ii> a(n);
-    for (int i = 0; i < n; i++) {
-        cin >> a[i].first >> a[i].second;
+    g = vvi(n + 1);
+    dp = vector<ll>(n + 1);
+    hijo = vector<ll>(n + 1);
+    res = LONG_LONG_MAX;
+
+    for (int i = 1; i <= n; i++) {
+        int l, r;
+        cin >> l >> r;
+
+        if (l != 0) {
+            g[i].push_back(l);
+            g[l].push_back(i);
+            hijo[l] = 1;
+        }
+        if (r != 0) {
+            g[i].push_back(r);
+            g[r].push_back(i);
+        }
     }
 
-    sort(all(a));
-
-    ordered_set<int> os;
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        res += sz(os) - os.order_of_key(a[i].second); 
-        os.insert(a[i].second);
-    }
+    dfs(1, 0);
 
     cout << res << "\n";
 }

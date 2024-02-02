@@ -28,19 +28,25 @@ void sol(){
 
     vector<ii> a(n);
     for (int i = 0; i < n; i++) {
-        cin >> a[i].first >> a[i].second;
+        cin >> a[i].first;
     }
-
-    sort(all(a));
-
-    ordered_set<int> os;
-    ll res = 0;
     for (int i = 0; i < n; i++) {
-        res += sz(os) - os.order_of_key(a[i].second); 
-        os.insert(a[i].second);
+        cin >> a[i].second;
     }
 
-    cout << res << "\n";
+    sort(all(a),[](ii p1, ii p2) {
+        if (max(p1.first, p1.second) == max(p2.first, p2.second)) {
+            return min(p1.first, p1.second) < min(p2.first, p2.second);
+        }
+        return max(p1.first, p1.second) < max(p2.first, p2.second);
+    });
+
+    for (int i = 0; i < n; i++) {
+        cout << a[i].first << " \n"[i == n - 1];
+    }
+    for (int i = 0; i < n; i++) {
+        cout << a[i].second << " \n"[i == n - 1];
+    }
 }
 
 int main(){

@@ -23,31 +23,20 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol(){
-    int n;
-    cin >> n;
+    string s;
+    cin >> s;
+    
+    int i = s.find("11");
+    int j = s.rfind("00");
 
-    vector<ii> a(n);
-    for (int i = 0; i < n; i++) {
-        cin >> a[i].first >> a[i].second;
-    }
-
-    sort(all(a));
-
-    ordered_set<int> os;
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        res += sz(os) - os.order_of_key(a[i].second); 
-        os.insert(a[i].second);
-    }
-
-    cout << res << "\n";
+    cout << (i != -1 && j != -1 && i < j ? "NO" : "YES") << endl;
 }
 
 int main(){
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    // cout << fixed << setprecision(10);
+    cout << fixed << setprecision(10);
 
     int t = 1;
     cin >> t;
