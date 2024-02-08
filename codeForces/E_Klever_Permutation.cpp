@@ -22,37 +22,29 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol() {
-    // cerr << "===========\n";
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
+void sol(){
+    int n, k;
+    cin >> n >> k;
 
-    string res = "";
-    vector<int> cnt(k, -1);
-    for (int i = 0; i < m; i++) {
-        char c = s[i];
-        cnt[c - 'a'] = i;
-
-        if (count(all(cnt), -1) == 0) {
-            int letra = max_element(all(cnt)) - cnt.begin();
-            res += (char) 'a' + letra;
-            cnt = vector<int>(k, -1);
+    vector<int> res(n);
+    int mn = 1, mx = n;
+    for (int i = 0; i < k; i++) {
+        if (i & 1) {
+            res[i] = mx--;
+            for (int j = i + k; j < n; j += k) {
+                res[j] = mx--;
+            }
+        }
+        else {
+            res[i] = mn++;
+            for (int j = i + k; j < n; j += k) {
+                res[j] = mn++;
+            }
         }
     }
 
-    if (sz(res) >= n) {
-        cout << "YES\n";
-    }
-    else {
-        cout << "NO\n";
-
-        int p = min_element(all(cnt)) - cnt.begin();
-        while (sz(res) < n) {
-            res += (char) 'a' + p;
-        }
-
-        cout << res << "\n";
+    for (int i = 0; i < n; i++) {
+        cout << res[i] << " \n"[i == n - 1];
     }
 }
 

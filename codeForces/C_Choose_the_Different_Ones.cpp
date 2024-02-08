@@ -22,37 +22,55 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol() {
-    // cerr << "===========\n";
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
+void sol(){
+    int n, m, k;
+    cin >> n >> m >> k;
 
-    string res = "";
-    vector<int> cnt(k, -1);
+    int meta = k / 2, x;
+
+    set<int> a, b;
+    for (int i = 0; i < n; i++) {
+        cin >> x;
+        a.insert(x);
+    }
     for (int i = 0; i < m; i++) {
-        char c = s[i];
-        cnt[c - 'a'] = i;
+        cin >> x;
+        b.insert(x);
+    }
 
-        if (count(all(cnt), -1) == 0) {
-            int letra = max_element(all(cnt)) - cnt.begin();
-            res += (char) 'a' + letra;
-            cnt = vector<int>(k, -1);
+    int cntA = 0, cntB = 0, cntAux = 0, cntBaux = 0;
+    for (int i = 1; i <= k; i++) {
+        if (a.count(i) && !b.count(i)) {
+            cntA++;
+        }
+        else if (!a.count(i) && b.count(i)) {
+            cntB++;
+        }
+        else if (a.count(i) && b.count(i)) {
+            cntAux++, cntBaux++;
         }
     }
 
-    if (sz(res) >= n) {
+    if (cntA >= meta && cntB >= meta) {
         cout << "YES\n";
     }
     else {
-        cout << "NO\n";
+        int necA = max(0, meta - cntA);
+        int posA = (cntAux >= necA ? necA : 0);
+        cntA += posA;
+        cntAux -= posA;
 
-        int p = min_element(all(cnt)) - cnt.begin();
-        while (sz(res) < n) {
-            res += (char) 'a' + p;
+        int necB = max(0, meta - cntB);
+        int posB = (cntAux >= necB ? necB : 0);
+        cntB += posB;
+
+        if (cntA >= meta && cntB >= meta) {
+            cout << "YES\n";
         }
-
-        cout << res << "\n";
+        else {
+            cout << "NO\n";
+        }
+        
     }
 }
 

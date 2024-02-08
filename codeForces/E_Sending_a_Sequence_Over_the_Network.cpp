@@ -22,38 +22,25 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol() {
-    // cerr << "===========\n";
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
+void sol(){
+    int n;
+    cin >> n;
 
-    string res = "";
-    vector<int> cnt(k, -1);
-    for (int i = 0; i < m; i++) {
-        char c = s[i];
-        cnt[c - 'a'] = i;
+    vector<int> a(n + 1);
+    vector<bool> dp(n + 1, false);
+    dp[0] = true;
 
-        if (count(all(cnt), -1) == 0) {
-            int letra = max_element(all(cnt)) - cnt.begin();
-            res += (char) 'a' + letra;
-            cnt = vector<int>(k, -1);
-        }
+    for (int i = 1; i <= n; i++) {
+        cin >> a[i];
+    }
+    for (int i = 1; i <= n; ++i) {
+        if (i + a[i] <= n && dp[i - 1]) 
+            dp[i + a[i]] = true;
+        if (i - a[i] - 1 >= 0 && dp[i - a[i] - 1]) 
+            dp[i] = true;
     }
 
-    if (sz(res) >= n) {
-        cout << "YES\n";
-    }
-    else {
-        cout << "NO\n";
-
-        int p = min_element(all(cnt)) - cnt.begin();
-        while (sz(res) < n) {
-            res += (char) 'a' + p;
-        }
-
-        cout << res << "\n";
-    }
+    cout << (dp[n] ? "YES" : "NO") << "\n";
 }
 
 int main(){

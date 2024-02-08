@@ -26,7 +26,32 @@ void sol(){
     ll a, b, r;
     cin >> a >> b >> r;
 
-    
+    if (b > a) {
+        swap(b, a);
+    }
+
+    ll x = 0;
+    bool f = true;
+    for (int i = 60; i >= 0; i--) {
+        ll pot = (1LL << i);
+        bool ba = a & pot;
+        bool bb = b & pot;
+
+        if (ba != bb) {
+            if (f) {
+                f = false;
+            }
+            else {
+                if ((x | pot) <= r && ba) {
+                    x |= pot;
+                    a ^= pot;
+                    b ^= pot;
+                }
+            }
+        }
+    }
+
+    cout << a - b << "\n";   
 }
 
 int main(){

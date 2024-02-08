@@ -22,38 +22,35 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol() {
-    // cerr << "===========\n";
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
+int encunetra (int n, vector<int> a) {
+    for (int i = 0; i < sz(a); i++) {
+        if (a[i] == n) {
+            return i;
+        }
+    }
+}
 
+void sol(){
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    vector<int> cnt(26);
     string res = "";
-    vector<int> cnt(k, -1);
-    for (int i = 0; i < m; i++) {
-        char c = s[i];
-        cnt[c - 'a'] = i;
 
-        if (count(all(cnt), -1) == 0) {
-            int letra = max_element(all(cnt)) - cnt.begin();
-            res += (char) 'a' + letra;
-            cnt = vector<int>(k, -1);
-        }
+    for (int i = 0; i < n; i++) {;
+        int pos = encunetra(a[i], cnt);
+        char c = 'a';
+        c += pos;
+        cnt[pos]++;
+        res += c;
     }
 
-    if (sz(res) >= n) {
-        cout << "YES\n";
-    }
-    else {
-        cout << "NO\n";
-
-        int p = min_element(all(cnt)) - cnt.begin();
-        while (sz(res) < n) {
-            res += (char) 'a' + p;
-        }
-
-        cout << res << "\n";
-    }
+    cout << res << "\n";
 }
 
 int main(){

@@ -22,38 +22,38 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol() {
-    // cerr << "===========\n";
-    int n, k, m;
-    string s;
-    cin >> n >> k >> m >> s;
+void sol(){
+    int n;
+    cin >> n;
+    vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        cin >> a[i];
+    }
 
-    string res = "";
-    vector<int> cnt(k, -1);
-    for (int i = 0; i < m; i++) {
-        char c = s[i];
-        cnt[c - 'a'] = i;
-
-        if (count(all(cnt), -1) == 0) {
-            int letra = max_element(all(cnt)) - cnt.begin();
-            res += (char) 'a' + letra;
-            cnt = vector<int>(k, -1);
+    vector<int> next_diff(n, -1);
+    for (int i = n - 2; i >= 0; --i) {
+        if (a[i] == a[i + 1]) {
+            next_diff[i] = next_diff[i + 1];
+        } else {
+            next_diff[i] = i + 1;
         }
     }
 
-    if (sz(res) >= n) {
-        cout << "YES\n";
-    }
-    else {
-        cout << "NO\n";
+    int q;
+    cin >> q;
+    while (q--) {
+        int l, r;
+        cin >> l >> r;
+        --l; --r; 
 
-        int p = min_element(all(cnt)) - cnt.begin();
-        while (sz(res) < n) {
-            res += (char) 'a' + p;
+        if (next_diff[l] != -1 && next_diff[l] <= r) {
+            cout << l + 1 << " " << next_diff[l] + 1 << "\n";
+        } else {
+            cout << "-1 -1\n";
         }
-
-        cout << res << "\n";
     }
+
+    cout << "\n";
 }
 
 int main(){
