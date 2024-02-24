@@ -22,28 +22,70 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol(){
-    int n;
-    cin >> n;
+void sol() {
+    // cerr << "==========\n";
+    int n, m; 
+    cin >> n >> m;
+    vector<vector<pair<ll, ll>>> adj(n + 1);
 
-    vector<ii> a(n);
-    for (int i = 0; i < n; i++) {
-        cin >> a[i].first >> a[i].second;
+    for (int i = 0; i < m; i++) {
+        int u, v; ll w; 
+        cin >> u >> v >> w;
+        adj[u].emplace_back(v, w);
+        adj[v].emplace_back(u, w);
+    }
+ 
+    vector<ll> nums(n + 1); 
+    for (int i = 1; i <= n; i++) {
+        cin >> nums[i];
+    }
+    vector<vector<ll>> dist(n + 1, vector<ll>(n + 1, 1e17));
+    dist[1][1] = 0;
+    set<tuple<ll,ll,ll>> pq = {{0, 1, 1}};
+
+    while (pq.size()) {
+        ll d, u, b; 
+        tie(d, u, b) = *pq.begin(); 
+        pq.erase(pq.begin());
+
+        // cerr << "Vamos a procesar " << d << " " << u << " " << b << "\n";
+        // cerr << "---------------------------\n";
+
+        for (auto [v, w] : adj[u]) {
+            // cerr << "Vamos a " << v << " con costo " << w << " y retraso " << nums[b] << "\n";
+            // if(v == b) {
+            //     cerr << "si\n";
+            // }
+
+            if (d + w * nums[b] < dist[v][b]) {
+                pq.erase({dist[v][b], v, b});
+                dist[v][b] = d + w * nums[b];
+                pq.insert({dist[v][b], v, b});
+            }
+ 
+            if (d + w * nums[b] < dist[v][v]) {
+                // cerr << "mnmn\n";
+                pq.erase({dist[v][v], v, v});
+                dist[v][v] = d + w * nums[b];
+                pq.insert({dist[v][v], v, v});
+            }
+        }
+
+        // cerr << "\n\n\n";
     }
 
-    sort(all(a));
+    // cerr << "----------------\n";
+    // // cout << *min_element(all(dist[n])) << "\n";
+    // for (int i = 1; i <= n; i++) {
+    //     for (int j = 1; j <= n; j++) {
+    //         cerr << dist[i][j] << " \n"[j == n];
+    //     }
+    // }
 
-    ordered_set<int> os;
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        res += os.order_of_key(a[i].second);
-        os.insert(a[i].second);
-    }
-
-    cout << res << "\n";
+    cout << dist[n][n] << "\n";
 }
 
-int main(){
+int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
@@ -52,7 +94,7 @@ int main(){
     int t = 1;
     cin >> t;
 
-    while(t--){
+    while(t--) {
         sol();
     }
 

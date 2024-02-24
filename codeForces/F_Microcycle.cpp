@@ -29,7 +29,7 @@ struct edge{
 };
 
 bool cmp(edge a, edge b) {
-    return a.costo < b.costo;
+    return a.costo > b.costo;
 }
 
 struct DSU {
@@ -76,24 +76,26 @@ struct DSU {
     }
 };
 
-vector<vector<ii>> t;
-vector<int> curr, vis;
-int mnC;
+vector<vector<int>> t;
+vector<int> r, curr;
+int U, V;
 
-void dfs(int nodo, int padre) {
-    curr.push_back(nodo);
-    vis[nodo] = 1;
+void dfs(int u, int p) {
+    cerr << u << " ";
+    r.push_back(u);
+    // if (u == V) {
+    //     return;
+    // }
 
-    for (auto [u, c]: t[nodo]) {
-        if (u != padre) {
-            mnC = min(mnC, c);
-            dfs(u, nodo);
+    for (auto v: t[u]) {
+        if (v != p) {
+            dfs(v, u);
         }
     }
 }
 
 void sol(){
-    // cerr << "===========\n";
+    cerr << "===========\n";
     int n, m;
     cin >> n >> m;
 
@@ -105,46 +107,43 @@ void sol(){
     }
 
     sort(all(g), cmp);
-    DSU ds(n);
-    t = vector<vector<ii>>(n + 1);
 
+    // for (auto [c, u, v]: g) {
+    //     cerr << c << " " << u << " " << v << "\n";
+    // }
+
+    int res = INT_MAX;
+    DSU ds(n);
+
+    t = vector<vector<int>>(n + 1);
     for (auto [c, u, v]: g) {
-        if (!ds.same(u, v)) {
-            t[u].emplace_back(v, c);
-            t[v].emplace_back(u, c);
+        if (ds.same(u, v)) {
+            res = c;
+            U = u;
+            V = v;
+        }
+        else {
+            t[u].push_back(v);
+            t[v].push_back(u);
             ds.unite(u, v);
         }
     }
 
-    // for (int i = 1; i <= n; i++) {
-    //     cerr << i << ": \n";
-    //     for (auto [u, c]: t[i]) {
-    //         cerr << "(" << u << "," << c << ") ";
-    //     }
-    //     cerr << "\n";
-    // }
+    r.clear();
+    dfs(U, 0);
 
-    int mn = INT_MAX;
-    vector<int> res;
-    vis = vector<int>(n + 1);
-    for (int i = 1; i <= n; i++) {
-        if (!vis[i]) {
-            curr.clear();
-            mnC = INT_MAX;
-            dfs(i, 0);
+    cerr << "\n\n" << U << " " << V << "\n\n";
 
-            if (mnC < mn) {
-                mn = mnC;
-                res = curr;
-            }
+    for (int i = 0; i <= n; i++) {
+        for (auto x: t[i]) {
+            cerr << i << " " << x << "\n";
         }
     }
-
-    cout << mn << " " << sz(res) << "\n";
-    for (int i = 0; i < sz(res); i++) {
-        cout << res[i] << " \n"[i == sz(res) - 1];
+    
+    cout << res << " " << sz(r) << "\n";
+    for (int i = 0; i < sz(r); i++) {
+        cout << r[i] << " \n"[i == sz(r) - 1];
     }
-
 }
 
 int main(){
