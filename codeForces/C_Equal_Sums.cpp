@@ -23,19 +23,29 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol() {
-    int n, k;
-    cin >> n >> k;
+    int k;
+    cin >> k;
 
-    while (k--) {
-        if (n % 10) {
-            n--;
+    vector<vector<int>> a(k);
+    vector<ll> sums(k);
+
+    for (int i = 0; i < k; i++) {
+        int t;
+        cin >> t;
+        
+        for (int j = 0; j < t; j++) {
+            int x;
+            cin >> x;
+            a[i].push_back(x);
+            sums[i] += x;
         }
-        else {
-            n /= 10;
-        }
+
+        sort(all(a[i]));
     }
 
-    cout << n << "\n";
+    for (int i = 0; i < k; i++) {
+        cerr << sums[i] << "\n";
+    }
 }
 
 int main() {

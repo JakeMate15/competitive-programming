@@ -23,19 +23,30 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol() {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    while (k--) {
-        if (n % 10) {
-            n--;
-        }
-        else {
-            n /= 10;
+    vector<int> a(n);
+    for (auto &x: a) {
+        cin >> x;
+    }
+
+    int mn = *min_element(all(a));
+    int cnt = count(all(a), mn);
+
+    if (cnt == 1) {
+        cout << "YES\n";
+        return;
+    }   
+
+    for (int i = 0; i < n; i++) {
+        if (a[i] % mn != 0) {
+            cout << "YES\n";
+            return;
         }
     }
 
-    cout << n << "\n";
+    cout << "NO\n";
 }
 
 int main() {
@@ -45,7 +56,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

@@ -23,19 +23,23 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol() {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+    string s;
+    cin >> s;
 
-    while (k--) {
-        if (n % 10) {
-            n--;
-        }
-        else {
-            n /= 10;
+    int res = 0;
+    for (int i = 0; i < n; i++) {
+        if (s[i] == 'x') {
+            int cnt = 0;
+            while (s[i] == 'x' && i < n) {
+                cnt++;
+                i++;
+            }
+            res += max(0, cnt - 2);
         }
     }
-
-    cout << n << "\n";
+    cout << res << "\n";
 }
 
 int main() {

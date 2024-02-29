@@ -23,19 +23,31 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol() {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    while (k--) {
-        if (n % 10) {
-            n--;
-        }
-        else {
-            n /= 10;
+    vector<int> a(n);
+    ll sum = 0;
+    for (auto &x: a) {
+        cin >> x;
+        sum += x;
+    }
+
+    if (sum % 3 == 0) {
+        cout << "0\n";
+        return;
+    }
+
+    for (int i = 0; i < n; i++) {
+        if ((sum - a[i]) % 3 == 0) {
+            cout << "1\n";
+            return;
         }
     }
 
-    cout << n << "\n";
+
+    cout << (ceil((1.0 * sum) / 3) * 3 - sum) << "\n";
+
 }
 
 int main() {
@@ -45,7 +57,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

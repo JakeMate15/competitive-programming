@@ -27,18 +27,20 @@ void sol() {
     cin >> a >> b >> c;
     c--;
 
-    int res = 0, dinero = b, cnt = 1;
-    for (int i = 0; i < 1005 && c; i++) {
-        res++;
-
+    ll dinero = 0, cnt = 1, res = 0;
+    while (c) {
         if (dinero >= a) {
-            dinero -= a;
             c--;
+            int nvo = dinero / a;
+            cnt += nvo;
+            dinero -= nvo * c;
         }
+
         dinero += cnt * b;
+        res++;
     }
 
-    cout << res << "\n";
+    cout << res - 1 << "\n";
 }
 
 int main() {

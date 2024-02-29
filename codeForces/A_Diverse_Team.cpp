@@ -26,16 +26,24 @@ void sol() {
     int n, k;
     cin >> n >> k;
 
-    while (k--) {
-        if (n % 10) {
-            n--;
-        }
-        else {
-            n /= 10;
-        }
+    map<int, int> mp;
+    for (int i = 0; i < n; i++) {
+        int x;
+        cin >> x;
+        mp[x] = i + 1;
     }
 
-    cout << n << "\n";
+    if (sz(mp) < k) {
+        cout << "NO\n";
+    }
+    else {
+        cout << "YES\n";
+        for (auto [num, pos]: mp) {
+            if (!k) break;
+            cout << pos << " ";
+            k--;
+        }
+    }
 }
 
 int main() {

@@ -23,19 +23,27 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol() {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
 
-    while (k--) {
-        if (n % 10) {
-            n--;
-        }
-        else {
-            n /= 10;
-        }
+    set<int> st;
+    vector<int> a(n), res;
+    for (auto &x: a) {
+        cin >> x;
+    }
+    reverse(all(a));
+
+    for (auto x: a) {
+        if (st.count(x))    continue;
+        res.push_back(x);
+        st.insert(x);
     }
 
-    cout << n << "\n";
+    reverse(all(res));
+    cout << sz(res) << "\n";
+    for (int i = 0; i < sz(res); i++) {
+        cout << res[i] << " \n"[i == sz(res) - 1];
+    }
 }
 
 int main() {
