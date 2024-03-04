@@ -27,25 +27,42 @@ void sol() {
     cin >> k;
 
     vector<vector<int>> a(k);
-    vector<ll> sums(k);
-
+    vector<pair<ll, pair<int, int>>> aux;
     for (int i = 0; i < k; i++) {
         int t;
         cin >> t;
-        
+            
+        ll sum = 0;
         for (int j = 0; j < t; j++) {
             int x;
             cin >> x;
             a[i].push_back(x);
-            sums[i] += x;
+            sum += x;
         }
 
-        sort(all(a[i]));
+        for (int j = 0; j < t; j++) {
+            aux.emplace_back(sum - a[i][j], make_pair(i + 1, j + 1));
+        }
     }
 
-    for (int i = 0; i < k; i++) {
-        cerr << sums[i] << "\n";
+    sort(all(aux));
+    for (int i = 0; i < sz(aux) - 1; i++) {
+        auto [s1, p1] = aux[i];
+        auto [st1, pos1] = p1;
+        auto [s2, p2] = aux[i + 1];
+        auto [st2, pos2] = p2;
+
+        if (s1 == s2 && st1 != st2) {
+            cout << "YES\n";
+            cout << st1 << " " << pos1 << "\n";
+            cout << st2 << " " << pos2 << "\n";
+            return;
+        }
     }
+
+    cout << "NO\n";
+
+    
 }
 
 int main() {
