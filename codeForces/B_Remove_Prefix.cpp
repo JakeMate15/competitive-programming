@@ -26,19 +26,21 @@ void sol() {
     int n;
     cin >> n;
 
-    vector<ll> a(n + 1, 1e18);
-    vector<ll> dp(n + 1, 1e18);
-    dp[1] = 0;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    vector<int> a(n);
+    set<int> st;
+    for (auto &x: a) {
+        cin >> x;
     }
 
-    for (int i = 2; i <= n; i++) {
-        dp[i] = min(dp[i], abs(a[i] - a[i - 1]) + dp[i - 1]);
-        dp[i] = min(dp[i], abs(a[i] - a[i - 2]) + dp[i - 2]);
+    int i = n - 1;
+    for (; i >= 0; i--) {
+        if (st.count(a[i])) {
+            break;
+        }
+        st.insert(a[i]);
     }
 
-    cout << dp[n] << "\n";
+    cout << i + 1 << "\n";
 }
 
 int main() {
@@ -48,7 +50,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

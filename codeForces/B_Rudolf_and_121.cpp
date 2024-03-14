@@ -22,23 +22,37 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
+bool areAllZeros(const vector<int>& vec) {
+    return all_of(vec.begin(), vec.end(), [](int i) { return i == 0; });
+}
+
 void sol() {
     int n;
     cin >> n;
 
-    vector<ll> a(n + 1, 1e18);
-    vector<ll> dp(n + 1, 1e18);
-    dp[1] = 0;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    vector<int> a(n);
+    for (auto &x: a) {
+        cin >> x;
+    }
+    
+    for (int i = 1; i < n - 1; i++) {
+        int aux = a[i - 1];
+        a[i - 1] -= aux;
+        a[i] -= (2 * aux);
+        a[i + 1] -= aux;
+
+        if (a[i - 1] < 0 || a[i] < 0 || a[i + 1] < 0) {
+            cout << "NO\n";
+            return;
+        }
     }
 
-    for (int i = 2; i <= n; i++) {
-        dp[i] = min(dp[i], abs(a[i] - a[i - 1]) + dp[i - 1]);
-        dp[i] = min(dp[i], abs(a[i] - a[i - 2]) + dp[i - 2]);
+    if (areAllZeros(a)) {
+        cout << "YES\n";
     }
-
-    cout << dp[n] << "\n";
+    else {
+        cout << "NO\n";
+    }
 }
 
 int main() {
@@ -48,7 +62,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

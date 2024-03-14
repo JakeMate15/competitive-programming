@@ -23,22 +23,41 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol() {
-    int n;
-    cin >> n;
+    int n, m, x;
+    cin >> n >> m >> x;
+    --x; 
+    set<int> st; 
+    st.insert(x);
 
-    vector<ll> a(n + 1, 1e18);
-    vector<ll> dp(n + 1, 1e18);
-    dp[1] = 0;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    for (int i = 0; i < m; ++i) {
+        int r;
+        char c;
+        cin >> r >> c;
+        set<int> stA;
+
+        if (c == '?') {
+            for (int pos : st) {
+                stA.insert((pos + r) % n);
+                stA.insert((pos - r + n) % n);
+            }
+        } else {
+            for (int pos : st) {
+                if (c == '0') { // Horario
+                    stA.insert((pos + r) % n);
+                } else { // Antihorario
+                    stA.insert((pos - r + n) % n);
+                }
+            }
+        }
+
+        st = stA;
     }
 
-    for (int i = 2; i <= n; i++) {
-        dp[i] = min(dp[i], abs(a[i] - a[i - 1]) + dp[i - 1]);
-        dp[i] = min(dp[i], abs(a[i] - a[i - 2]) + dp[i - 2]);
+    cout << sz(st) << endl;
+    for (int pos : st) {
+        cout << pos + 1 << " "; 
     }
-
-    cout << dp[n] << "\n";
+    cout << endl;
 }
 
 int main() {
@@ -48,7 +67,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

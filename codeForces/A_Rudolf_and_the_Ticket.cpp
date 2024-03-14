@@ -23,22 +23,27 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol() {
-    int n;
-    cin >> n;
+    int n, m, k;
+    cin >> n >> m >> k;
 
-    vector<ll> a(n + 1, 1e18);
-    vector<ll> dp(n + 1, 1e18);
-    dp[1] = 0;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    vector<int> a(n), b(m);
+    for (auto &x: a) {
+        cin >> x;
+    }
+    for (auto &x: b) {
+        cin >> x;   
     }
 
-    for (int i = 2; i <= n; i++) {
-        dp[i] = min(dp[i], abs(a[i] - a[i - 1]) + dp[i - 1]);
-        dp[i] = min(dp[i], abs(a[i] - a[i - 2]) + dp[i - 2]);
+    int res = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            if (a[i] + b[j] <= k) {
+                res++;
+            }
+        }
     }
 
-    cout << dp[n] << "\n";
+    cout << res << "\n";
 }
 
 int main() {
@@ -48,7 +53,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

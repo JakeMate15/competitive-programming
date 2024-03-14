@@ -25,20 +25,17 @@ const int MX = 2e5 + 5;
 void sol() {
     int n;
     cin >> n;
-
-    vector<ll> a(n + 1, 1e18);
-    vector<ll> dp(n + 1, 1e18);
-    dp[1] = 0;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    int time, h, m;
+    cin >> h >> m;
+    time = 60 * h + m;
+    int ans = 24 * 60;
+    for(int i = 0; i < n; ++i){
+        cin >> h >> m;
+        int t = 60 * h + m - time;
+        if(t < 0) t += 24 * 60;
+        ans = min(ans, t);
     }
-
-    for (int i = 2; i <= n; i++) {
-        dp[i] = min(dp[i], abs(a[i] - a[i - 1]) + dp[i - 1]);
-        dp[i] = min(dp[i], abs(a[i] - a[i - 2]) + dp[i - 2]);
-    }
-
-    cout << dp[n] << "\n";
+    cout << ans / 60 << " " << ans % 60 << "\n";
 }
 
 int main() {
@@ -48,7 +45,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

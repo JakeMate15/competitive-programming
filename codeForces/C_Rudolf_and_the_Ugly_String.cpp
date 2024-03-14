@@ -24,21 +24,27 @@ const int MX = 2e5 + 5;
 
 void sol() {
     int n;
-    cin >> n;
+    string s;
+    cin >> n >> s;
 
-    vector<ll> a(n + 1, 1e18);
-    vector<ll> dp(n + 1, 1e18);
-    dp[1] = 0;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    int res = 0;
+    for (int i = 0; i < n - 2; i++) {
+        if (i < n - 4 && s[i] == 'm' && s[i + 1] == 'a' && s[i + 2] == 'p' && s[i + 3] == 'i' && s[i + 4] == 'e') {
+            res++; 
+            i += 4; 
+        }
+        else if (s[i] == 'm' && s[i + 1] == 'a' && s[i + 2] == 'p') {
+            res++;
+            i += 2; 
+        }
+        else if (s[i] == 'p' && s[i + 1] == 'i' && s[i + 2] == 'e') {
+            res++; 
+            i += 2;
+        }
     }
 
-    for (int i = 2; i <= n; i++) {
-        dp[i] = min(dp[i], abs(a[i] - a[i - 1]) + dp[i - 1]);
-        dp[i] = min(dp[i], abs(a[i] - a[i - 2]) + dp[i - 2]);
-    }
+    cout << res << "\n";
 
-    cout << dp[n] << "\n";
 }
 
 int main() {
@@ -48,7 +54,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

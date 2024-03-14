@@ -26,19 +26,27 @@ void sol() {
     int n;
     cin >> n;
 
-    vector<ll> a(n + 1, 1e18);
-    vector<ll> dp(n + 1, 1e18);
-    dp[1] = 0;
-    for (int i = 1; i <= n; i++) {
-        cin >> a[i];
+    int sum = 0;
+    string res = "";
+    set<int> aux = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    while (sum != n) {
+        set<int>::iterator it;
+        if (aux.count(n - sum)) {
+            it = aux.find(n - sum);
+        }
+        else {
+            it = prev(aux.upper_bound(n - sum));
+        }
+
+        char num = '0';
+        num += *it;
+        aux.erase(it);
+        sum += *it;
+        res += num;
     }
 
-    for (int i = 2; i <= n; i++) {
-        dp[i] = min(dp[i], abs(a[i] - a[i - 1]) + dp[i - 1]);
-        dp[i] = min(dp[i], abs(a[i] - a[i - 2]) + dp[i - 2]);
-    }
-
-    cout << dp[n] << "\n";
+    sort(all(res));
+    cout << res << "\n";
 }
 
 int main() {
@@ -48,7 +56,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();
