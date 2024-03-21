@@ -22,148 +22,92 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-struct state {
-    int len, link;
-    map<char, int> next;
-};
-
-struct SAM {
-    vector<state> st;
-    vector<bool> vis;
-    vector<ll> dp;
-    int sz = 0, last;
-
-    SAM (string s) {
-        int n = s.size() * 2;
-        st.resize(n);
-        vis.resize(n);
-        dp.resize(n);
-
-        st[0].len = 0;
-        st[0].link = -1;
-        sz++;
-        last = 0;
-
-        for (auto x: s) {
-            sa_extend(x);
-        }
+vector<int> sort_cyclic_shifts(string const& s) {
+    int n = s.size();
+    const int alphabet = 256;
+    vector<int> p(n), c(n), cnt(max(alphabet, n), 0);
+    for (int i = 0; i < n; i++)
+        cnt[s[i]]++;
+    for (int i = 1; i < alphabet; i++)
+        cnt[i] += cnt[i-1];
+    for (int i = 0; i < n; i++)
+        p[--cnt[s[i]]] = i;
+    c[p[0]] = 0;
+    int classes = 1;
+    for (int i = 1; i < n; i++) {
+        if (s[p[i]] != s[p[i-1]])
+            classes++;
+        c[p[i]] = classes - 1;
     }
-
-    void sa_extend(char c) {
-        int cur = sz++;
-        st[cur].len = st[last].len + 1;
-        dp[cur] = (cur == 0 ? 0 : 1);
-        int p = last;
-        while (p != -1 && !st[p].next.count(c)) {
-            st[p].next[c] = cur;
-            p = st[p].link;
+    vector<int> pn(n), cn(n);
+    for (int h = 0; (1 << h) < n; ++h) {
+        for (int i = 0; i < n; i++) {
+            pn[i] = p[i] - (1 << h);
+            if (pn[i] < 0)
+                pn[i] += n;
         }
-        if (p == -1) {
-            st[cur].link = 0;
-        } else {
-            int q = st[p].next[c];
-            if (st[p].len + 1 == st[q].len) {
-                st[cur].link = q;
-            } else {
-                int clone = sz++;
-                st[clone].len = st[p].len + 1;
-                st[clone].next = st[q].next;
-                st[clone].link = st[q].link;
-                dp[clone] = 0;  // Para encontrar la cantidad de repetciones de un substrins
-                while (p != -1 && st[p].next[c] == q) {
-                    st[p].next[c] = clone;
-                    p = st[p].link;
-                }
-                st[q].link = st[cur].link = clone;
-            }
+        fill(cnt.begin(), cnt.begin() + classes, 0);
+        for (int i = 0; i < n; i++)
+            cnt[c[pn[i]]]++;
+        for (int i = 1; i < classes; i++)
+            cnt[i] += cnt[i-1];
+        for (int i = n-1; i >= 0; i--)
+            p[--cnt[c[pn[i]]]] = pn[i];
+        cn[p[0]] = 0;
+        classes = 1;
+        for (int i = 1; i < n; i++) {
+            pair<int, int> cur = {c[p[i]], c[(p[i] + (1 << h)) % n]};
+            pair<int, int> prev = {c[p[i-1]], c[(p[i-1] + (1 << h)) % n]};
+            if (cur != prev)
+                ++classes;
+            cn[p[i]] = classes - 1;
         }
-        last = cur;
+        c.swap(cn);
     }
+    return p;
+}
 
-    void diferentesSubStrings(int nodo, int padre) {
-        // cerr << nodo << "\n";
-        if (vis[nodo]) return;
+vector<int> suffix_array_construction(string s) {
+    s += "$";
+    vector<int> sorted_shifts = sort_cyclic_shifts(s);
+    sorted_shifts.erase(sorted_shifts.begin());
+    return sorted_shifts;
+}
 
-        vis[nodo] = true;
-        for (auto [c, pos]: st[nodo].next) {
-            // cerr << c << " " << pos << "\n";
-            // cerr << nodo << " " << pos << " " << c << "\n";
-            diferentesSubStrings(pos, nodo);
-            dp[nodo] += (dp[pos] + 1);
+vector<int> lcp_construction(string const& s, vector<int> const& p) {
+    int n = s.size();
+    vector<int> rank(n, 0);
+    for (int i = 0; i < n; i++)
+        rank[p[i]] = i;
+
+    int k = 0;
+    vector<int> lcp(n-1, 0);
+    for (int i = 0; i < n; i++) {
+        if (rank[i] == n - 1) {
+            k = 0;
+            continue;
         }
+        int j = p[rank[i] + 1];
+        while (i + k < n && j + k < n && s[i+k] == s[j+k])
+            k++;
+        lcp[rank[i]] = k;
+        if (k)
+            k--;
     }
-
-    void numerOfOcurrences() {
-        vector<int> order(sz);
-        iota(order.begin(), order.end(), 0);
-        sort(order.begin(), order.end(), [this](int a, int b) {
-            return st[a].len > st[b].len;
-        });
-
-        for (int v : order) {
-            if (st[v].link != -1) {
-                dp[st[v].link] += dp[v];
-            }
-        }
-    }
-
-    int masLago() {
-        int res = 1;
-
-        ll mx = *max_element(dp.begin() + 1, dp.end());
-        int mxl = 1;
-        set<int> estados;
-        for (int i = 1; i < sz; i++) {
-            if (dp[i] == mx) {
-                if (st[mxl].len < st[i].len) {
-                    mxl = i;
-                    estados.clear();
-                    estados.insert(i);
-                }
-                else if (st[mxl].len == st[i].len) {
-                    estados.insert(i);
-                }
-            }
-        }
-
-        for (auto x: estados) {
-            cout << x << " ";
-        }
-        cout << "\n";
-
-        return res;
-    }
-
-    int encuentra_patron(string s) {
-        int estado_actual = 0; // Empieza en el estado inicial
-        for (char c : s) {
-            if (st[estado_actual].next.count(c)) {
-                // Si existe una transición para el carácter actual, sigue esa transición
-                estado_actual = st[estado_actual].next[c];
-            } 
-            else {
-                // Si no existe tal transición, la subcadena no está representada en el SAM
-                return -1; // Puedes devolver -1 o cualquier otro indicador de "no encontrado"
-            }
-        }
-        return estado_actual;
-    }
-};
-
+    return lcp;
+}
 
 void sol() {
     int n;
     string s;
     cin >> n >> s;
 
-    SAM sa(s);
-    sa.numerOfOcurrences();
-    sa.masLago();
+    auto sa = suffix_array_construction(s);
+    auto lcp = lcp_construction(s, sa);
 
-    for (auto x: sa.dp) {
-        cerr << x << " ";
-    }
-    cout << sa.encuentra_patron("b") << "\n";
+    auto mx = max_element(all(lcp)) - lcp.begin();
+    cerr << sa[mx] << "\n";
+    
 }
 
 int main() {
@@ -173,7 +117,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    // cin >> t;
+    //cin >> t;
 
     while(t--) {
         sol();

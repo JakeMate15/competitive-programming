@@ -20,39 +20,50 @@ typedef vector<int> vi;
 typedef vector<vector<int>> vvi;
 
 const int mod = 1e9 + 7;
-const int MX = 1e6 + 5;
-ll dp[MX];
-
-ll go(int n) {
-    if (n < 0)  return 0;
-    if (n <= 1) return 1;
-
-    ll &mem = dp[n];
-    if (mem != 0)   return mem;
-
-    for (int i = 1; i <= 6; i++) {
-        (mem += go(n - i)) %= mod;
-    }
-
-    return mem;
-}
-
+const int MX = 2e5 + 5;
 
 void sol() {
     int n;
     cin >> n;
 
-    // cout << go(n) << "\n";
-    dp[0] = 1;
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= 6; j++) {
-            if (i - j >= 0) {
-                (dp[i] += dp[i - j]) %= mod;
-            }
-        }
+    string s;
+    vector<string> arr(n);
+    vector<int> res;
+    for (int i = 0; i < n; i++) {
+        cin >> arr[i];
     }
 
-    cout << dp[n] << "\n";
+    reverse(all(arr));
+    int ant = 101;
+    for (auto x: arr) {
+        int num = stoi(x);
+        int n1, n2;
+        if (sz(x) > 1) {
+            n1 = x[0] - '0';
+            n2 = x[1] - '0';
+        }
+
+        if (num <= ant || sz(x) == 1) {
+            res.push_back(num);
+            ant = num;
+        }
+        else {
+            res.push_back(n2);
+            res.push_back(n1);
+            
+            ant = n2;
+        }
+    }
+    reverse(all(res));
+
+    // for (auto x: res) {
+    //     cerr << x << " ";
+    // }
+    // cerr << "\n";
+
+    
+    cout << (is_sorted(all(res)) ? "YES" : "NO") << "\n";
+
 }
 
 int main() {
@@ -62,7 +73,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

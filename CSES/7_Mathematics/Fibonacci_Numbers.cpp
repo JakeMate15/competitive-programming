@@ -20,39 +20,51 @@ typedef vector<int> vi;
 typedef vector<vector<int>> vvi;
 
 const int mod = 1e9 + 7;
-const int MX = 1e6 + 5;
-ll dp[MX];
+const int MX = 2e5 + 5;
 
-ll go(int n) {
-    if (n < 0)  return 0;
-    if (n <= 1) return 1;
-
-    ll &mem = dp[n];
-    if (mem != 0)   return mem;
-
-    for (int i = 1; i <= 6; i++) {
-        (mem += go(n - i)) %= mod;
+struct matrix {
+    long long mat[2][2];
+    matrix friend operator *(const matrix &a, const matrix &b){
+        matrix c;
+        for (int i = 0; i < 2; i++) {
+          for (int j = 0; j < 2; j++) {
+              c.mat[i][j] = 0;
+              for (int k = 0; k < 2; k++) {
+                  (c.mat[i][j] += a.mat[i][k] * b.mat[k][j]) %= mod;
+              }
+          }
+        }
+        return c;
     }
+};
 
-    return mem;
+matrix matpow(matrix base, long long n) {
+    matrix ans{ {
+      {1, 0},
+      {0, 1}
+    } };
+    while (n) {
+        if(n&1)
+            ans = ans*base;
+        base = base*base;
+        n >>= 1;
+    }
+    return ans;
 }
 
+long long fib(ll n) {
+    matrix base{ {
+      {1, 1},
+      {1, 0}
+    } };
+    return matpow(base, n).mat[0][1];
+}
 
 void sol() {
-    int n;
+    ll n;
     cin >> n;
 
-    // cout << go(n) << "\n";
-    dp[0] = 1;
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= 6; j++) {
-            if (i - j >= 0) {
-                (dp[i] += dp[i - j]) %= mod;
-            }
-        }
-    }
-
-    cout << dp[n] << "\n";
+    cout << fib(n) << "\n";
 }
 
 int main() {

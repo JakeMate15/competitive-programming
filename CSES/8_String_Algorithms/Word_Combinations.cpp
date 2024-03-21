@@ -23,78 +23,81 @@ template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>
 typedef long long ll;
 typedef long double ld;
 
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const ll MOD = 1e9 + 7;
+const int MAXN = 2e5 + 10;
 
-struct Node{
-  	bool isWord = false;
-	map<char, Node*> letters;
-};
+int to[MAXN][27], term[MAXN], sz[MAXN], link_array [MAXN], next_term[MAXN], cur = 1;
+ll dp[MAXN];
+ 
+void add(string &s, int id = 0, int ps = 0) {
+	assert(id >= 0 && id < MAXN);
+    if(ps == sz(s)) {
+        term[id] = 1;
+        sz[id] = sz(s);
+        return;
+    }
 
-struct Trie{
-	Node* root;
-
-	Trie(){
-		root = new Node();
-	}
-
-	inline bool exists(Node * actual, const char & c){
-		return actual->letters.find(c) != actual->letters.end();
-	}
-
-	void InsertWord(const string& word){
-		Node* current = root;
-		for(auto & c : word){
-			if(!exists(current, c))
-				current->letters[c] = new Node();
-			current = current->letters[c];
-		}
-		current->isWord = true;
-	}
-
-	bool FindWord(const string& word){
-		Node* current = root;
-		for(auto & c : word){
-			if(!exists(current, c))
-				return false;
-			current = current->letters[c];
-		}
-		return current->isWord;
-	}
-
-	void printRec(Node * actual, string acum){
-		if(actual->isWord){
-			cout << acum << "\n";
-		}
-		for(auto & next : actual->letters)
-			printRec(next.second, acum + next.first);
-	}
-
-	void printWords(const string & prefix){
-		Node * actual = root;
-		for(auto & c : prefix){
-			if(!exists(actual, c)) return;
-			actual = actual->letters[c];
-		}
-		printRec(actual, prefix);
-	}
-};
-
+    if(!to[id][s[ps] - 'a']) {
+        to[id][s[ps] - 'a'] = cur;
+        cur++;
+    }
+    add(s, to[id][s[ps] - 'a'], ps + 1);
+}
+ 
+void build_aho() {
+    queue<int> q({0});
+    next_term[0] = 0;
+    while(sz(q)) {
+        int u = q.front();
+        q.pop();
+        for(int ch = 0; ch < 26; ch++) {
+            int v = to[u][ch];
+            if(v != 0) {
+                link_array [v] = (u ? to[link_array [u]][ch] : 0);
+                next_term[v] = (term[link_array [v]] ? link_array [v] : next_term[link_array [v]]);
+                q.push(v);
+            }
+            else {
+                to[u][ch] = (u ? to[link_array [u]][ch] : 0);
+            }
+        }
+    }
+}
 
 void sol(){
     string s;
-    int q;
-    cin >> s >> q;
+    cin >> s;
 
-    Trie t;
-    t.InsertWord(s);
+    int n;
+    cin >> n;
 
-    while(q--) {
-        cin >> s;
-        t.InsertWord(s);
+    for(int i = 0; i < n; i++) {
+        string ss;
+        cin >> ss;
+        add(ss);
     }
 
-    t.printWords("");
+    build_aho();
+    /*for(int i = 0; i < cur; i++) {
+        cerr  << "id = " << i << " " << link_array [i] << endl;
+    }*/
+
+    n = sz(s);
+
+    dp[0] = 1;
+    int curr = 0;
+    
+    for(int i = 1; i <= n; i++) {
+        char c = s[i - 1];
+        curr = to[curr][c - 'a'];
+        int tmp = curr;
+        while(tmp > 0) {
+            if(term[tmp])
+                dp[i] = (dp[i] + dp[i - sz[tmp]]) % MOD;
+            tmp = next_term[tmp];
+        }
+    }
+    cout << dp[n] << '\n';
 }
 
 int main(){

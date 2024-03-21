@@ -20,39 +20,53 @@ typedef vector<int> vi;
 typedef vector<vector<int>> vvi;
 
 const int mod = 1e9 + 7;
-const int MX = 1e6 + 5;
-ll dp[MX];
+const int MX = 1e5 + 5;
 
-ll go(int n) {
-    if (n < 0)  return 0;
-    if (n <= 1) return 1;
+int c[MX], n;
+string palabras[MX];
+ll dp[MX][2];
 
-    ll &mem = dp[n];
-    if (mem != 0)   return mem;
+ll go (int i, int invertido) {
+    if (i == n)
+        return 0;
 
-    for (int i = 1; i <= 6; i++) {
-        (mem += go(n - i)) %= mod;
-    }
+    ll &mem = dp[i][invertido];
+    if (mem != -1)
+        return mem;
 
-    return mem;
+    string anterior = palabras[i - 1];
+    if (invertido) 
+        reverse(all(anterior));
+
+    ll res = 1E18;
+    string act = palabras[i];
+
+    if (anterior <= act)
+        res = min(res, go(i + 1, 0));
+
+    reverse(all(act));
+    if (anterior <= act) 
+        res = min(res, go(i + 1, 1) + c[i]);
+
+    return mem = res;
 }
 
 
 void sol() {
-    int n;
     cin >> n;
 
-    // cout << go(n) << "\n";
-    dp[0] = 1;
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= 6; j++) {
-            if (i - j >= 0) {
-                (dp[i] += dp[i - j]) %= mod;
-            }
-        }
+    for (int i = 0; i < n; i++) {
+        cin >> c[i];
+        dp[i][0] = dp[i][1] = -1;
     }
 
-    cout << dp[n] << "\n";
+    for (int i = 0; i < n; i++) {
+        cin >> palabras[i];
+    }
+
+    ll res = min(go(1, 0), go(1, 1) + c[0]);
+    cout << (res == 1E18 ? -1 : res) << "\n";
+
 }
 
 int main() {

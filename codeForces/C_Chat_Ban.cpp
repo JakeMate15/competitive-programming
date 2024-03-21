@@ -20,39 +20,29 @@ typedef vector<int> vi;
 typedef vector<vector<int>> vvi;
 
 const int mod = 1e9 + 7;
-const int MX = 1e6 + 5;
-ll dp[MX];
+const int MX = 2e5 + 5;
 
-ll go(int n) {
-    if (n < 0)  return 0;
-    if (n <= 1) return 1;
-
-    ll &mem = dp[n];
-    if (mem != 0)   return mem;
-
-    for (int i = 1; i <= 6; i++) {
-        (mem += go(n - i)) %= mod;
-    }
-
-    return mem;
+ll g(ll n) {
+    return (n * (n + 1)) / 2;
 }
 
+ll get(ll m) {
+    return g(m) + g(m - 1);
+}
 
 void sol() {
-    int n;
-    cin >> n;
+    ll k, x;
+    cin >> k >> x;
 
-    // cout << go(n) << "\n";
-    dp[0] = 1;
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= 6; j++) {
-            if (i - j >= 0) {
-                (dp[i] += dp[i - j]) %= mod;
-            }
-        }
+    ll lo = -1, hi = 1e18 + 5;
+    while (lo + 1 < hi) {
+        ll mid = (lo + hi) / 2;
+
+        if (get(mid) <= x)  hi = mid;
+        else                lo = mid;
     }
 
-    cout << dp[n] << "\n";
+    cout << hi << "\n";
 }
 
 int main() {
@@ -62,7 +52,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();
