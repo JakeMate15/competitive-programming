@@ -2,18 +2,19 @@
 using namespace std;
 
 #define all(v)          v.begin(),v.end()
+
 typedef long long ll;
+const int MX = 1e5 + 5;
+
+int c[MX], n;
+string palabras[MX];
+ll dp[MX][2];
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    int n;
     cin >> n;
-
-    vector<int> c(n);
-    vector<string> palabras(n);
-    ll dp[n][2];
 
     for(int i = 0; i < n; ++i) {
         cin >> c[i];
@@ -24,10 +25,9 @@ int main() {
     }
 
     dp[n][0] = dp[n][1] = 0;
-
     for(int i = n - 1; i >= 0; --i) {
-        for(int j = 0; j < 2; ++j) {
-            string anterior = i > 0 ? palabras[i-1] : "";
+        for(int j = 0; j <= 1; ++j) {
+            string anterior = i > 0 ? palabras[i - 1] : "";
             if(j) reverse(all(anterior));
 
             ll res = 1E18;

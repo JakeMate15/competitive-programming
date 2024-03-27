@@ -22,42 +22,25 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-ll binPow(ll x, ll n, ll m) {
-    assert(n >= 0);
-    x %= m;
-    ll res = 1;
-    
-    while (n > 0) {
-        if (n & 1)
-            res = res * x % m;
-        x = x * x % m;
-        n >>= 1;
-    }
-    
-    return res;
-}
-
 void sol() {
-    int n, k;
-    cin >> n >> k;
- 
-    ll mxS = 0, sum = 0, ss = 0, x;
-    for(int i = 0; i < n; i++) {
-        cin >> x;
-        sum = max(x, sum + x);
-        mxS = max(mxS, sum);
-        ss += x;
+    int n;
+    cin >> n;
+
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
     }
 
-    ll sk = (mxS % mod * binPow(2, k, mod)) % mod;
-    ll res = (ss + sk) % mod;
-    res -= mxS;
-    res += mod;
-    res %= mod;
-    res += mod;
-    res %= mod;
-    
-    cout << res << "\n";
+    sort(all(a));
+
+    int m = (n + 1) / 2 - 1;
+    int cnt = 0;
+    for (int i = m; i < n; i++) {
+        if (a[i] != a[m])  break;
+        cnt++;
+    }
+
+    cout << cnt << "\n";
 }
 
 int main() {

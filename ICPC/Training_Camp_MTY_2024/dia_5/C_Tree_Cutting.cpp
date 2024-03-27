@@ -22,42 +22,45 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-ll binPow(ll x, ll n, ll m) {
-    assert(n >= 0);
-    x %= m;
-    ll res = 1;
-    
-    while (n > 0) {
-        if (n & 1)
-            res = res * x % m;
-        x = x * x % m;
-        n >>= 1;
+vvi g;
+vector<ll> tam;
+
+void dfs(int nodo, int padre, int t) {
+
+    for (auto u: g[nodo]) {
+        if (u != padre) {
+            dfs(u, nodo, t);
+            tam[nodo] += tam[u];
+        }
     }
-    
-    return res;
 }
 
 void sol() {
+    cerr << "=============\n";
     int n, k;
     cin >> n >> k;
- 
-    ll mxS = 0, sum = 0, ss = 0, x;
-    for(int i = 0; i < n; i++) {
-        cin >> x;
-        sum = max(x, sum + x);
-        mxS = max(mxS, sum);
-        ss += x;
+
+    g.resize(n + 1);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+
+        g[u].push_back(v);
+        g[v].push_back(u);
     }
 
-    ll sk = (mxS % mod * binPow(2, k, mod)) % mod;
-    ll res = (ss + sk) % mod;
-    res -= mxS;
-    res += mod;
-    res %= mod;
-    res += mod;
-    res %= mod;
-    
-    cout << res << "\n";
+    int lo = -1, hi = k + 1;
+    while (lo + 1 < hi) {
+        int mid = (lo + hi) / 2;
+
+        tam = vector<ll>(n + 1, 1);
+        dfs(1, 0, 9);
+        for (int i = 1; i <= n; i++) {
+            cerr << tam[i] << " \n"[i == n];
+        }
+
+        break;
+    }
 }
 
 int main() {
