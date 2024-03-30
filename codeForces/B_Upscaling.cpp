@@ -23,34 +23,22 @@ const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
 void sol() {
-    int n, k;
-    cin >> n >> k;
+    int n;
+    cin >> n;
+
+    int aux = 2 * n;
     
-    vector<int> c(n);
-    for (int i = 0; i < n; i++) {
-        cin >> c[i];
-    }
-    
-    if (c[0] == c[n - 1]) {
-        if (count(c.begin(), c.end(), c[0]) >= k) {
-            cout << "YES\n";
-        } else {
-            cout << "NO\n";
+    for (int i = 0; i < aux; ++i) {
+        for (int j = 0; j < aux; ++j) {
+            if (((i / 2 + j / 2) % 2) == 0) {
+                cout << '#';
+            } 
+            else {
+                cout << '.';
+            }
         }
-        return;
+        cout << '\n';
     }
-    
-    int c1 = 0;
-    int c2 = count(c.begin(), c.end(), c[n - 1]);
-    for (int i = 0; i < n; i++) {
-        c1 += (c[0] == c[i]);
-        c2 -= (c[n - 1] == c[i]);
-        if (c1 >= k && c2 >= k) {
-            cout << "YES\n";
-            return;
-        }
-    }
-    cout << "NO\n";
 }
 
 int main() {

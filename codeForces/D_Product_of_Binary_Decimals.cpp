@@ -22,35 +22,62 @@ typedef vector<vector<int>> vvi;
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-void sol() {
-    int n, k;
-    cin >> n >> k;
-    
-    vector<int> c(n);
-    for (int i = 0; i < n; i++) {
-        cin >> c[i];
+
+vector<int> bins;
+map<ll, ll> factoriza(ll x) {
+    map<ll, ll> res;
+    for(ll p: bins) {
+        if(p * p > x) {//Cuidado con el overflow, cambiar el tipo a la criba si es necesario
+            break;
+        }
+        int e = 0;
+        while(x % p == 0) {
+            e++;
+            x /= p;
+        }
+
+        if(e) {
+            res[p] = e;
+        }
     }
     
-    if (c[0] == c[n - 1]) {
-        if (count(c.begin(), c.end(), c[0]) >= k) {
-            cout << "YES\n";
-        } else {
-            cout << "NO\n";
-        }
+    if(x > 1) {//revisar los limites
+        res[x] = 1;
+    }
+
+    return res;
+}
+
+bool bin(ll n) {
+    if (n == 1) return true;
+
+    while (n > 0) {
+        if (n % 10 != 0 && n % 10 != 1) return false;
+        n /= 10;
+    }
+    return true;
+}
+
+
+void sol() {
+    int n;
+    cin >> n;
+
+    if (bin(n)) {
+        cout << "YES\n";
         return;
     }
-    
-    int c1 = 0;
-    int c2 = count(c.begin(), c.end(), c[n - 1]);
-    for (int i = 0; i < n; i++) {
-        c1 += (c[0] == c[i]);
-        c2 -= (c[n - 1] == c[i]);
-        if (c1 >= k && c2 >= k) {
-            cout << "YES\n";
+
+    auto f = factoriza(n);
+    for (auto [p, pp]: f) {
+        if (!bin(p)) {
+            cout << "NO\n";
             return;
         }
     }
-    cout << "NO\n";
+
+    cout << "YES\n";
+
 }
 
 int main() {
@@ -61,6 +88,13 @@ int main() {
 
     int t = 1;
     cin >> t;
+
+    int cnt = 0;
+    for (int i = 2; i <= 1E5; i++) {
+        if (bin(i)) {
+            bins.push_back(i);
+        }
+    }
 
     while(t--) {
         sol();
