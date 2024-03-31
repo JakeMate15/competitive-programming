@@ -26,7 +26,19 @@ void sol() {
     int n, k;
     cin >> n >> k;
 
-    if ()
+    if (k != 1 && k != n) {
+        cout << "-1\n";
+        return;
+    }
+
+    vector<int> res(n, 1);
+    if (k == 1) {
+        res.back() = 2;
+    }
+
+    for (int i = 0; i < n; i++) {
+        cout << res[i] << " \n"[i == n - 1];
+    }
 }
 
 int main() {
@@ -36,7 +48,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

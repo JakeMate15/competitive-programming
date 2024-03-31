@@ -1,50 +1,59 @@
-#include <iostream>
-#include <vector>
-#include <set>
+#include<bits/stdc++.h>
+
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 
 using namespace std;
+using namespace __gnu_pbds;
 
-void solve(int n, vector<int>& a) {
-    vector<int> p(n); // Para almacenar la permutación resultante
-    set<int> mexSet; // Para almacenar los números disponibles para el MEX
+#define all(v)          v.begin(),v.end()
+#define sz(a)           (int)a.size()
+#define nl              cout << "\n";
 
-    // Inicialmente, añadimos todos los números de 0 a n - 1 al conjunto MEX
-    for (int i = 0; i < n; ++i) {
-        mexSet.insert(i);
+template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<int, int> ii;
+typedef vector<int> vi;
+typedef vector<vector<int>> vvi;
+
+const int mod = 1e9 + 7;
+const int MX = 2e5 + 5;
+
+void sol() {
+    int n;
+    cin >> n;
+
+    vector<int> a(n), res(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
     }
 
-    for (int i = 0; i < n; ++i) {
-        // El valor de p[i] se determina sumando a[i] al MEX actual de p[0] a p[i-1]
-        int currentMex = *mexSet.begin(); // El MEX actual es el primer elemento del conjunto
-        p[i] = currentMex + a[i];
-
-        // Una vez que p[i] es conocido, se elimina de los candidatos para futuros MEX
-        mexSet.erase(p[i]);
-
-        // Si p[i] está en el rango [0, n-1], también necesitamos actualizar mexSet
-        if (p[i] < n) {
-            mexSet.insert(p[i]);
-        }
+    int mex = n;
+    for (int i = n - 1; i >= 0; i--) {
+        res[i] = mex - a[i];
+        mex = min(mex, res[i]);
     }
 
-    // Imprimimos la permutación p construida
-    for (int i = 0; i < n; ++i) {
-        cout << p[i] << " ";
+    for (int i = 0; i < n; i++) {
+        cout << res[i] << " \n"[i == n - 1];
     }
-    cout << endl;
 }
 
 int main() {
-    int t;
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    // cout << fixed << setprecision(10);
+
+    int t = 1;
     cin >> t;
-    while (t--) {
-        int n;
-        cin >> n;
-        vector<int> a(n);
-        for (int i = 0; i < n; ++i) {
-            cin >> a[i];
-        }
-        solve(n, a);
+
+    while(t--) {
+        sol();
     }
+
     return 0;
 }
