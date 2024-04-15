@@ -33,6 +33,7 @@ struct H {
     H operator-(const H& h) const { return H(sub(x, h.x, MOD_X), sub(y, h.y, MOD_Y)); }
     H operator*(const H& h) const { return H(mul(x, h.x, MOD_X), mul(y, h.y, MOD_Y)); }
     bool operator==(const H& h) const { return x == h.x && y == h.y; }
+    // bool operator!=(const H& h) const { return x != h.x || y != h.y; }
     bool operator<(const H& h) const {if (x == h.x) {return y < h.y; } return x < h.x; }
 
     static ll add(ll a, ll b, ll mod) {
@@ -65,72 +66,52 @@ void init(const string& s) {
 }
 
 void sol() {
-    cerr << "=====\n";
     int n;
     string s;
     cin >> n >> s;
 
     init(s);
     int res = n;
-
     for (int i = 1; i <= n; i++) {
-        if (n % i)  continue;
+        if (n % i != 0) continue;
 
-        cerr << i << "\n";
+        map<H, int> idx, cnt;
 
-        bool f = true;
-        set<H> st;
-        map<H, int> mp, ncc;
+        for (int j = 0; j < n; j += i) {
+            auto h = get(j, j + i);
 
-        for (int j = 0; j < n - i; j += i) {
-            auto h2 = get(j, j + i);
-
-            st.insert(h2);
-            mp[h2] = j;
-            ncc[h2]++;
-
-            if (sz(st) > 2) {
-                break;
-            }
-
+            idx[h] = j;
+            cnt[h]++;
         }
-        cerr << "\n";
 
-        if (sz(st) > 2) {
+        if (sz(idx) == 1) {
+            res = min(res, i);
             continue;
         }
 
-        if (sz(st) == 1) {
-            res = min(i, res);
+        if (sz(idx) > 2) {
+            continue;
         }
 
-        if (sz(st) == 2) {
-            auto [hh, p] = *mp.begin();
-            auto [hh2, p2] = *next(mp.begin());
-            
-            
-            string s1 = s.substr(p, i), s2 = s.substr(p2, i);
-            cerr << s1 << " " << s2 << "\n";
+        auto [h1, r1] = *cnt.begin();
+        auto [h2, r2] = *next(cnt.begin());
 
-            int difss = 0;
-            for (int k = 0; k < i; k++) {
-                if (s1[k] != s2[k] && difss == 0) {
-                    difss++;
-                }
-                else {
-                    difss++;
-                    break;
-                }
+
+        if (min(r1, r2) != 1) {
+            continue;
+        }
+        
+        string s1 = s.substr(idx[h1], i), s2 = s.substr(idx[h2], i);
+        int difs = 0;
+        for (int k = 0; k < sz(s1); k++) {
+            if (s1[k] != s2[k]) {
+                difs++;
             }
+        }
 
-            cerr << ncc[hh] << " " << ncc[hh2] << "\n";
-
-            int mnn = min(ncc[hh], ncc[hh2]);
-            int df = difss * mnn;
-            cerr << df << "\n";
-            if (df <= 1) {
-                res = min(res, i);
-            }
+        difs *= min(r1, r2);
+        if (difs == 1) {
+            res = min(res, i);
         }
     }
 

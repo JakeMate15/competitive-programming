@@ -55,7 +55,7 @@ struct SegmentTree {
         T aux = st[i + n].valor;
         for (st[i += n] = nodo(aux + v); i >>= 1; )
             st[i] = st[i << 1] + st[i << 1 | 1];
-    }
+    }   
 
     nodo query(int l, int r) {//[l, r)
         nodo resl, resr;
@@ -78,29 +78,38 @@ void sol() {
     int n, m, k, d;
     cin >> n >> m >> k >> d;
 
-    vector<int> r(n);
+    vector<ll> r(n);
     for (int j = 0; j < n; j++) {
         vector<ll> a(m);
         for (int i = 0; i < m; i++) {
             cin >> a[i];
+            a[i]++;
         }
-
-        a[0] = 1;
 
         SegmentTree<ll> st(m, a);
         for (int i = 1; i < m; i++) {
-            int l = max(0, i - d);
+            int l = max(0, i - d - 1);
             ll aux = st.query(l, i).valor;
-            st.update(i, aux + 1);
+            st.update(i, aux);
         }
 
         r[j] = st.query(m - 1, m).valor;
     }
 
-    for (auto x: r) {
-        cerr << x << " ";
+    ll sum = 0, res;
+    for (int i = 0; i < k; i++) {
+        sum += r[i];
     }
-    cerr << "\n";
+    
+    res = sum;
+    for (int i = k; i < n; i++) {
+        sum -= r[i - k];
+        sum += r[i];
+
+        res = min(res, sum);
+    }
+    
+    cout << res << "\n";
 }
 
 int main() {
