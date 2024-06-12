@@ -22,56 +22,44 @@ template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-vvi g;
-vector<bool> vis;
-int cnt = 0;
-
-void dfs (int nodo) {
-    if (vis[nodo])  return;
-    vis[nodo] = true;
-
-    for (auto u: g[nodo]) {
-        dfs(u);
-    }
-}
-
 void sol() {
-    int n, m;
-    cin >> n >> m;
+    int n;
+    cin >> n;
 
-    g = vvi(n + 1, vi());
-    vis = vector<bool>(n + 1);
+    vector<int> arr(n);
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
 
-    for (int i = 0; i < m; i++) {
-        int u, v;
-        cin >> u >> v;
+    map<vector<int>, ll> m1, mp1, mp2, mp3;
 
-        g[u].push_back(v);
-        g[v].push_back(u);
+    ll res = 0;
+    for (int i = 0; i < n - 2; i++) {
+        int a = arr[i], b = arr[i + 1], c = arr[i + 2];
+
+        res += mp1[{a, b, 0}];
+        res += mp2[{a, 0, c}];
+        res += mp3[{0, b, c}];
+
+        res -= m1[{a, b, c}] * 3;
+
+        mp1[{a, b, 0}]++;
+        mp2[{a, 0, c}]++;
+        mp3[{0, b, c}]++;
+
+        m1[{a, b, c}]++;
     }
 
-    vector<int> res;
-    for (int i = 1; i <= n; i++) {
-        if (vis[i]) continue;
-        cnt++;
-        dfs(i);
-
-        res.push_back(i);
-    }
-
-    cout << cnt - 1 << "\n";
-    for (int i = 1; i < sz(res); i++) {
-        cout << 1 << " " << res[i] << "\n";
-    }
-
+    cout << res << "\n";
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
+    // cout << fixed << setprecision(10);
+
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();

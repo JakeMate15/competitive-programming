@@ -22,56 +22,56 @@ template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>
 const int mod = 1e9 + 7;
 const int MX = 2e5 + 5;
 
-vvi g;
-vector<bool> vis;
-int cnt = 0;
+ll get (vector<ll> arr, vector<ll> p, int pos, int k) {
+    ll puntos = 0;
 
-void dfs (int nodo) {
-    if (vis[nodo])  return;
-    vis[nodo] = true;
+    vector<bool> vis(sz(arr) + 1);
+    int curr = pos, i = 1;
+    ll s = 0;
 
-    for (auto u: g[nodo]) {
-        dfs(u);
+    while (!vis[curr] && k - i >= 0) {
+        vis[curr] = true;
+
+        s += arr[curr];
+        puntos = max(puntos, s + max(0LL, 1LL * k - i++) * arr[curr]);
+        curr = p[curr];
     }
+
+    return puntos;
 }
 
 void sol() {
-    int n, m;
-    cin >> n >> m;
+    int n, b, s, k;
+    cin >> n >> k >> b >> s;
 
-    g = vvi(n + 1, vi());
-    vis = vector<bool>(n + 1);
-
-    for (int i = 0; i < m; i++) {
-        int u, v;
-        cin >> u >> v;
-
-        g[u].push_back(v);
-        g[v].push_back(u);
-    }
-
-    vector<int> res;
+    vector<ll> arr(n + 1), p(n + 1);
     for (int i = 1; i <= n; i++) {
-        if (vis[i]) continue;
-        cnt++;
-        dfs(i);
-
-        res.push_back(i);
+        cin >> p[i];
+    }
+    for (int i = 1; i <= n; i++) {
+        cin >> arr[i];
     }
 
-    cout << cnt - 1 << "\n";
-    for (int i = 1; i < sz(res); i++) {
-        cout << 1 << " " << res[i] << "\n";
-    }
+    ll bb = get(arr, p, b, k);
+    ll ss = get(arr, p, s, k);
 
+    if (bb == ss) 
+        cout << "Draw\n";
+    else if (bb > ss) 
+        cout << "Bodya\n";
+    else
+        cout << "Sasha\n";
+    
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
+    // cout << fixed << setprecision(10);
+
     int t = 1;
-    //cin >> t;
+    cin >> t;
 
     while(t--) {
         sol();
@@ -79,3 +79,5 @@ int main() {
 
     return 0;
 }
+
+// -Wall -Wextra -Wshadow -D_GLIBCXX_ASSERTIONS -DDEBUG -ggdb3 -fmax-errors=2

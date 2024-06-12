@@ -1,48 +1,38 @@
-//https://cses.fi/problemset/result/5968107/
 #include<bits/stdc++.h>
 using namespace std;
- 
-typedef long long int lli;
-#define IO  ios::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define forn(i,n)   for(lli (i)=0; i<n; i++)
-#define forr(i,a,n) for(lli i=(a); i<n; i++)
-#define fore(i,a,n) for(lli i=(a); i<=n; i++)
-#define YES         cout << "YES\n"
-#define NO          cout << "NO\n"
-#define debug(a)    cout << a << "\n"
- 
-const int maxV = 2*1e5+1;
-vector<vector<int>> arbol;
-int cantNodos[maxV];
- 
-void dfs(int nodo, int padre){
-    cantNodos[nodo] = 1;
-    for(int u: arbol[nodo]){
-        if(u==padre) continue;
-        dfs(u,nodo);
-        cantNodos[nodo]+=cantNodos[u];
+
+int main () {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int n;
+    cin >> n;
+
+    vector<int> g[n + 1];
+    for (int i = 2; i <= n; i++) {
+        int u;
+        cin >> u;
+
+        g[u].push_back(i);
+        g[i].push_back(u);
     }
-}
- 
-void sol(){  
-    int n;  
-    cin>>n;
-    arbol.resize(n+1);
-    memset(cantNodos,0,sizeof(cantNodos));
- 
-    forr(i,2,n+1){
-        int emp;cin>>emp;
-        arbol[emp].push_back(i);
-        arbol[i].push_back(emp);
+
+    vector<int> dp(n + 1);
+    function<void(int, int)> dfs = [&](int nodo, int padre) -> void {
+        dp[nodo] = 1;
+        for (auto u: g[nodo]) {
+            if (padre != u) {
+                dfs(u, nodo);
+                dp[nodo] += dp[u];
+            }
+        }
+    };
+
+    dfs(1, 0);
+
+    for (int i = 1; i <= n; i++) {
+        cout << dp[i] - 1 << " \n"[i == n];
     }
- 
-    dfs(1,0);
-    fore(i,1,n) cout << cantNodos[i]-1 << " ";
-}
- 
- 
-int main(){IO
-    int t=1;//cin>>t;
-    while(t--)
-        sol();
+
+    return 0;
 }
