@@ -1,0 +1,28 @@
+{
+	"Criba de primos": {
+		"prefix": "cribaPrimos",
+		"body": [
+		  "vector<int> primos, primoMin;",
+		  "void criba(int n) {",
+		  "    primoMin.resize(n + 1);",
+		  "    for(int i = 2; i <= n; i++) {",
+		  "        if(primoMin[i] == 0) {",
+		  "            primos.push_back(i);",
+		  "            primoMin[i] = i;",
+		  "        }",
+		  "",
+		  "        for(int p: primos) {",
+		  "            int d = i * p;",
+		  "            if(d > n)   break;",
+		  "            primoMin[d] = p;",
+		  "            if(p == primoMin[i]) {",
+		  "                break;",
+		  "            }",
+		  "        }",
+		  "    }",
+		  "}",
+		  ""
+		],
+		"description": "Criba de primos y minP"
+	  }
+}

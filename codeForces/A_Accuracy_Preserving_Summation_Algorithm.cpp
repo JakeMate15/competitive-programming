@@ -7,8 +7,10 @@ mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
 #ifndef ONLINE_JUDGE
     #define debug(x) cerr << #x << " = " << x << "\n";
+    #define insAux stA.insert(idx);
 #else
     #define debug(x)
+    #define insAux
 #endif
 
 chrono::high_resolution_clock::time_point start;
@@ -196,7 +198,6 @@ string getAlgorithm(const vector<node> &currentSolution, const int &n, int idx) 
     
 }
 
-
 inline double getA (const vector<node> &currentSolution) {
     double Se = currentSolution[1].realSum;
     double Sc = currentSolution[1].proposedSum;
@@ -241,8 +242,7 @@ inline double fitness(const vector<node> &currentSolution) {
     return score;
 }
 
-vector<int> randNumbers;
-inline int roulette (int id) {
+inline int roulette (int id, int n) {
     double h = log2(id);
     
     double pH = 1 / (h + 1);
@@ -270,63 +270,25 @@ inline int roulette (int id) {
     return 2;
 }
 
-/*
-Update with a single point and random point
-*/
-// vector<node> genSol(const vector<node>& currentSolution) {
-//     int n = currentSolution.size() >> 1;
-//     vector<node> sol = currentSolution;
- 
-//     int idx = RAND(1, n - 1);
-//     singleUpdate(sol, idx, roulette(idx));
- 
-//     return sol;
-// }
-
-// Seleccionar un nodo y bajas
-// vector<pair<int, int>> genSol(vector<node>& currentSolution) {
-//     int n = currentSolution.size() >> 1;
-//     vector<pair<int, int>> changes;
-
-//     int idx = RAND(1, n - 1);
-//     while (idx < n) {
-//         double dontChange = 1;
-//         dontChange /= pow((double)log2(idx + 1), 0.5);
-        
-//         if (RANDR(0.0, 1.0) <= dontChange) {
-//             changes.emplace_back(idx, currentSolution[idx].type);
-//             singleUpdate(currentSolution, idx, roulette(idx));
-//         }
-
-//         double rSide = RANDR(0.0, 1.0);
-//         int side = 0;
-
-//         if (rSide <= (double) 50.0) {
-//             side = 1;
-//         }
-        
-//         idx = (idx << 1 | side);
-//     }
- 
-//     return changes;
-// } 
-
+set<int> stA;
 // Seleccionar un nodo y subir
 vector<pair<int, int>> genSol(vector<node>& currentSolution) {
     int n = currentSolution.size() >> 1;
     vector<pair<int, int>> changes;
 
     int idx = RAND(1, n - 1);
+    insAux
     while (idx >= 1) {
+        insAux
         double dontChange = 1;
         dontChange /= pow((double)log2(idx + 1), 0.5);
+        debug(idx);
+        debug(dontChange);
         
-        if (RANDR(0.0, 1.0) <= dontChange) {
+        if (RANDR(0.0, 1.0) > dontChange) {
             changes.emplace_back(idx, currentSolution[idx].type);
-            singleUpdate(currentSolution, idx, roulette(idx));
+            singleUpdate(currentSolution, idx, roulette(idx, n));
         }
-        changes.emplace_back(idx, currentSolution[idx].type);
-        singleUpdate(currentSolution, idx, roulette(idx));
         
         idx >>= 1;
     }
@@ -334,16 +296,7 @@ vector<pair<int, int>> genSol(vector<node>& currentSolution) {
     return changes;
 } 
 
-double linearCooling(double initialTemperature, int iteration, double alpha = 0.95) {
-    return initialTemperature - alpha * iteration;
-}
-
 double exponentialCooling(double initialTemperature, int iteration, double alpha = 0.999) {
-    return initialTemperature * pow(alpha, iteration);
-}
-
-double adaptiveCooling(double initialTemperature, int iteration, double improvementRate) {
-    double alpha = 0.9 + 0.1 * improvementRate; // Ajusta `alpha` en función de la tasa de mejora
     return initialTemperature * pow(alpha, iteration);
 }
 
@@ -353,9 +306,8 @@ double coolingLogarithmic(double initialTemperature, int iteration) {
 
 // Delta postivo, es mas flexible
 vector<node> annealing (vector<node> &currentSolution) {
-    double initialTemperature = 1000000.0;
+    double initialTemperature = 10'000'000'000.0;
     double finalTemperature = 0.001;
-    int maxIterations = (int) 5E7;
     int improvementCount = 0;
 
     double temperature = initialTemperature;
@@ -365,27 +317,22 @@ vector<node> annealing (vector<node> &currentSolution) {
 
     debug(bestFitness);
 
-    for (int i = 0; i < maxIterations && temperature > finalTemperature; i++) {
-        // debug(i);
-
+    for (int i = 0; temperature > finalTemperature; i++) {
         auto changes = genSol(currentSolution);
         reverse(changes.begin(), changes.end());
         double newFitness = fitness(currentSolution);
 
         double delta = newFitness - currentFitness;
         double acceptanceProbability = exp(-delta / temperature);
-        // debug(acceptanceProbability);
 
         if (newFitness > bestFitness) {
             bestFitness = newFitness;
             bestSolution = currentSolution;
-            // debug(bestFitness);
         } 
 
         if (delta > 0) {
             currentFitness = newFitness;
             improvementCount++;
-            // debug(delta);
         } else if (acceptanceProbability < RANDR(0.0, 1.0)) {
             debug(acceptanceProbability);
             currentFitness = newFitness;
@@ -396,12 +343,8 @@ vector<node> annealing (vector<node> &currentSolution) {
             }
         }
         
-        // temperature = linearCooling(initialTemperature, i);
-        temperature = exponentialCooling(initialTemperature, i);
-        // temperature = coolingLogarithmic(initialTemperature, i);
-
-        // double improvementRate = static_cast<double>(improvementCount) / (i + 1);
-        // temperature = adaptiveCooling(initialTemperature, i, improvementRate);
+        // temperature = exponentialCooling(initialTemperature, i);
+        temperature = coolingLogarithmic(initialTemperature, i);
 
         chrono::high_resolution_clock::time_point now = chrono::high_resolution_clock::now();
         chrono::duration<double> elapsed = chrono::duration_cast<chrono::duration<double>>(now - start);
@@ -410,11 +353,11 @@ vector<node> annealing (vector<node> &currentSolution) {
         }
     }
 
+    debug(stA.size());
     debug(bestFitness);
     return bestSolution;
 }
 
-// Intento extra
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);

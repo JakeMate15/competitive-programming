@@ -1,0 +1,22 @@
+{
+    "Binary Power Function": {
+        "prefix": "binpow",
+        "body": [
+            "ll binPow(ll x, ll n) {",
+            "    assert(n >= 0);",
+            "    x %= MOD;",
+            "    ll res = 1;",
+            "    ",
+            "    while (n > 0) {",
+            "        if (n & 1)",
+            "            res = res * x % MOD;",
+            "        x = x * x % MOD;",
+            "        n >>= 1;",
+            "    }",
+            "    ",
+            "    return res;",
+            "}"
+        ],
+        "description": "Snippet for Binary Exponentiation Function"
+    }
+}
