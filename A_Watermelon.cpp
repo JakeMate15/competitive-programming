@@ -21,7 +21,14 @@ const int MX = 2E5 + 5;
 const int MOD = 1E9 + 7;
 
 void sol () {
-    
+    int n;
+    cin >> n;
+
+    if (n > 2 && n % 2 == 0) {
+        cout << "YES\n";
+    } else {
+        cout << "NO\n";
+    }
 }
 
 int main() {
@@ -31,7 +38,7 @@ int main() {
     // cout << fixed << setprecision(10);
 
     int t = 1;
-    cin >> t;
+    // cin >> t;
 
     while(t--) {
         sol();

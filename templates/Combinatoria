@@ -1,0 +1,37 @@
+{
+    "Combinatoria C++": {
+        "scope": "cpp",
+        "prefix": "combinatoria",
+        "body": [
+            "ll fact[MX], inv[MX];",
+            "",
+            "ll binPow(ll a, ll n) {",
+            "    a %= MOD;",
+            "    ll res = 1;",
+            "    while (n) {",
+            "        if (n & 1)",
+            "            res = res * a % MOD;",
+            "        a = a * a % MOD;",
+            "        n >>= 1;",
+            "    }",
+            "    return res;",
+            "}",
+            "",
+            "// No olvidar esto",
+            "void preCalc() {",
+            "    fact[0] = inv[0] = 1;",
+            "    for (int i = 1; i < MX; i++) {",
+            "        fact[i] = fact[i - 1] * i % MOD;",
+            "        inv[i] = binPow(fact[i], MOD - 2);",
+            "    }",
+            "}",
+            "",
+            "ll C(int n, int k) {",
+            "    if (k > n)",
+            "        return 0;",
+            "    return fact[n] * inv[k] % MOD * inv[n - k] % MOD;",
+            "}"
+        ],
+        "description": "Snippet para cálculo combinatorio en C++"
+    }
+}
