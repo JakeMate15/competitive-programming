@@ -1,40 +1,50 @@
-#include<bits/stdc++.h>
+#include <bits/stdc++.h>
 using namespace std;
+#define forsn(i,s,n) for(int i = int(s);i<int(n);i++)
+#define dforsn(i,s,n) for(int i = int(n)-1;i>=int(s);i--)
+#define forn(i,n) forsn(i,0,n)
+#define dforn(i,n) dforsn(i,0,n)
+#define fore(i,s,n) forsn(i,s,n)
 
-#define all(v)          v.begin(),v.end()
-#define sz(a)           (int)a.size()
-#define nl              cout << "\n";
+#define mp make_pair
+#define snd second
+#define fst first
+#define pb push_back
 
-typedef long long ll;
-typedef long double ld;
+#define SZ(x) int((x).size())
+#define ALL(x) (x).begin(),(x).end()
+#define DBG(x) cout<<#x<<" = "<<x<<endl;
 
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
-
-void sol(){
-    ll n, k;
-    cin >> n >> k;
-
-    if(((n & 1) && k % 2 == 0) || n == 1 && k != 1) {
-        cout << "NO\n";
+template<class x> 
+ostream &operator<<(ostream &out, vector<x> v) {
+    out << "{";
+    for(auto y : v) {
+        out << y << " ";
     }
-    else {
-        cout << "YES\n";
-    }
+    out << "}";
+    return out;
 }
+typedef long long ll;
 
 int main(){
-    ios::sync_with_stdio(false);
     cin.tie(0);
-
-    //cout << fixed << setprecision(10);
-
-    int t = 1;
-    cin >> t;
-
+    cin.sync_with_stdio(0);
+    int t;
+    cin>>t;
     while(t--){
-        sol();
-    }
+        ll n, k;
+        cin >> n >> k;
 
-    return 0;
+        vector<int> arr(n);
+        iota(ALL(arr), 1);
+
+        DBG(arr);
+
+        if(((n & 1) && k % 2 == 0) || n == 1 && k != 1) {
+            cout << "NO\n";
+        }
+        else {
+            cout << "YES\n";
+        }
+    }
 }
