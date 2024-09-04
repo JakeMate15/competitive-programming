@@ -24,27 +24,11 @@ void sol () {
     int a, b;
     cin >> a >> b;
 
-    vector<int> arr(a, 1);
-    arr.insert(arr.end(), b, 2);
-
-    int n = arr.size();
-    int totalCombinations = 1 << n; 
-
-    for (int i = 0; i < totalCombinations; ++i) {
-        int sum = 0;
-        for (int j = 0; j < n; ++j) {
-            if (i & (1 << j)) {
-                sum += arr[j];
-            } else {
-                sum -= arr[j];
-            }
-        }
-        if (sum == 0) {
-            cout << "YES\n";
-            return;
-        }
+    int res = 0;
+    for (int c = a; c <= b; c++) {
+        res = max(res, c - a + b - c);
     }
-    cout << "NO\n";
+    cout << res << "\n";
 }
 
 int main() {

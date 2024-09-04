@@ -21,30 +21,16 @@ const int MX = 2E5 + 5;
 const int MOD = 1E9 + 7;
 
 void sol () {
-    int a, b;
-    cin >> a >> b;
+    int n;
+    cin >> n;
 
-    vector<int> arr(a, 1);
-    arr.insert(arr.end(), b, 2);
-
-    int n = arr.size();
-    int totalCombinations = 1 << n; 
-
-    for (int i = 0; i < totalCombinations; ++i) {
-        int sum = 0;
-        for (int j = 0; j < n; ++j) {
-            if (i & (1 << j)) {
-                sum += arr[j];
-            } else {
-                sum -= arr[j];
-            }
-        }
-        if (sum == 0) {
-            cout << "YES\n";
-            return;
-        }
+    int res = 0;
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        res += (i & 1 ? -1 : 1) * a[i];
     }
-    cout << "NO\n";
+    cout << res << "\n";
 }
 
 int main() {

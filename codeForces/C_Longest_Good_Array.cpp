@@ -20,31 +20,28 @@ typedef pair<int, int> ii;
 const int MX = 2E5 + 5;
 const int MOD = 1E9 + 7;
 
+ll g (ll n) {
+    return n * (n + 1) / 2;
+}
+
 void sol () {
-    int a, b;
-    cin >> a >> b;
+    int l, r;
+    cin >> l >> r;
 
-    vector<int> arr(a, 1);
-    arr.insert(arr.end(), b, 2);
+    ll tam = r - l;
 
-    int n = arr.size();
-    int totalCombinations = 1 << n; 
+    ll lo = -1, hi = 1E5;
+    while (lo + 1 < hi) {
+        ll mid = (lo + hi) / 2;
+        ll s = g(mid);
 
-    for (int i = 0; i < totalCombinations; ++i) {
-        int sum = 0;
-        for (int j = 0; j < n; ++j) {
-            if (i & (1 << j)) {
-                sum += arr[j];
-            } else {
-                sum -= arr[j];
-            }
-        }
-        if (sum == 0) {
-            cout << "YES\n";
-            return;
-        }
+        if (s <= tam)
+            lo = mid;
+        else 
+            hi = mid;
     }
-    cout << "NO\n";
+
+    cout << hi << "\n";
 }
 
 int main() {
