@@ -29,15 +29,8 @@ void sol () {
         cin >> x;
     }
 
-    ll sum = 0;
-    int res = 0, mx = 0;
-    for (int i = 0; i < n; i++) {
-        sum += arr[i];
-        mx = max(mx, arr[i]);
-        res += (sum - mx == mx);
-    }
-
-    cout << res << "\n";
+    set<int> st(all(arr));
+    debug(st);
 }
 
 int main() {

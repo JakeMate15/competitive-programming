@@ -20,25 +20,27 @@ typedef pair<int, int> ii;
 const int MX = 2E5 + 5;
 const int MOD = 1E9 + 7;
 
-void sol () {
+int s(int n, int x) {
+    int k = n / x;
+    return x * (k * (k + 1)) / 2;
+}
+ 
+void sol() {
     int n;
     cin >> n;
-
-    vector<int> arr(n);
-    for (auto &x: arr) {
-        cin >> x;
+    int res = 2;
+    int curr = s(n, 2);
+ 
+    for (int x = 3; x <= n; ++x) {
+        int cs = s(n, x);
+        if (cs > curr) {
+            curr = cs;
+            res = x;
+        }
     }
-
-    ll sum = 0;
-    int res = 0, mx = 0;
-    for (int i = 0; i < n; i++) {
-        sum += arr[i];
-        mx = max(mx, arr[i]);
-        res += (sum - mx == mx);
-    }
-
-    cout << res << "\n";
-}
+ 
+    cout << res << endl;
+}   
 
 int main() {
     ios::sync_with_stdio(false);

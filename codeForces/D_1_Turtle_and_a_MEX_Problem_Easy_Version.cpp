@@ -24,25 +24,6 @@ void sol () {
     int n, k;
     cin >> n >> k;
 
-    auto getMex = [] (const vector<int> &v) -> int {
-        bool f = true;
-        set<int> st(all(v));
-        int mex = 0;
-
-        while (true) {
-            if (st.count(mex)) {
-                mex++;
-            } else if (f) {
-                mex++;
-                f = false;
-            } else {
-                break;
-            }
-        }
-
-        return mex;
-    };
-
     auto gaus = [] (ll n) -> ll {
         if (n <= 0)
             return 0LL;
@@ -51,15 +32,23 @@ void sol () {
     
     int mex = 0;
     for (int i = 0; i < n; i++) {
-        int l;
+        int l, x;
         cin >> l;
 
-        vector<int> arr(l);
-        for (auto &x: arr) {
+        set<int> st;
+        for (int j = 0; j < l; j++) {
             cin >> x;
+            st.insert(x);
         }
 
-        mex = max(mex, getMex(arr));
+        int cmex = 0;
+        bool f = true;
+        while (st.count(cmex) || f) {
+            f &= st.count(cmex);
+            cmex++;
+        }
+
+        mex = max(mex, cmex);
     }
 
     ll res = 0;

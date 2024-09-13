@@ -21,23 +21,12 @@ const int MX = 2E5 + 5;
 const int MOD = 1E9 + 7;
 
 void sol () {
-    int n;
-    cin >> n;
+    string a, b;
+    cin >> a >> b;
 
-    vector<int> arr(n);
-    for (auto &x: arr) {
-        cin >> x;
-    }
+    swap(a[0], b[0]);
 
-    ll sum = 0;
-    int res = 0, mx = 0;
-    for (int i = 0; i < n; i++) {
-        sum += arr[i];
-        mx = max(mx, arr[i]);
-        res += (sum - mx == mx);
-    }
-
-    cout << res << "\n";
+    cout << a << " " << b << "\n";
 }
 
 int main() {

@@ -24,20 +24,33 @@ void sol () {
     int n;
     cin >> n;
 
-    vector<int> arr(n);
-    for (auto &x: arr) {
-        cin >> x;
+    vector<ii> pt(n), pt2(2);
+    for (auto &[x, y]: pt) {
+        cin >> x >> y;
     }
 
-    ll sum = 0;
-    int res = 0, mx = 0;
+    for (auto &[x, y]: pt2) {
+        cin >> x >> y;
+    }
+
+    auto dist = [] (ii a, ii b) -> ld {
+        ld x = a.first - b.first;
+        ld y = a.second - b.second;
+
+        return hypot(x, y);
+    };
+
+    ld d = dist(pt2[0], pt2[1]);
     for (int i = 0; i < n; i++) {
-        sum += arr[i];
-        mx = max(mx, arr[i]);
-        res += (sum - mx == mx);
+        ld d1 = dist(pt2[1], pt[i]);
+
+        if (d1 <= d) {
+            cout << "NO\n";
+            return;
+        }
     }
 
-    cout << res << "\n";
+    cout << "YES\n";
 }
 
 int main() {

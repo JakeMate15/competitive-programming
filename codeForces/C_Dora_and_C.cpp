@@ -21,31 +21,21 @@ const int MX = 2E5 + 5;
 const int MOD = 1E9 + 7;
 
 void sol () {
-    ll x, y, z, k;
-    cin >> x >> y >> z >> k;
+    int n, a, b;
+    cin >> n >> a >> b;
 
-    vector<ll> divs;
-    for (ll i = 1; i * i <= k; i++) {
-        if (k % i == 0) {
-            divs.push_back(i);
-            if (k / i != i) {
-                divs.push_back(k / i);
-            }
-        }
+    int g = gcd(a, b);
+    vector<int> arr(n);
+    for (auto &x: arr) {
+        cin >> x;
+        x %= g;
     }
 
-    ll res = 0;
-    for (auto xi: divs) {
-        if (xi > x) continue;
-        for (auto yi: divs) {
-            if (yi > y || k % (xi * yi) != 0 || k / (xi * yi) > z) continue;
-            ll zi = k / (xi * yi);
+    sort(all(arr));
 
-            if (xi * yi * zi == k) {
-                ll curr = (x - xi + 1) * (y - yi + 1) * (z - zi + 1);
-                res = max(res, curr);
-            }
-        }
+    int res = arr[n - 1] - arr[0];
+    for (int i = 1; i < n; i++) {
+        res = min(res, arr[i - 1] + g - arr[i]);
     }
 
     cout << res << "\n";

@@ -24,54 +24,41 @@ void sol () {
     int n, q;
     cin >> n >> q;
 
-    ll sum = 0;
-    vector<int> arr(n * 2);
+    vector<ll> arr(n * 2);
     for (int i = 0; i < n; i++) {
         cin >> arr[i];
         arr[i + n] = arr[i];
-        sum += arr[i];
     }
 
     for (int i = 1; i < 2 * n; i++) {
         arr[i] += arr[i - 1];
     }
 
-    RAYA
-    debug(arr);
-    cerr << '\n';
+    auto query = [&] (int l, int r) -> ll {
+        if (l <= 0)
+            return arr[r];
+        return arr[r] - arr[l - 1];
+    };
 
     while (q--) {
-        int l, r;
+        ll l, r;
         cin >> l >> r;
         l--, r--;
-        
+
         int p1 = l / n, p2 = r / n;
-        int sep = max(0, p2 - p1 - 1);
+        ll sep = p2 - p1 - 1;
+
+        p1 %= n, p2 %= n;
+        l %= n, r %= n;
+
         ll res = 0;
-
-        l %= n;
-        r %= n;
-
-        // l += p1;
-        // r += p2;
-
-        if (p1 == p2) { // Mismo cyclic 
-            // if (l > r) {
-            //     swap(l, r);
-            // }
-            res += arr[r] - arr[l - (l == 0 ? 0 : 1)];
-            debug("iguales");
-        } else {
-            r += n;
-            res += sep * sum;
-            // res += arr[l + n - 1] - arr[l - (l == 0 ? 0 : 1)];
-            // res += arr[r] - arr[0];
-            res += arr[r] - arr[r - n];
-            res += arr[n - 1] - arr[l - (l == 0 ? 0 : 1)];
-            debug(r, r - n);
+        if (p1 == p2) {
+            res += query(l + p1, r + p1);
+        } else {    
+            res += arr[n - 1] * sep;
+            res += query(p2, p2 + r);
+            res += query(p1 + l, p1 + n - 1);
         }
-
-        
 
         cout << res << "\n";
     }
