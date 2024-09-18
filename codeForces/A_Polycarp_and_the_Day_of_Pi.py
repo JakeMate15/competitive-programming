@@ -6,12 +6,15 @@ rvar = lambda: map(int, input().split())
 rlist = lambda: list(map(int, input().split()))
 
 def solve():
-    a, b = rvar()
+    s = input()
+    ss = "31415926535897932384626433832795028841971693993751058209749445923078"
 
-    if a % 2 == 0 and (a > 0 or b % 2 == 0):
-        print('YES')
-    else:
-        print('NO')
+    res = 0
+    for i in range(len(s)):
+        if s[i] != ss[i]:
+            break
+        res += 1
+    print(res)
     
 
 for _ in range(rint()):

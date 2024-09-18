@@ -1,48 +1,34 @@
-import math
-import sys
-input = sys.stdin.read
+import sys, math
 
-data = input().split()
-index = 0
-t = int(data[index])
-index += 1
+input = lambda: sys.stdin.readline()[:-1]
+rint = lambda: int(input())
+rvar = lambda: map(int, input().split())
+rlist = lambda: list(map(int, input().split()))
 
-results = []
+def solve():
+    n = rint()
+    s = input()
 
-for _ in range(t):
-    n = int(data[index])
-    s = data[index + 1]
-    index += 2
-    
     sq = int(math.sqrt(n))
-    
     if sq * sq != n:
-        results.append("No")
-        continue
+        print('No')
+        return
     
-    ok = True
-    for j in range(sq):
-        if s[j] != '1' or s[(sq - 1) * sq + j] != '1':
-            ok = False
-            break
-    
-    for i in range(sq):
-        if s[i * sq] != '1' or s[i * sq + sq - 1] != '1':
-            ok = False
-            break
-    
-    if ok:
-        for i in range(1, sq - 1):
-            for j in range(1, sq - 1):
-                if s[i * sq + j] != '0':
-                    ok = False
-                    break
-            if not ok:
-                break
-    
-    if ok:
-        results.append("Yes")
-    else:
-        results.append("No")
+    arr = [int(i) for i in s]
+    aux = [0] * n
 
-print("\n".join(results))
+    for i in range(sq):
+        for j in range(sq):
+            if i == 0 or j == 0 or i == sq -1 or j == sq - 1:
+                aux[i * sq + j] = 1
+
+
+    if arr == aux:
+        print('Yes')
+    else:
+        print('No')
+
+    
+
+for _ in range(rint()):
+    solve()
