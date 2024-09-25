@@ -4,7 +4,7 @@
         "body": [
             "import sys, math",
             "",
-            "input = lambda: sys.stdin.readline()[:-1]",
+            "input = lambda: sys.stdin.readline()",
             "rint = lambda: int(input())",
             "rvar = lambda: map(int, input().split())",
             "rlist = lambda: list(map(int, input().split()))",
