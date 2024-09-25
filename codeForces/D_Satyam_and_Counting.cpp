@@ -46,11 +46,6 @@ void sol () {
         bool x2 = y1.find(x + 1) != y1.end();
 
         res += (x1 && x2);
-
-        // if (y1[x - 1] != 0 && y1[x + 1] != 0) {
-        //     debug(x, x - 1, x + 1);
-        //     res++;
-        // }   
     }
 
     for (auto &[x, r]: y1) {
@@ -63,12 +58,6 @@ void sol () {
 
         res += (x1 && x2);
     }
-    // for (auto& [x, cnt_y0] : y0) {
-    //     if (y1.find(x) != y1.end()) {
-    //         ll cnt_y1 = y1[x];
-    //         res += cnt_y0 * cnt_y1;
-    //     }
-    // }
     
     cout << res << endl;
 }

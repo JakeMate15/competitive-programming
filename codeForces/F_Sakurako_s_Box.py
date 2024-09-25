@@ -1,73 +1,29 @@
-class ModInt:
-    def __init__(self, v, p):
-        self.p = p
-        self.v = v % p
-        if self.v < 0:
-            self.v += p
+import sys, math
 
-    def __add__(self, other):
-        if isinstance(other, ModInt):
-            return ModInt(self.v + other.v, self.p)
-        else:
-            return ModInt(self.v + other, self.p)
+input = lambda: sys.stdin.readline()
+rint = lambda: int(input())
+rvar = lambda: map(int, input().split())
+rlist = lambda: list(map(int, input().split()))
 
-    def __sub__(self, other):
-        if isinstance(other, ModInt):
-            return ModInt(self.v - other.v, self.p)
-        else:
-            return ModInt(self.v - other, self.p)
+mod = 10**9 + 7
 
-    def __mul__(self, other):
-        if isinstance(other, ModInt):
-            return ModInt(self.v * other.v, self.p)
-        else:
-            return ModInt(self.v * other, self.p)
+def solve():
+    n = rint()
+    arr = rlist()
 
-    def __truediv__(self, other):
-        if isinstance(other, ModInt):
-            return ModInt(self.v * pow(other.v, -1, self.p), self.p)
-        else:
-            return ModInt(self.v * pow(other, -1, self.p), self.p)
+    aux = arr.copy()
+    arr = [0] + arr + [0]
+    for i in range(1, n + 2):
+        arr[i] += arr[i - 1]
+        arr[i] %= mod
 
-    def __neg__(self):
-        return ModInt(-self.v, self.p)
+    s = 0
+    for i in range(1, n + 1):
+        s += (aux[i - 1] * (arr[n + 1] - arr[i])) % mod
 
-    def __eq__(self, other):
-        if isinstance(other, ModInt):
-            return self.v == other.v
-        else:
-            return self.v == other
+    q = pow(n * (n - 1) // 2, mod - 2, mod)
 
-    def __repr__(self):
-        return str(self.v)
-
-
-import sys
-input = sys.stdin.read
-data = input().split()
-
-MOD = 10**9 + 7
-
-index = 0
-t = int(data[index])
-index += 1
-
-for _ in range(t):
-    n = int(data[index])
-    index += 1
-    a = list(map(int, data[index:index + n]))
-    index += n
+    print((s * q) % mod)
     
-    sum_a = ModInt(0, MOD)
-    ss = ModInt(0, MOD)
-
-    for num in a:
-        sum_a += num
-        ss += ModInt(num, MOD) * num
-
-    P = (sum_a * sum_a - ss) / ModInt(2, MOD)
-    Q = ModInt(n * (n - 1) // 2, MOD)
-
-    result = P / Q
-    print(result)
-
+for _ in range(rint()):
+    solve()

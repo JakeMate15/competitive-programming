@@ -1,22 +1,16 @@
-import sys
-input = sys.stdin.read
-data = input().split()
+import sys, math
 
-def g(n):
-    return n * (n + 1) // 2
+input = lambda: sys.stdin.readline()
+rint = lambda: int(input())
+rvar = lambda: map(int, input().split())
+rlist = lambda: list(map(int, input().split()))
 
-index = 0
-t = int(data[index])
-index += 1
+def solve():
+    l, r = rvar()
 
-results = []
-for _ in range(t):
-    l = int(data[index])
-    r = int(data[index + 1])
-    index += 2
-    
+    g = lambda x: x * (x + 1) // 2
+
     tam = r - l
-
     lo = -1
     hi = 100000
     while lo + 1 < hi:
@@ -28,8 +22,7 @@ for _ in range(t):
         else:
             hi = mid
     
-    results.append(hi)
-
-for result in results:
-    print(result)
-
+    print(hi)
+    
+for _ in range(rint()):
+    solve()

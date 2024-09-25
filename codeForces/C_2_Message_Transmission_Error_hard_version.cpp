@@ -43,7 +43,7 @@ void sol() {
 
     auto z = Z(all(s));
     ll a = sz(s);
-    for (int q = 1; q * 2 < a; ++q) {
+    for (int q = 1; q * 2 < a; q++) {
         if (z[q] >= a - q) {
             cout << "YES\n" << s.substr(q);
             return;
