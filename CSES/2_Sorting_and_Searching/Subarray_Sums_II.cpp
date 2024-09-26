@@ -1,59 +1,44 @@
 #include<bits/stdc++.h>
-
 #include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
 
 using namespace std;
 using namespace __gnu_pbds;
 
-#define all(v)          v.begin(),v.end()
-#define sz(a)           (int)a.size()
-#define nl              cout << "\n";
-
-template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
-
-typedef long long ll;
-typedef long double ld;
-typedef pair<int, int> ii;
-typedef vector<int> vi;
-typedef vector<vector<int>> vvi;
-
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
-
-void sol(){
-    int n, sum;
-    cin >> n >> sum;
-
-    vector<int> a(n);
-    for (auto &x: a) {
-        cin >> x;
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
     }
 
-    ll pref = 0, res = 0;
-    map<ll, int> mp;
-    for (int i = 0; i < n; i++) {
-        pref += a[i];
-        if (pref == sum)  res++;
-        res += mp[pref - sum];
-        mp[pref]++;
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
     }
-    cout << res << "\n";
-}
-
-int main(){
+};
+ 
+int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    // cout << fixed << setprecision(10);
+    int n, k, x;
+    cin >> n >> k;
 
-    int t = 1;
-    //cin >> t;
+    gp_hash_table<long long, int, custom_hash> mp;
+    long long sum = 0, res = 0;
+    for (int i = 0; i < n; i++) {
+        mp[sum]++;
 
-    while(t--){
-        sol();
+        cin >> x;
+        sum += x;
+
+        if (mp.find(sum - k) != mp.end()) {
+            res += mp[sum - k];
+        }
     }
 
+    cout << res << "\n";
     return 0;
 }

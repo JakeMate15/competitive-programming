@@ -1,24 +1,26 @@
 #include<bits/stdc++.h>
 using namespace std;
  
-int main(){
-    int n,k;
-    cin>>n>>k;
-    int a[n];
-    for(int i=0; i<n; i++)  cin>>a[i];
- 
-    map<int,int> res;
-    int aux;
-    for(int i=0; i<n; i++){
-        aux = k-a[i];
-        if(res.count(aux)){
-            cout << res[aux] << " " << i+1 << endl;
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+
+    int n, k, x;
+    cin >> n >> k;
+
+    map<int, int> mp;
+    for (int i = 0; i < n; i++) {
+        cin >> x;
+        
+        if (mp.count(k - x)) {
+            cout << i + 1 << " " << mp[k - x] + 1 << "\n";
             return 0;
         }
-        res[a[i]] = i+1;
+
+        mp[x] = i;
     }
- 
-    cout << "IMPOSSIBLE" << endl;
+
+    cout << "IMPOSSIBLE\n";
  
     return 0;
 }
