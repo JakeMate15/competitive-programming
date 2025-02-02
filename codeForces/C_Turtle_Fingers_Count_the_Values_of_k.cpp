@@ -64,26 +64,23 @@ istream &operator>>(istream &is, __int128_t & value){
 }
 
 void sol() {
-    i128 a, b, l;
-    cin >> a >> b >> l;
+    int64_t A, B, l;
+    cin >> A >> B >> l;
 
-    unordered_set<i128> res;
-    i128 aa = 1, bb = 1;
-    for (int i = 0; i <= 20; i++) {
-        for (int j = 0; j <= 20; j++) {
-            if (aa * bb > l) {
-                break;
-            }
+    set<int64_t> res;
+    int64_t a = A, b = B;
+    for (int i = 2; i <= 20 && (a * b <= l); i++) {
+        a *= A;
+        for (int j = 2; j <= 20 && (a * b <= l); j++) {
+            b *= B;
 
-            i128 k = l / (aa * bb);
-            if (k * aa * bb == l) {
+            int64_t k = l / (a * b);
+            if (l == k * a * b) {
                 res.insert(k);
             }
-            bb *= b;
         }
-        bb = 1;
-        aa *= a;
     }
+
     cout << sz(res) << "\n";
 }
 

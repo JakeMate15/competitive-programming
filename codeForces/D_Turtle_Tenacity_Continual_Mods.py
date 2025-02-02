@@ -1,10 +1,25 @@
-t = int(input())  # Número de casos de prueba
-for _ in range(t):
-    n = int(input())  # Tamaño del array
-    a = list(map(int, input().split()))  # El array
-    
-    # Comprobar si todos los números son 1
-    if all(x == 1 for x in a):
-        print("NO")
-    else:
+import sys, math
+
+input = lambda: sys.stdin.readline()
+rint = lambda: int(input())
+rvar = lambda: map(int, input().split())
+rlist = lambda: list(map(int, input().split()))
+
+def solve():
+    n = rint()
+    arr = rlist()
+
+    arr.sort()
+
+    if arr[0] != arr[1]:
         print("YES")
+        return
+
+    for i in range(1, n):
+        if (arr[i] % arr[0] != 0):
+            print("YES")
+            return
+    print("NO")
+    
+for _ in range(rint()):
+    solve()

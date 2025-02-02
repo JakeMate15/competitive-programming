@@ -1,53 +1,47 @@
 #include<bits/stdc++.h>
-
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-
 using namespace std;
-using namespace __gnu_pbds;
 
-#define all(v)          v.begin(),v.end()
-#define sz(a)           (int)a.size()
-#define nl              cout << "\n";
+#ifndef ONLINE_JUDGE
+    #include "algoDebug.h"
+#else
+    #define debug(x...)
+    #define RAYA 
+    #define raya 
+#endif
 
-template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+#define sz(a)       (int) a.size()
+#define all(a)      a.begin(), a.end()
+#define rall(a)     a.rbegin(), a.rend()
 
 typedef long long ll;
 typedef long double ld;
 typedef pair<int, int> ii;
-typedef vector<int> vi;
-typedef vector<vector<int>> vvi;
 
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const int MX = 2E5 + 5;
+const int MOD = 1E9 + 7;
 
-void sol() {
+void sol () {
     int n;
     cin >> n;
 
-    vector<int> a(n);
-    ll sum = 0;
-    for (auto &x: a) {
+    int s = 0;
+    vector<int> arr(n), cnt(3);
+    for (auto &x: arr) {
         cin >> x;
-        sum += x;
+        s += x;
+        cnt[x % 3]++;
     }
 
-    if (sum % 3 == 0) {
-        cout << "0\n";
-        return;
+    if (s % 3 == 0) {
+        cout << 0;
+    } else if (s % 3 == 2) {
+        cout << 1;
+    } else {
+        int ok = (cnt[1] > 0 ? 1 : 2);
+        cout << min(2, ok);
     }
 
-    for (int i = 0; i < n; i++) {
-        if ((sum - a[i]) % 3 == 0) {
-            cout << "1\n";
-            return;
-        }
-    }
-
-
-    cout << (ceil((1.0 * sum) / 3) * 3 - sum) << "\n";
-
+    cout << "\n";
 }
 
 int main() {

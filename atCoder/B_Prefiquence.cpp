@@ -1,41 +1,23 @@
 #include<bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-
 using namespace std;
-using namespace __gnu_pbds;
 
-typedef long long ll;
-typedef long double ld;
-typedef pair<int, int> ii;
-typedef vector<int> vi;
-typedef vector<vector<int>> vvi;
+#ifndef ONLINE_JUDGE
+    #include "/algoDebug.h"
+#else
+    #define debug(x...)
+    #define RAYA 
+    #define raya 
+#endif
 
-template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+#define sz(a)       (int) a.size()
+#define all(a)      a.begin(), a.end()
+#define rall(a)     a.rbegin(), a.rend()
 
-#define all(v)          v.begin(), v.end()
-#define rall(v)         v.rbegin(), v.rend()
-#define sz(a)           (int)a.size()
-#define nl              cout << "\n";
+const int MX = 2E5 + 5;
+const int MOD = 1E9 + 7;
 
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
-
-void sol() {
-    int n, m;
-    string a, b;
-    cin >> n >> m >> a >> b;
-
-    int res = 0, j = 0;
-    for (int i = 0; i < m; i++) {
-        if (b[i] == a[j]) {
-            j++;
-            res++;
-        }
-    }
+void sol () {
     
-    cout << res << "\n";
 }
 
 int main() {
@@ -53,5 +35,3 @@ int main() {
 
     return 0;
 }
-
-// -Wall -Wextra -Wshadow -D_GLIBCXX_ASSERTIONS -DDEBUG -ggdb3 -fmax-errors=2

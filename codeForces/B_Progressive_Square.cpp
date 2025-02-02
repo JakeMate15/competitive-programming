@@ -1,28 +1,26 @@
 #include<bits/stdc++.h>
-
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-
 using namespace std;
-using namespace __gnu_pbds;
 
-#define all(v)          v.begin(),v.end()
-#define sz(a)           (int)a.size()
-#define nl              cout << "\n";
+#ifndef ONLINE_JUDGE
+    #include "algoDebug.h"
+#else
+    #define debug(x...)
+    #define RAYA 
+    #define raya 
+#endif
 
-template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+#define sz(a)       (int) a.size()
+#define all(a)      a.begin(), a.end()
+#define rall(a)     a.rbegin(), a.rend()
 
 typedef long long ll;
 typedef long double ld;
 typedef pair<int, int> ii;
-typedef vector<int> vi;
-typedef vector<vector<int>> vvi;
 
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const int MX = 2E5 + 5;
+const int MOD = 1E9 + 7;
 
-void sol() {
+void sol () {
     int n, a, b;
     cin >> n >> a >> b;
 
@@ -35,7 +33,7 @@ void sol() {
         mn = min(mn, x);
     }
 
-    vvi mat(n, vi(n));
+    vector<vector<int>> mat(n, vector<int>(n));
     mat[0][0] = mn;
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {

@@ -21,7 +21,11 @@ const int MX = 2E5 + 5;
 const int MOD = 1E9 + 7;
 
 void sol () {
-    
+    int l, r;
+    cin >> l >> r;
+
+    int ans = (r + 1) / 2 - l / 2;
+    cout << ans / 2 << "\n";
 }
 
 int main() {

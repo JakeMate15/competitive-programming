@@ -9,17 +9,6 @@ using namespace std;
     #define raya 
 #endif
 
-#define sz(a)       (int) a.size()
-#define all(a)      a.begin(), a.end()
-#define rall(a)     a.rbegin(), a.rend()
-
-typedef long long ll;
-typedef long double ld;
-typedef pair<int, int> ii;
-
-const int MX = 2E5 + 5;
-const int MOD = 1E9 + 7;
-
 void sol () {
     int n, k;
     cin >> n >> k;
@@ -29,27 +18,25 @@ void sol () {
         cin >> x;
     }
 
-    sort(rall(arr));
+    sort(arr.rbegin(), arr.rend());
 
-    ll res = 0;
-    for (int i = 0; i < n; i++) {
-        if (i & 1) {
-            int aux = min(k, arr[i - 1] - arr[i]);
-            res -= aux + arr[i];
-            k -= aux;
-        } else {
-            res += arr[i];
-        }
+    int64_t a = 0, b = 0;
+    for (int i = 0; i < n; i += 2) {
+        a += arr[i];
+
+        if (i + 1 < n) {
+            int dif = min(k, arr[i] - arr[i + 1]);
+            k -= dif;
+            b += arr[i + 1] + dif;
+        } 
     }
 
-    cout << res << "\n";
+    cout << a - b << "\n";
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-
-    // cout << fixed << setprecision(10);
 
     int t = 1;
     cin >> t;

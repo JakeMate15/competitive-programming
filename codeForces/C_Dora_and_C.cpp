@@ -24,21 +24,23 @@ void sol () {
     int n, a, b;
     cin >> n >> a >> b;
 
-    int g = gcd(a, b);
     vector<int> arr(n);
     for (auto &x: arr) {
         cin >> x;
+    }
+
+    int g = gcd(a, b);
+    for (auto &x: arr) {
         x %= g;
     }
 
     sort(all(arr));
 
-    int res = arr[n - 1] - arr[0];
-    for (int i = 1; i < n; i++) {
-        res = min(res, arr[i - 1] + g - arr[i]);
+    int ans = arr[n - 1] - arr[0];
+    for (int i = 0; i < n - 1; i++) {
+        ans = min(ans, arr[i] - arr[i + 1] + g);
     }
-
-    cout << res << "\n";
+    cout << ans << "\n";
 }
 
 int main() {

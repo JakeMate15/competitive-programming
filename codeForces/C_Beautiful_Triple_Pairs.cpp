@@ -1,52 +1,56 @@
-#include<bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-
+#include <bits/stdc++.h>
 using namespace std;
-using namespace __gnu_pbds;
 
-typedef long long ll;
-typedef long double ld;
-typedef pair<int, int> ii;
-typedef vector<int> vi;
-typedef vector<vector<int>> vvi;
+struct Triplet {
+    int a, b, c;
 
-template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+    Triplet(int _a, int _b, int _c) : a(_a), b(_b), c(_c) {}
 
-#define all(v)          v.begin(), v.end()
-#define rall(v)         v.rbegin(), v.rend()
-#define sz(a)           (int)a.size()
-#define nl              cout << "\n";
+    bool operator==(const Triplet& other) const {
+        return a == other.a && b == other.b && c == other.c;
+    }
 
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+    bool operator<(const Triplet& other) const {
+        if (a == other.a) {
+            if ()
+        }
+    }
+};
 
-void sol() {
+struct TripletHash {
+    size_t operator()(const Triplet& t) const {
+        return ((size_t)t.a * 1000003) ^ ((size_t)t.b * 1000033) ^ ((size_t)t.c * 1000037);
+    }
+};
+
+void sol () {
     int n;
     cin >> n;
 
     vector<int> arr(n);
-    for (int i = 0; i < n; i++)
-        cin >> arr[i];
+    for (auto &x: arr) {
+        cin >> x;
+    }
 
-    map<vector<int>, ll> m1, mp1, mp2, mp3;
-
-    ll res = 0;
+    int64_t res = 0;
+    map<Triplet, int, TripletHash> cnt;
     for (int i = 0; i < n - 2; i++) {
-        int a = arr[i], b = arr[i + 1], c = arr[i + 2];
+        int a = arr[i], b = arr[i + 1], c = arr[i + 2], z = -1;
+        Triplet t1(z, b, c);
+        Triplet t2(a, z, c);
+        Triplet t3(a, b, z);
+        Triplet t4(a, b, c);
 
-        res += mp1[{a, b, 0}];
-        res += mp2[{a, 0, c}];
-        res += mp3[{0, b, c}];
+        res += cnt[t1];
+        res += cnt[t2];
+        res += cnt[t3];
 
-        res -= m1[{a, b, c}] * 3;
+        res -= 3 * cnt[t4];
 
-        mp1[{a, b, 0}]++;
-        mp2[{a, 0, c}]++;
-        mp3[{0, b, c}]++;
-
-        m1[{a, b, c}]++;
+        cnt[t4]++;
+        cnt[t1]++;
+        cnt[t2]++;
+        cnt[t3]++;
     }
 
     cout << res << "\n";
@@ -55,8 +59,6 @@ void sol() {
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
-
-    // cout << fixed << setprecision(10);
 
     int t = 1;
     cin >> t;

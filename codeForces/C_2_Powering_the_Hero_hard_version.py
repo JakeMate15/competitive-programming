@@ -1,18 +1,24 @@
-import sys
-import heapq
-input = sys.stdin.readline
+import sys, heapq
 
-for _ in range(int(input())):
-    n = int(input())
-    a = list(map(int, input().split()))
+input = lambda: sys.stdin.readline()
+rint = lambda: int(input())
+rvar = lambda: map(int, input().split())
+rlist = lambda: list(map(int, input().split()))
 
+def solve():
+    n = rint()
+    arr = rlist()
+    
     pq = []
-    res = 0
-    for x in a:
-        if(x == 0):
-            if(len(pq) > 0):
-                res += -heapq.heappop(pq)
+    ans = 0
+    for x in arr:
+        if x == 0:
+            if len(pq) > 0:
+                ans += -heapq.heappop(pq)
         else:
             heapq.heappush(pq, -x)
 
-    print(res)
+    print(ans)
+
+for _ in range(rint()):
+    solve()

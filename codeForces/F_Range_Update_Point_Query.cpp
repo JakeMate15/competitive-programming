@@ -47,28 +47,28 @@ struct SegmentTree{
 		ST.resize(N << 1,0);
 	}
  
-	void update(int l, int r, int value){
-		for (l += N, r += N; l < r; l >>= 1, r >>= 1){
-			if (l&1)     ST[l++] += value;
-			if (r & 1)   ST[--r] += value;
-		}
-	}
+    void update(int l, int r, int value){
+        for (l += N, r += N; l < r; l >>= 1, r >>= 1){
+            if (l&1)     ST[l++] += value;
+            if (r & 1)   ST[--r] += value;
+        }
+    }
  
-	//Get element at i
-	int query(int p){
-		int v = 0, pos = p;
+    //Get element at i
+    int query(int p){
+        int v = 0, pos = p;
 
-		for (p += N; p > 0; p >>= 1) v += ST[p];
+        for (p += N; p > 0; p >>= 1) v += ST[p];
 
-		int res = a[pos];
-		for(int i = 0; i < v; i++) {
+        int res = a[pos];
+        for(int i = 0; i < v; i++) {
             if(res < 10) {
                 break;
             }
-			res = sum(res);
-		}
+            res = sum(res);
+        }
 
-		return res;
+        return res;
 	}
 };
 

@@ -1,12 +1,23 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-void dfs (int v, int p, vector<int> &d, const vector<vector<int>> &g) {
-    d[v] = d[p] + 1;
+int d = 0;
+
+int dfs (int v, int p, const vector<vector<int>> &g) {
+    int maxDeph = 0, seconDeph = 0;
     for (auto u: g[v]) {
-        if (u != p)
-            dfs (u, v, d, g);
+        if (u != p) {
+            int currDeph = dfs(u, v, g) + 1;
+            if (currDeph > maxDeph) {
+                seconDeph = maxDeph;
+                maxDeph = currDeph;
+            } else if (currDeph > seconDeph) {
+                seconDeph = currDeph;
+            } 
+        }
     }
+    d = max(d, maxDeph + seconDeph);
+    return maxDeph;
 }
 
 int main () {
@@ -25,14 +36,9 @@ int main () {
         g[v].push_back(u);
     }
 
-    vector<int> d1(n + 1), d2(n + 1);
-    d1[0] = d2[0] = -1;
+    dfs(1, 0, g);
 
-    dfs(1, 0, d1, g);
-    int a = max_element(d1.begin(), d1.end()) - d1.begin();
-
-    dfs(a, 0, d2, g);
-    cout << *max_element(d2.begin(), d2.end());
+    cout << d << "\n";
 
     return 0;
 }

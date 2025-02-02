@@ -1,169 +1,89 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#define all(v)          v.begin(),v.end()
-#define sz(a)           (int)a.size()
-#define nl              cout << "\n";
+struct LCA {
+    int N;
+    int root;
+    vector<int> st;
+    vector<int> tin;
+    vector<int> depth;
+    vector<int> euler;
+    vector<vector<int>> tree;
 
-typedef long long ll;
-typedef long double ld;
+    LCA (int n, int _root) : root(_root) {
+        tin.resize(n);
+        tree.resize(n);
+    }
 
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+    void run () {
+        dfs(root, -1, 0);
+        N = euler.size();
+        ST();
+    }
 
-struct HLD {
-    int n;
-    vector<int> siz, top, dep, parent, in, out, seq, valor;
-    vector<vector<int>> adj;
-    int cur;
-    
-    HLD() {}
-    HLD(int n) {
-        init(n);
+    void addEdge (int u, int v) {
+        tree[u].push_back(v);
+        tree[v].push_back(u);
     }
-    void init(int n) {
-        this->n = n;
-        siz.resize(n);
-        top.resize(n);
-        dep.resize(n);
-        parent.resize(n);
-        in.resize(n);
-        out.resize(n);
-        seq.resize(n);
-        valor.resize(n);
-        cur = 0;
-        adj.assign(n, {});
-    }
-    void addEdge(int u, int v) {
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
-    void work(int root = 0) {
-        top[root] = root;
-        dep[root] = 0;
-        parent[root] = -1;
-        dfs1(root);
-        dfs2(root);
-    }
-    void dfs1(int u) {
-        if (parent[u] != -1) {
-            adj[u].erase(find(adj[u].begin(), adj[u].end(), parent[u]));
-        }
-        
-        siz[u] = 1;
-        for (auto &v : adj[u]) {
-            parent[v] = u;
-            dep[v] = dep[u] + 1;
-            dfs1(v);
-            siz[u] += siz[v];
-            if (siz[v] > siz[adj[u][0]]) {
-                swap(v, adj[u][0]);
+
+    void dfs (int u, int p, int d) {
+        tin[u] = euler.size();
+        depth.push_back(d);
+        euler.push_back(u);
+        for (auto v: tree[u]) {
+            if (v != p) {
+                dfs(v, u, d + 1);
+                depth.push_back(d);
+                euler.push_back(u);
             }
         }
     }
-    void dfs2(int u) {
-        in[u] = cur++;
-        seq[in[u]] = u;
-        for (auto v : adj[u]) {
-            top[v] = v == adj[u][0] ? top[u] : v;
-            dfs2(v);
-        }
-        out[u] = cur;
+
+    int merge(int x, int y) {
+        return depth[x] < depth[y] ? x : y;
     }
 
-    int lca(int u, int v) {
-        while (top[u] != top[v]) {
-            if (dep[top[u]] > dep[top[v]]) {
-                u = parent[top[u]];
-            } else {
-                v = parent[top[v]];
-            }
-        }
-        return dep[u] < dep[v] ? u : v;
-    }
-    
-    int dist(int u, int v) {
-        return dep[u] + dep[v] - 2 * dep[lca(u, v)];
-    }
-    
-    int jump(int u, int k) {
-        if (dep[u] < k) {
-            return -1;
-        }
-        
-        int d = dep[u] - k;
-        
-        while (dep[top[u]] > d) {
-            u = parent[top[u]];
-        }
-        
-        return seq[in[u] - dep[u] + d];
-    }
-    
-    bool isAncester(int u, int v) {
-        return in[u] <= in[v] && in[v] < out[u];
-    }
-    
-    int rootedParent(int u, int v) {
-        swap(u, v);
-        if (u == v) {
-            return u;
-        }
-        if (!isAncester(u, v)) {
-            return parent[u];
-        }
-        auto it = upper_bound(adj[u].begin(), adj[u].end(), v, [&](int x, int y) {
-            return in[x] < in[y];
-        }) - 1;
-        return *it;
-    }
-    
-    int rootedSize(int u, int v) {
-        if (u == v) {
-            return n;
-        }
-        if (!isAncester(v, u)) {
-            return siz[v];
-        }
-        return n - siz[rootedParent(u, v)];
-    }
-    
-    int rootedLca(int a, int b, int c) {
-        return lca(a, b) ^ lca(b, c) ^ lca(c, a);
+    void ST () {
+        st.resize(N << 1);
+        for (int i = 0; i < N; i++)
+            st[N + i] = i; 
+        for (int i = N - 1; i > 0; i--) 
+            st[i] = merge(st[i << 1], st[i << 1 | 1]);
     }
 
+    int lca (int u, int v) {
+        u = tin[u], v = tin[v];
+        if (v < u) swap(u, v);
+        int ans = u;
+        for (u += N, v += N; u <= v; u >>= 1, v >>= 1) {
+            if (u & 1)      ans = merge(ans, st[u++]);
+            if (!(v & 1))   ans = merge(ans, st[v--]);
+        }
+        return euler[ans];
+    }
 };
 
-void sol(){
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    
     int n, q;
     cin >> n >> q;
 
-    HLD h(n + 1);
-    for(int i = 2; i <= n; i++) {
+    LCA lca(n, 0);
+    for (int i = 1; i < n; i++) {
         int v;
         cin >> v;
-        h.addEdge(i, v);
+        lca.addEdge(i, v - 1);
     }
-    h.work(1);
 
-    while(q--) {
-        int u, k;
-        cin >> u >> k;
-        cout << h.lca(u, k) << "\n";
-    }
-}
+    lca.run();
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(0);
-
-    //cout << fixed << setprecision(10);
-
-    int t = 1;
-    //cin >> t;
-
-    while(t--){
-        sol();
+    while (q--) {
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        cout << lca.lca(u, v) + 1 << "\n";
     }
 
     return 0;

@@ -1,47 +1,31 @@
 #include<bits/stdc++.h>
-
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-
 using namespace std;
-using namespace __gnu_pbds;
 
-#define all(v)          v.begin(),v.end()
-#define sz(a)           (int)a.size()
-#define nl              cout << "\n";
+#ifndef ONLINE_JUDGE
+    #include "algoDebug.h"
+#else
+    #define debug(x...)
+    #define RAYA 
+    #define raya 
+#endif
 
-template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-template <typename T> using ordered_multi_set = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+#define sz(a)       (int) a.size()
+#define all(a)      a.begin(), a.end()
+#define rall(a)     a.rbegin(), a.rend()
 
 typedef long long ll;
 typedef long double ld;
+typedef pair<int, int> ii;
 
-const int mod = 1e9 + 7;
-const int MX = 2e5 + 5;
+const int MX = 2E5 + 5;
+const int MOD = 1E9 + 7;
 
-vector<vector<int>> g;
-vector<ll> dp;
-
-void dfs(int nodo, int padre) {
-
-    for (auto u: g[nodo]) {
-        dp[u] += (sz(g[u]) == 1 && u != 1);
-
-        if(u != padre) {
-            dfs(u, nodo);
-            dp[nodo] += dp[u]; 
-        }
-    }
-
-}
-
-void sol(){
+void sol () {
     int n;
     cin >> n;
 
-    g = vector<vector<int>>(n + 1);
-    dp = vector<ll>(n + 1);
-
+    vector<vector<int>> g(n + 1);
+    vector<int> hojas(n + 1, 1);
     for (int i = 0; i < n - 1; i++) {
         int u, v;
         cin >> u >> v;
@@ -49,23 +33,30 @@ void sol(){
         g[v].push_back(u);
     }
 
-    dfs(1, 0);
+    function<void(int, int)> dfs = [&] (int u, int p) -> void {
+        int cnt = 0;
+        for (auto v: g[u]) {
+            if (v != p) {
+                hojas[u] = 0;
+                dfs(v, u);
+                cnt += hojas[v];
+            }
+        }
+        hojas[u] = max(cnt, hojas[u]);
+    };
 
-    // for(int i = 1; i <= n; i++) {
-    //     cout << dp[i] << " \n"[i == n];
-    // }
+    dfs(1, 0);
 
     int q;
     cin >> q;
-    while(q--) {
+    while (q--) {
         int u, v;
         cin >> u >> v;
-
-        cout << dp[u] * dp[v] << "\n";
+        cout << 1LL * hojas[u] * hojas[v] << "\n";
     }
 }
 
-int main(){
+int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
@@ -74,7 +65,7 @@ int main(){
     int t = 1;
     cin >> t;
 
-    while(t--){
+    while(t--) {
         sol();
     }
 
