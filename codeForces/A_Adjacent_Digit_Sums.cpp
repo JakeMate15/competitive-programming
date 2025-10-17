@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#ifdef ONLINE_JUDGE
+#ifndef ONLINE_JUDGE
     #include "/algoDebug.h"
 #else
     #define debug(x...)
@@ -17,24 +17,28 @@ const int MX = 2E5 + 5;
 const int MOD = 1E9 + 7;
 
 void sol () {
-    
+    int x, y;
+    cin >> x >> y;
+
+    int rem = x - y + 1;
+    if (rem % 9 == 0 && rem >= 0) {
+        cout << "Yes\n";
+    } else {
+        cout << "No\n";
+    }
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
 
-    string s = "AAABBCCD";
-    sort(all(s));
+    // cout << fixed << setprecision(10);
 
-    set<string> aux;
-    do {
-        aux.insert(s.substr(0, 3));
-    } while (next_permutation(all(s)));
+    int t = 1;
+    cin >> t;
 
-    cerr << sz(aux) << "\n";
-    for (auto &x: aux) {
-        cerr << x << "\n";
+    while(t--) {
+        sol();
     }
 
     return 0;

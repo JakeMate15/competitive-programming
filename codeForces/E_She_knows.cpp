@@ -1,13 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
 
-#ifdef LOCAL
-    #include "/algoDebug.h"
-#else
-    #define debug(x...)
-#endif
+#define sz(a)       (int) a.size()
+#define all(a)      a.begin(), a.end()
+#define rall(a)     a.rbegin(), a.rend()
 
+const int MX = 2E5 + 5;
 const int64_t MOD = 1E9 + 7;
+
 struct mint {
     int64_t v;
     mint(int64_t _v = 0) {
@@ -55,36 +55,47 @@ struct mint {
     }
 };
 
-void sol () {RAYA
-    int n;
-    cin >> n;
-    
-    vector<int> a(n);
-    for (int i = 0; i < n; i++) {
-        cin >> a[i];
+void sol () {
+    int n, m, k;
+    cin >> n >> m >> k;
+
+    int64_t tOd = 0;
+    int64_t totC = 1LL * n * m;
+    int64_t vacias = totC - k;
+    if(m > 2) tOd += 2 * (m - 2);
+    if(n > 2) tOd += 2 * (n - 2);
+
+
+    int64_t cnt = 0, s = 0;
+    for(int i = 0; i < k; i++) {
+        int64_t x, y, c;
+        cin >> x >> y >> c;
+        bool imp = false;
+        if(x == 1 || x == n || y == 1 || y == m) {
+            if(!((x == 1 && y == 1) || (x == 1 && y == m) || (x == n && y == 1) || (x == n && y == m)))
+                imp = true;
+        }
+        if(imp) {
+            cnt++;
+            s ^= c;
+        }
     }
 
-    int64_t s = 0, p = 0;
-    for (auto &x: a) {
-        int pot = __builtin_ctz(x);
-        p += pot;
-        x /= (1LL << pot);
+    mint ans = 0;
+    if(tOd > cnt) {
+        ans = mint(2).pow(vacias - 1);
+    } else {
+        ans = (s == 0 ? mint(2).pow(vacias) : 0);
     }
 
-    debug(a, p);
-
-    s -= a[n - 1];
-    s += (1LL << p) * a[n - 1];
-
-    for (int i = 0; i < n - 2; i++) {
-        s += a[i];
-    }
-    debug(s);
+    cout << ans << "\n";
 }
 
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(0);
+
+    // cout << fixed << setprecision(10);
 
     int t = 1;
     cin >> t;

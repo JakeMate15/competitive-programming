@@ -1,165 +1,122 @@
 #include <bits/stdc++.h>
 using namespace std;
+ 
+const int MX = 1E5 + 5;
+const int64_t INF = 1LL << 60;
+const int64_t MOD = 1000000007;
 
-typedef long long ll;
-template<class T> using pqg = priority_queue<T, vector<T>, greater<T>>;
+int64_t fact[MX], inv[MX];
 
-template <int p>
-struct mod_int {
-    ll expo(ll b, ll e) {
-        ll ret = 1;
-        while (e) {
-            if (e % 2) ret = ret * b % p;
-            e /= 2, b = b * b % p;
-        }
-        return ret;
+int64_t binPow(int64_t a, int64_t n) {
+    a %= MOD;
+    int64_t res = 1;
+    while (n) {
+        if (n & 1)
+            res = res * a % MOD;
+        a = a * a % MOD;
+        n >>= 1;
     }
-    ll inv(ll b) { return expo(b, p-2); }
+    return res;
+}
 
-    using m = mod_int;
-    int v;
-    mod_int() : v(0) {}
-    mod_int(ll v_) {
-        if (v_ >= p or v_ <= -p) v_ %= p;
-        if (v_ < 0) v_ += p;
-        v = v_;
+// No olvidar esto
+void preCalc() {
+    fact[0] = inv[0] = 1;
+    for (int i = 1; i < MX; i++) {
+        fact[i] = fact[i - 1] * i % MOD;
+        inv[i] = binPow(fact[i], MOD - 2);
     }
-    m& operator +=(const m& a) {
-        v += a.v;
-        if (v >= p) v -= p;
-        return *this;
-    }
-    m& operator -=(const m& a) {
-        v -= a.v;
-        if (v < 0) v += p;
-        return *this;
-    }
-    m& operator *=(const m& a) {
-        v = v * ll(a.v) % p;
-        return *this;
-    }
-    m& operator /=(const m& a) {
-        v = v * inv(a.v) % p;
-        return *this;
-    }
-    m operator -() { return m(-v); }
-    m& operator ^=(ll e) {
-        if (e < 0) {
-            v = inv(v);
-            e = -e;
-        }
-        v = expo(v, e % (p - 1));
-        return *this;
-    }
-    bool operator ==(const m& a) { return v == a.v; }
-    bool operator !=(const m& a) { return v != a.v; }
+}
 
-    friend m operator +(m a, m b) { return a += b; }
-    friend m operator -(m a, m b) { return a -= b; }
-    friend m operator *(m a, m b) { return a *= b; }
-    friend m operator /(m a, m b) { return a /= b; }
-    friend m operator ^(m a, ll e) { return a ^= e; }
-};
-
-const int MOD = 1E9 + 7;
-typedef mod_int<MOD> mint;
-
-struct Combinatoria {
-    int n;
-    vector<mint> fact;
-    vector<mint> inv_fact;
-
-    Combinatoria(int max_n) {
-        n = max_n;
-        fact.assign(n + 1, 1);
-        inv_fact.assign(n + 1, 1);
-
-        for (int i = 1; i <= n; i++) {
-            fact[i] = fact[i - 1] * i;
-            inv_fact[i] = 1 / fact[i];
-        }
-    }
-
-    mint comb(int a, int b) {
-        if (a < b || b < 0) return 0;
-        return fact[a] / (inv_fact[b] * inv_fact[a - b]);
-    }
-};
-
-int main() {
+int64_t C(int n, int k) {
+    if (k > n)
+        return 0;
+    return fact[n] * inv[k] % MOD * inv[n - k] % MOD;
+}
+ 
+int main(){
     ios::sync_with_stdio(false);
-    cin.tie(0);
-
+    cin.tie(nullptr);
+ 
     int n, m, k;
     cin >> n >> m >> k;
-
-    vector<pair<int, int>> g[n + 1];
-    for (int i = 0; i < m; i++) {
-        int p, q, c;
-        cin >> p >> q >> c;
-        g[p].emplace_back(q, c);
-        g[q].emplace_back(p, c);
+    vector<vector<pair<int, int>>> g(n);
+    for (int i = 0; i < m; i++){
+        int u, v, w;
+        cin >> u >> v >> w;
+        g[u].emplace_back(v, w);
+        g[v].emplace_back(u, w);
     }
-
-    vector<ll> d(n, 1e18);
-    d[0] = 0;
-    pqg<pair<ll, int>> pq;
-    pq.emplace(0, 0);
-    vector<bool> vis(n);
-    while (!pq.empty()) {
-        auto [dist, u] = pq.top();
+ 
+    vector<int64_t> dist(n, INF);
+    priority_queue<pair<int64_t, int>, vector<pair<int64_t, int>>, greater<pair<int64_t, int>>> pq;
+    dist[0] = 0;
+    pq.push({0, 0});
+    while(!pq.empty()){
+        auto [d, u] = pq.top();
         pq.pop();
-        if (vis[u]) {
-            continue;
-        }
-
-        vis[u] = true;
-        for (auto &[v, w] : g[u]) {
-            if (!vis[v] && d[v] > d[u] + w) {
-                d[v] = d[u] + w;
-                pq.emplace(d[v], v);
+        if(d == dist[u]) {
+            for(auto [u, w] : g[u]) {
+                if(dist[u] > d + w){
+                    dist[u] = d + w;
+                    pq.push({dist[u], u});
+                }
             }
+        }   
+    }
+ 
+    sort(dist.begin(), dist.end());
+ 
+    vector<int64_t> uniqueD;
+    vector<int> freq;
+    for (int64_t d : dist) {
+        if(uniqueD.empty() || uniqueD.back() != d){
+            uniqueD.push_back(d);
+            freq.push_back(1);
+        } else {
+            freq.back()++;
         }
     }
-
-    map<ll, int> mp;
-    for (int i = 1; i < n; i++) {
-        mp[d[i]]++;
-    }
-
-    vector<pair<ll, int>> cnt(mp.begin(), mp.end());
-    
-    int s = cnt.size();
-    vector<ll> cj(s, 0LL);
-    ll tot = n - 1;
-    ll sum = 0;
-    for (int j = 0; j < s; j++) {
-        cj[j] = tot - sum;
-        sum += cnt[j].second;
-    }
-
-    Combinatoria combi(n);
-    mint Ck = combi.comb(n - 1, k);
-
-    mint sum1 = 0;
-    mint sum2 = 0;
-    ll pl = 1;
-    ll md = cnt.back().first;
-    for (int j = 0; j < s; j++) {
-        ll cl = cnt[j].first;
-        if (cl > pl) {
-            mint r = cl - pl;
-            sum1 += r;
+        
+ 
+    int total = dist.size();
+    int maxN = total;
+    vector<int64_t> fact(maxN+1), invfact(maxN+1);
+    fact[0] = 1;
+    for (int i = 1; i <= maxN; i++)
+        fact[i] = fact[i-1] * i % MOD;
+ 
+    auto modexp = [&](int64_t base, int64_t exp) -> int64_t {
+        int64_t res = 1;
+        while(exp){
+            if(exp & 1) res = res * base % MOD;
+            base = base * base % MOD;
+            exp >>= 1;
         }
-        ll sigL = (j < s - 1) ? cnt[j + 1].first : (md + 1);
-        mint r2 = sigL - cl;
-        mint CK = combi.comb(cj[j], k);
-        sum2 += r2 * CK;
-        pl = sigL;
+        return res;
+    };
+    invfact[maxN] = modexp(fact[maxN], MOD-2);
+    for (int i = maxN; i >= 1; i--)
+        invfact[i-1] = invfact[i] * i % MOD;
+ 
+    auto comb = [&](int a, int b) -> int64_t {
+        if(b < 0 || b > a) return 0;
+        return fact[a] * invfact[b] % MOD * invfact[a-b] % MOD;
+    };
+ 
+    int64_t totalComb = comb(total, k), ans = 0;
+    int cum = 0;
+    for (size_t i = 0; i < uniqueD.size(); i++){
+        int cntBefore = cum;
+        int cntGroup = freq[i];
+        int64_t c1 = comb(total - cntBefore, k);
+        int64_t c2 = comb(total - (cntBefore + cntGroup), k);
+        int64_t ways = (c1 - c2 + MOD) % MOD;
+        ans = (ans + uniqueD[i] % MOD * ways) % MOD;
+        cum += cntGroup;
     }
-
-    mint E = sum1 + sum2 / Ck;
-    cout << E.v << "\n";
-
+    int64_t invTotalComb = modexp(totalComb, MOD-2);
+    ans = ans * invTotalComb % MOD;
+    cout << ans;
     return 0;
 }

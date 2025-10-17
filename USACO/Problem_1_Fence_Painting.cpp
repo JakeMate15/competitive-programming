@@ -19,21 +19,21 @@ const int MAX_POS = 100;
 
 void sol(){
     freopen("paint.in", "r", stdin);
-	freopen("paint.out", "w", stdout);
+    freopen("paint.out", "w", stdout);
 
     int a, b, c, d;
-	cin >> a >> b >> c >> d;
+    cin >> a >> b >> c >> d;
 
-	vector<bool> painted(MAX_POS + 1);
+    vector<bool> painted(MAX_POS + 1);
 
-	for (int i = a; i < b; i++) { painted[i] = true; }
-	for (int i = c; i < d; i++) { painted[i] = true; }
+    for (int i = a; i < b; i++) { painted[i] = true; }
+    for (int i = c; i < d; i++) { painted[i] = true; }
 
 
-	int total = 0;
-	for (bool i : painted) { total += i; }
+    int total = 0;
+    for (bool i : painted) { total += i; }
 
-	cout << total << endl;
+    cout << total << endl;
 }
 
 int main(){
